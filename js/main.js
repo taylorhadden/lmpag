@@ -93,6 +93,9 @@ $(document).ready(function() {
 			name : $dischargeFunnelData.first().find('.name').text(),
 			description : $.trim($dischargeFunnelData.first().find('.description').text()),//.trim(),
 			price : $dischargeFunnelData.first().find('.amount').text()
+		},
+		spouts : {
+			// This is a dictionary of spouts
 		}
 	};
 	 
@@ -157,12 +160,16 @@ $(document).ready(function() {
 	}
 
 	// Calculate the grand total frome the machine object
-	function calculateTotal($fieldID) {
+	function calculateTotalPrice($fieldID) {
 		var price = 0;
 
 		price += parseFloat(machine.price);
 		price += parseFloat(machine.weighHopper.price);
 		price += parseFloat(machine.dischargeFunnel.price);
+
+		for (var id in machine.spouts) {
+			price += parseFloat(machine.spouts[id].price);
+		}
 
 		$grandTotalContainer.html(price);
 	}
@@ -523,7 +530,7 @@ $(document).ready(function() {
 					break;
 			}
 		}
-		calculateTotal();
+		calculateTotalPrice();
 	});
 
 	/*
@@ -574,7 +581,7 @@ $(document).ready(function() {
 				$spoutContainer.find('.warning').show().find('.calculatedSpoutSize').text(spoutSize);
 			}
 			else {
-				spoutValid(num, $spoutContainer, spoutTitle, spoutSize);
+				approveSpout(num, $spoutContainer, spoutTitle, spoutSize);
 			}
 		}
 	});
@@ -590,7 +597,7 @@ $(document).ready(function() {
 		return closest;
 	}
 	
-	function spoutValid(num, $spoutContainer, spoutTitle, spoutSize) {
+	function approveSpout(num, $spoutContainer, spoutTitle, spoutSize) {
 		// Hide invalid warning message
 		$spoutContainer.find('.warning').hide();
 		// Show add button when the number of fields is less that 3
@@ -604,14 +611,16 @@ $(document).ready(function() {
 		// Show delete button
 		$btnDel.show().prop('disabled', false);
 		// Adjust the grand total
-		grandTotal += spoutPrice;
-		$grandTotalContainer.html(grandTotal);
 		// Show the spout image
 		if ($spoutImage.hasClass('hidden')) {
 			$spoutImage.removeClass('hidden');
 			$machineImage.removeClass('no-spout');
 			$machineImage.addClass('spout');
 		}
+
+		var spout = spoutObjectForSpoutWrapperElement($spoutContainer.closest(".spout-wrapper"));
+		machine.spouts[spout.id] = spout;
+		calculateTotalPrice();
 	}
 	
 	// Buttons for adding, removing and editing spouts
@@ -625,7 +634,7 @@ $(document).ready(function() {
 		// Create the new element via clone() give it the new ID using newNum value
 		$newElem = $('#spout' + num).clone().attr('id', newSpoutID);
 		// Manipulate the name/id values of the spout type inputs inside the new element
-		spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
+		fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
 		// Show spout type fields and reset
 		$newElem.find('.field-name-spout-type').show().find('input').prop('checked', false).removeClass('active');
 		// Reset the field descriptions
@@ -671,23 +680,25 @@ $(document).ready(function() {
 			// Delete the spout
 			$spoutWrapper.remove();
 			// Reset the ID and label numbering for the remaining fields
+			machine.spouts = {};
 			$('.spout-wrapper').each(function(index) {
 				var $newElem = $(this); newNum = index + 1, newSpoutID = 'spout' + newNum, newSpoutIDUpper = newSpoutID.capitalise(), newSpoutTypeID = "type" + newSpoutIDUpper;
-				spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
+				fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
 				$newElem.find('.spout-calculation .spoutNum').text('Spout ' + newNum);
+				var spout = spoutObjectForSpoutWrapperElement($newElem);
+				machine.spouts[spout.id] = spout;
 			});
 		}
 		// Adjust the spout price
-		grandTotal -= spoutPrice;
-		$grandTotalContainer.html(grandTotal);
+		calculateTotalPrice();
 		// Show the "add" button if the 3rd spout is being removed
 		if (num == 3) {
 			$btnAdd.show();
 		}
 	});
 	
-	function spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID) {
-		$newElem.attr('id', 'spout' + newNum).find('legend').html('Spout ' + newNum).next().find('input').attr({
+	function fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID) {
+		$newElem.attr('id', newSpoutID).find('legend').html('Spout ' + newNum).next().find('input').attr({
 			"id" : function(arr) {
 				return "type" + (arr + 1) + newSpoutIDUpper;
 			},
@@ -699,6 +710,17 @@ $(document).ready(function() {
 			attr = attr.substring(0, attr.length - 1);
 			return attr + newNum;
 		});
+
+	}
+
+	function spoutObjectForSpoutWrapperElement(spoutWrapper) {
+
+		var spoutObject = {
+			id : spoutWrapper.attr('id'),
+			price : spoutPrice
+		};
+
+		return spoutObject;
 	}
 	
 	// Edit button
@@ -708,9 +730,11 @@ $(document).ready(function() {
 			$spoutFieldset = $spoutWrapper.find('fieldset');
 		// Show still-complete form and delete spout-calculation
 		$spoutFieldset.slideDown('fast').next().remove();
-		// Adjust the spout price
-		grandTotal -= spoutPrice;
-		$grandTotalContainer.html(grandTotal);
+		
+		var spout = spoutObjectForSpoutWrapperElement($spoutWrapper);
+		delete machine.spouts[spout.id];
+		calculateTotalPrice();
+
 		//Show add button:
 		$btnAdd.hide();
 	});
