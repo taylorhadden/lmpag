@@ -156,34 +156,15 @@ $(document).ready(function() {
 		return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 
-	// Calculate the grand total - passed a particular input and called when that input has been selected
+	// Calculate the grand total frome the machine object
 	function calculateTotal($fieldID) {
-		var price = parseInt($fieldID.next('label').find(".amount").text(), 10), 
-		siblingAmounts = 0, 
-		radioName = $fieldID.attr("name");
-		if (!isNaN(price)) { // If price is a number
-			// Get active inputs in same group excluding clicked:
-			var $siblingInputs = $("input[name='" + radioName + "'].active").not($fieldID);
-			// Add price of each to siblingAmounts:
-			$siblingInputs.each(function() {
-				siblingAmounts += parseInt($(this).next("label").find(".amount").text(), 10);
-			});
-			// Toggle active status for selected input and remove from all other inputs:
-			$fieldID.toggleClass("active");
-			$siblingInputs.removeClass("active");
-			// Test whether clicked input is 'active' and proceed accordingly
-			if ($fieldID.hasClass("active")) {
-				// subtract sibling amounts from grand total and add price
-				grandTotal -= siblingAmounts;
-				grandTotal += price;
-			}
-			else {
-				// subtract price from grand total
-				grandTotal -= price;
-			}
-			// Insert grand total amount into box below machine image
-			$grandTotalContainer.html(grandTotal);
-		}
+		var price = 0;
+
+		price += parseFloat(machine.price);
+		price += parseFloat(machine.weighHopper.price);
+		price += parseFloat(machine.dischargeFunnel.price);
+
+		$grandTotalContainer.html(price);
 	}
 
 	// Change the machine image between front and side view
@@ -292,7 +273,7 @@ $(document).ready(function() {
 		var stepValue = $(this).attr('href');
 		// Text for price value on various options set to name of machine selected
 		if ($('#s4').hasClass('active')) {
-		$('.machine-name').text('S-4');
+			$('.machine-name').text('S-4');
 		}
 		else if ($('#s5').hasClass('active')) {
 			$('.machine-name').text('S-5');
@@ -406,8 +387,6 @@ $(document).ready(function() {
 				// Select default radio input for selected discharge funnel:
 				var $defaultFunnel = $('#small-std-fnl')
 				$defaultFunnel.prop('checked', true);
-				// Recalculate total for default discharge funnel:	
-				calculateTotal($defaultFunnel);
 				// Get data for discharge funnel:
 				$defaultFunnelData = $defaultFunnel.siblings('label')
 				// Assign properties to the machine.dischargeFunnel object
@@ -535,9 +514,8 @@ $(document).ready(function() {
 					$spoutContainer.find('.container-shape-images .' + fieldVal).show();
 					break;
 			}
-			calculateTotal($fieldID);
 		}
-
+		calculateTotal();
 	});
 
 	/*
