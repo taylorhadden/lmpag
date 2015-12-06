@@ -356,8 +356,8 @@ $(document).ready(function() {
 	}
 	function defaultSpoutS6 () {
 		$('.not-s6').hide();
-			$('#field-name-spout').hide();
-			$('.s6-sp').show();
+		$('#field-name-spout').hide();
+		$('.s6-sp').show();
 	}
 
 	// Display Base Price as title on the front page and Price as Configured on every other page
@@ -381,6 +381,14 @@ $(document).ready(function() {
 			objectVal = $fieldID.attr('id'), // ID - precise name of item selected
 			inputVal = $fieldID.closest('ul.field-type-radio').find('.active').attr('id'), // Id of currently active option
 			$fieldLabel = $(this).next('label'); // Label that corresponds to selected input
+
+		// Get active inputs in same group excluding clicked:
+		var $siblingInputs = $("input[name='" + objectName + "'].active").not($fieldID);
+		
+		// Toggle active status for selected input and remove from all other inputs:
+		$fieldID.toggleClass("active");
+		$siblingInputs.removeClass("active");
+
 		// Check if the clicked field is the same as the selected field
 		if (inputVal == objectVal) {
 			if (inputVal == "stwh" && machine.dischargeFunnel.id !== "standard-std-fnl") {
