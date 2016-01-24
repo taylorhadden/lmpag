@@ -470,7 +470,7 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 											</p></label>
 
 									</li>
-									<li class="small">
+									<li class="small s4">
 										<input type="radio" id="stwh" class="active" name="weighhopper" value="standard-weigh-hopper" 
 										<?php
 if (!$_POST || ($_POST && $_POST['weighhopper'] == 'standard-weigh-hopper')) {
@@ -489,7 +489,7 @@ if (!$_POST || ($_POST && $_POST['weighhopper'] == 'standard-weigh-hopper')) {
 											</p></label>
 
 									</li>
-									<li class="large">
+									<li class="large s4">
 										<input type="radio" id="lrgwh" class="" name="weighhopper" value="large-weigh-hopper" 
 										<?php
 if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {

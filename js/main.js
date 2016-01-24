@@ -272,160 +272,131 @@ $(document).ready(function() {
 	}
 	
 
+	// Recursive selection based on the radio input that is selected
+	function selectOption(optionElement) {
+		var input = $(optionElement);
+		var label = input.next("label");
+		var optionID = input.attr('id');
+
+		var name = input.attr('name');
+		
+		var previousInput = $("input[name='" + name + "'].active").not(input);
+		
+		input.addClass('active');
+		previousInput.removeClass('active');
+
+		fieldContainerID = input.closest($fieldContainer).attr('id')
+
+		console.log("Selected a " + name);
+		console.log("Changing selection from " + previousInput.attr('id') + ", to " + input.attr('id'));
+
+		var nextOptionSet = null;
+		var nextOptionTag = null;
+
+		// Selecting a base machine
+		if (name === "machinemodel") {
+			
+			// Update the machine object
+			machine.id = optionID;
+			machine.name = label.find('.name').text();
+			machine.type = label.find('.type').text();
+			machine.description = $.trim(label.find('.description').text())//.trim();
+			machine.price = label.find('.amount').text();
+
+			// Show/Hide descriptions
+			$machineData.children(':not(h4,.price)').hide();
+			label.find('*').show();
+
+			// Assign classes to machine image and change name displayed below
+			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
+			$nextMachineImage.html(machine.name + " " + machine.type);
+
+			// Check machine type and show relevant weigh hoppers
+			nextOptionSet = $weighHopper;
+			nextOptionTag = "." + input.closest('li').attr('class');
+		}
+		else if (name === 'weighhopper') {
+			// Assign properties to the machine.weighHopper object
+			machine.weighHopper.id = optionID;
+			machine.weighHopper.name = label.find('.name').text();
+			machine.weighHopper.description = $.trim(label.find('.description').text())//.trim();
+			machine.weighHopper.price = label.find('.amount').text();
+
+			// Assign classes to machine image
+			$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(optionID + ' std-fnl');
+
+			nextOptionSet = $dischargeFunnel;
+			nextOptionTag = "." + $machineModel.find('input[type=radio].active').closest('li').attr('class')
+		}
+		else if (name === 'dischargefunnel') {
+			// Assign properties to the machine.dischargeFunnel object
+			machine.dischargeFunnel.id = input.attr('id');
+			machine.dischargeFunnel.name = input.find('.name').text();
+			machine.dischargeFunnel.description = $.trim(label.find('.description').text())//.trim();
+			machine.dischargeFunnel.price = label.find('.amount').text();
+
+			// Assign classes to machine image
+			if (machine.weighHopper.id == 'lrgwh') {
+				if ( machine.dischargeFunnel.id == 'large-std-fnl') {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
+				}
+				else {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
+				}
+			}
+			else {
+				$machineImage.toggleClass('std-fnl steep-fnl');
+			}
+		}
+		else if (fieldContainerID === 'field-name-spout') {
+			var fieldVal = input.val(), 
+			$spoutContainer = input.closest('fieldset');
+
+			// Show calculate button
+			$spoutContainer.find('.calculate').show();
+
+			// Toggle active class
+			$spoutContainer.find('input.active').removeClass('active');
+			input.addClass('active');
+
+			// Hide all the dimensions fields and images
+			$spoutContainer.find('.field-name-dimensions li').hide();
+			$spoutContainer.find('.container-shape-images > *').hide();
+			$spoutContainer.find('p').hide();
+
+			// Show the appropriate instructions and fields for the spout type choice
+			$spoutContainer.find('.instructions .' + fieldVal).show();
+			$spoutContainer.find('.field-name-dimensions .' + fieldVal).show();
+			$spoutContainer.find('.container-shape-images .' + fieldVal).show();
+		}
+
+		if (nextOptionSet != null && nextOptionTag != null) {
+			// Closes all sets and opens the ones with the appropriate tag
+			nextOptionSet.find('li').hide().filter('.' + nextOptionTag).show();
+
+			var foundVisibleSelectedOption = false;
+			nextOptionSet.find('li .' + nextOptionTag).each(function() {
+				if (this.style.display != 'none') {
+					foundVisibleSelectedOption = true;
+					return false;
+				}
+			});
+
+			if (!foundVisibleSelectedOption) {
+				// Select the first visible option
+				selectOption(nextOptionSet.find('li ' + nextOptionTag).first().find("input[type=radio]")[0]);
+			}
+		}
+		
+	}
+
     /*
-     * Pages 1 - 3 selection actions
+     * Pages 1 - 4 selection actions
      */
 
 	$fieldContainer.on('change', 'input[type=radio]', function(e) { // Action when choosing options - registers & indicates selection, determines knock-on choices, updates image, updates cost.
 		
-		var $fieldID = $(this), 
-			fieldContainerID = $(this).closest($fieldContainer).attr('id'), // Id of container element - type of option selected
-			objectName = $fieldID.attr('name'), // Name of input - Appears unused - equates to fieldContainerID
-			objectVal = $fieldID.attr('id'), // ID - precise name of item selected
-			inputVal = $fieldID.closest('ul.field-type-radio').find('.active').attr('id'), // Id of currently active option
-			$fieldLabel = $(this).next('label'); // Label that corresponds to selected input
-
-		// Get active inputs in same group excluding clicked:
-		var $siblingInputs = $("input[name='" + objectName + "'].active").not($fieldID);
-		
-		// Toggle active status for selected input and remove from all other inputs:
-		$fieldID.toggleClass("active");
-		$siblingInputs.removeClass("active");
-
-		// Check if the clicked field is the same as the selected field
-		if (inputVal == objectVal) {
-			if (inputVal == "stwh" && machine.dischargeFunnel.id !== "standard-std-fnl") {
-				// Select default radio input for selected discharge funnel:
-				var $defaultFunnel = $('#small-std-fnl')
-				$defaultFunnel.prop('checked', true);
-				// Get data for discharge funnel:
-				$defaultFunnelData = $defaultFunnel.siblings('label')
-				// Assign properties to the machine.dischargeFunnel object
-				machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-				machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-				machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-				machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-				// Assign classes to machine image
-				$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass('stwh std-fnl');
-			}
-			e.preventDefault();
-        }
-		else {
-			// If it is different execute the following actions according to which field was clicked
-			switch (fieldContainerID) {
-				case 'field-name-machine-model':
-					// Assign properties to the machine object
-					machine.id = $fieldID.attr('id');
-					machine.name = $fieldLabel.find('.name').text();
-					machine.type = $fieldLabel.find('.type').text();
-					machine.description = $.trim($fieldLabel.find('.description').text())//.trim();
-					machine.price = $fieldLabel.find('.amount').text();
-					// Show/Hide descriptions - once more than one machine is available this will hide all descriptions except for that of selected machine
-					$machineData.children(':not(h4,.price)').hide();
-					$fieldLabel.find('*').show();
-					// Assign classes to machine image and change name displayed below
-					$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
-					$nextMachineImage.html(machine.name + " " + machine.type);
-					// Check machine type and show relevant weigh hoppers
-					var machineType = $fieldID.closest('li').attr('class');
-					$weighHopper.find($('li')).hide().filter($('.' + machineType)).show();
-					break;
-				case 'field-name-weigh-hopper':
-					// Assign properties to the machine.weighHopper object
-					machine.weighHopper.id = $fieldID.attr('id');
-					machine.weighHopper.name = $fieldLabel.find('.name').text();
-					machine.weighHopper.description = $.trim($fieldLabel.find('.description').text())//.trim();
-					machine.weighHopper.price = $fieldLabel.find('.amount').text();
-					// Assign classes to machine image
-					$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(objectVal + ' std-fnl');
-					// If the S-6 isn't selected
-					if ($('#s4').hasClass('active') || $('#s5').hasClass('active')) {
-						// Show/Hide discharge funnels and reset checked properties:
-						// Get name of required category of discharge funnels
-						var componentSize = $fieldID.closest('li').attr('class');
-						// Hide all list items then show those that are in the required category:
-						$dischargeFunnel.find($('li')).hide().filter($('.' + componentSize)).show();
-						// Uncheck selection of any discharge funnel and de-activate selection flag:
-						$dischargeFunnel.find($('input')).prop('checked', false);
-
-						var $defaultFunnel;
-						// Check which weigh hopper is being selected:
-						if (machine.weighHopper.id == 'stwh') {
-							// Select default radio input for selected discharge funnel:
-							var $defaultFunnel = $('#small-std-fnl');
-						}
-						else if (machine.weighHopper.id == 'no-wh') {
-							// Select default radio input for selected discharge funnel:
-							$defaultFunnel = $('#small-std-fnl');
-						}
-						// Automatically selects Large Discharge funnel and adds the cost
-						else if (machine.weighHopper.id == 'lrgwh') {
-							// Select default radio input for selected discharge funnel:
-							$defaultFunnel = $('#large-std-fnl')
-						}
-
-						$defaultFunnel.prop('checked', true);
-						// Get data for discharge funnel:
-						$defaultFunnelData = $defaultFunnel.siblings('label')
-						// Assign properties to the machine.dischargeFunnel object
-						machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-						machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-						machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-						machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-					}
-					// If the S-7 is selected
-					else if ($('#s7').hasClass('active')) {
-						$('#small-steep-fnl').parent('.small').hide();
-						$('#field-name-discharge-funnel .large').hide();
-						$('#field-name-discharge-funnel .discharge-cht').hide();
-						var $defaultFunnel = $('#small-std-fnl')
-						$defaultFunnel.prop('checked', true);
-					}
-					// If the S-6 is selected
-					else {
-						$('#field-name-discharge-funnel .small').hide();
-						var $defaultFunnel = $('#discharge-cht')
-						$defaultFunnel.prop('checked', true);
-					}
-					break;
-				case 'field-name-discharge-funnel':
-					// Assign properties to the machine.dischargeFunnel object
-					machine.dischargeFunnel.id = $fieldID.attr('id');
-					machine.dischargeFunnel.name = $fieldLabel.find('.name').text();
-					machine.dischargeFunnel.description = $.trim($fieldLabel.find('.description').text())//.trim();
-					machine.dischargeFunnel.price = $fieldLabel.find('.amount').text();
-					// Assign classes to machine image
-					if (machine.weighHopper.id == 'lrgwh') {
-						if ( machine.dischargeFunnel.id == 'large-std-fnl') {
-							$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
-						}
-						else {
-							$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
-						}
-					}
-					else {
-						$machineImage.toggleClass('std-fnl steep-fnl');
-					}
-					break;
-				case 'field-name-spout':
-					var fieldVal = $fieldID.val(), 
-					$spoutContainer = $fieldID.closest('fieldset');
-					// Show calculate button
-					$spoutContainer.find('.calculate').show();
-					// Toggle active class
-					$spoutContainer.find('input.active').removeClass('active');
-					$fieldID.addClass('active');
-					// Hide all the dimensions fields and images
-					$spoutContainer.find('.field-name-dimensions li').hide();
-					$spoutContainer.find('.container-shape-images > *').hide();
-					$spoutContainer.find('p').hide();
-					// Show the appropriate instructions and fields for the spout type choice
-					$spoutContainer.find('.instructions .' + fieldVal).show();
-					$spoutContainer.find('.field-name-dimensions .' + fieldVal).show();
-					$spoutContainer.find('.container-shape-images .' + fieldVal).show();
-					break;
-			}
-		}
+		selectOption(this);
 		calculateTotalPrice();
 	});
 
