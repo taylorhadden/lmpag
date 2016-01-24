@@ -109,27 +109,27 @@ include_once 'bin/php_validation.php';
 			<nav id="pag-navigation" class="clearfix">
 				<ol>
 					<li>
-						<a href="#step-1" class="active"><span class="list-no">1</span>
+						<a data="step-1" class="active"><span class="list-no">1</span>
 						<br/>
 						Select your machine</a>
 					</li>
 					<li>
-						<a href="#step-2"><span class="list-no">2</span>
+						<a data="step-2"><span class="list-no">2</span>
 						<br/>
 						Select a Weigh Hopper</a>
 					</li>
 					<li>
-						<a href="#step-3"><span class="list-no">3</span>
+						<a data="step-3"><span class="list-no">3</span>
 						<br/>
 						Select a Discharge Funnel</a>
 					</li>
 					<li>
-						<a href="#step-4"><span class="list-no">4</span>
+						<a data="step-4"><span class="list-no">4</span>
 						<br/>
 						Select Spouts</a>
 					</li>
 					<li>
-						<a href="#step-5"><span class="list-no">5</span>
+						<a data="step-5"><span class="list-no">5</span>
 						<br/>
 						Your Quote Summary</a>
 					</li>

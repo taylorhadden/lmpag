@@ -192,158 +192,54 @@ $(document).ready(function() {
      *  Navigation
      */
 
-	$('.step-pager .button').click(function() { // Action for 'prev' & 'next' buttons
-		changeCostContainerText()
-		var $stepContainer = $(this).closest('.step-container'), 
-			nextStepContainerID = $stepContainer.next().attr('id'), 
-			prevStepContainerID = $stepContainer.prev().attr('id');
-		// Text for price value on various options set to name of machine selected
-		if ($('#s4').hasClass('active')) {
-			$('.machine-name').text('S-4');
-		}
-		else if ($('#s5').hasClass('active')) {
-			$('.machine-name').text('S-5');
-		}
-		else if ($('#s6').hasClass('active')) {
-			$('.machine-name').text('S-6');
-		}
-		else if ($('#s7').hasClass('active')) {
-			$('.machine-name').text('S-7');
-		}
-		// Remove active class from the current page 
+    // This causes no state change, only view change.
+    // It is called by clicking on the left-hand tabs and
+    // By the previous/next buttons on each page.
+	function switchToStep(stepID) {
+		changeCostContainerText();
+
+		var stepContainer = $("#" + stepID);
+		// Remove active state from old step tab
 		$('#pag-navigation a').removeClass('active');
-		// Move the app forward if the clicked button is next or back if is previous and add the active class
+		// Set active state for current step tab
+		$('#pag-navigation a[data*=' + stepID + ']').addClass('active');
+
+		$('.step-container').hide();
+		stepContainer.show();
+
+		if (stepID === "step-5") {
+			showValues();
+		}
+
+		$('#thankYouMessage').remove();
+	}
+
+	// Action for 'prev' & 'next' buttons
+	$('.step-pager .button').click(function() {
+		console.log("Previous / Next Button Clicked");
+
+		// Determine the next step ID
+		var $stepContainer = $(this).closest('.step-container');
+		
+		var switchingToID;
 		if ($(this).is('.next')) {
-			$stepContainer.hide().next().show();
-			$('#pag-navigation a[href*=' + nextStepContainerID + ']').addClass('active');
+			switchingToID = $stepContainer.next().attr('id');
 		}
 		else {
-			$stepContainer.hide().prev().show();
-			$('#pag-navigation a[href*=' + prevStepContainerID + ']').addClass('active');
-		}
-		// Execute showvalues() to display results if moving to the summary page
-		if ($(this).is('#step-4-pager .button.next')) {
-			showValues();
-		}
-		$('#thankYouMessage').remove();
-		// Reload the page to reset the form if moving to page 1
-		if ($(this).is('#step-2-pager .button.prev')) {
-			location.reload();
-		}
-		// Reload the page to reset the form if moving to page 1
-		if ($(this).is('#step-3-pager .button.prev')) {
-			defaultHopperS4();
+			switchingToID = $stepContainer.prev().attr('id');
 		}
 
-		// Select the correct Weigh Hopper(s) for each machine
-		if ($(this).is('#step-1-pager .button.next')) {
-			defaultHopperS4();
-			$('#smwh').parent('li').hide();
-			$('#stwh').parent('li').hide();
-			$('#lrgwh').parent('li').hide();
-			$('#lrgwh2').parent('li').hide();
-			$('.wh5').hide();
-			$('.fu6').hide();
-		}
-		if ($(this).is('#step-1-pager .button.next')&& $('#s4').hasClass('active')) {
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s5').hasClass('active')) {
-			$('.wh5').show();
-			$('.not-wh5').hide();
-			defaultHopperS5();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultHopperS6();
-			$('#smwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s7').hasClass('active')) {
-			defaultHopperS4();
-			$('#stwh').parent('li').show();
-			$('#lrgwh2').parent('li').show();
-		}
-		if ($(this).is('#step-2-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		if ($(this).is('#step-2-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		if ($(this).is('#step-4-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultSpoutS6();
-		}
+		// Apply the switch to the ID
+		switchToStep(switchingToID);
 	});
 
-	$('#pag-navigation a').click(function() { // Action for left-hand step tabs
-		changeCostContainerText();
-		var stepValue = $(this).attr('href');
-		// Text for price value on various options set to name of machine selected
-		if ($('#s4').hasClass('active')) {
-			$('.machine-name').text('S-4');
-		}
-		else if ($('#s5').hasClass('active')) {
-			$('.machine-name').text('S-5');
-		}
-		else if ($('#s6').hasClass('active')) {
-			$('.machine-name').text('S-6');
-		}
-		else if ($('#s7').hasClass('active')) {
-			$('.machine-name').text('S-7');
-		}
-		// Remove active class from current page and add to selected page
-		$('#pag-navigation a').removeClass('active');
-		$(this).addClass('active');
-		// Hide the current page and show the selected page
-		$('.step-container').hide();
-		$(stepValue).show();
-		// Execute showvalues() to display results if moving to the summary page
-		if (stepValue === "#step-5") {
-			showValues();
-		}
-		$('#thankYouMessage').remove();
-		// Reload the page to reset the form if moving to page 1
-		if (stepValue === "#step-1") {
-			location.reload();
-		}
-		// Reset the hopper to S4 default if moving to page 2
-		if (stepValue === "#step-2") {
-			defaultHopperS4();
-			$('#smwh').parent('li').hide();
-			$('#stwh').parent('li').hide();
-			$('#lrgwh').parent('li').hide();
-			$('.wh5').hide();
-			$('.fu6').hide();
-			$('.s6-sp').hide();
-		}
-		// Select the correct Weigh Hopper(s) for each machine
-		if (stepValue === "#step-2" && $('#s4').hasClass('active')) {
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-2" && $('#s5').hasClass('active')) {
-			defaultHopperS5();
-			$('.wh5').show();
-			$('.not-wh5').hide();
-		}
-		if (stepValue === "#step-2" && $('#s6').hasClass('active')) {
-			defaultHopperS6();
-			$('#smwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-2" && $('#s7').hasClass('active')) {
-			defaultHopperS4();
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-3" && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		// Don't show Spouts for S6 
-		if (stepValue === "#step-4" && $('#s6').hasClass('active')) {
-			defaultSpoutS6();
-		}
+	// Action for left-hand step tabs
+	$('#pag-navigation a').click(function() {
+		var stepID = $(this).attr('data');
+		switchToStep(stepID);
 	});
+
+
 	
 	function defaultHopperS4 () {
 		$('#stwh').prop('checked', true).trigger('change');
