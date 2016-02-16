@@ -98,7 +98,110 @@ $(document).ready(function() {
 			// This is a dictionary of spouts
 		}
 	};
-	 
+	
+	
+	/*
+	Logical Object Creation
+
+	There are two types of objects: MachineOptions and ConfigurationSteps
+
+	A MachineOption can have many MachineOptions as subOptions
+	A ConfigurationStep can have many MachineOptions
+
+	A MachineOption belongs to one MachineStep
+	Multiple MachineOptions may reference the same object. Each MachineOption in a hierarchy is its own object.
+
+	When a MachineOption is selected
+		- deselect all options in the step
+		- select current option
+		- we get the ConfigurationStep of the first sub-option
+		- for each option in the step
+			- if the option is not in the sub-option list
+				- we hide the option
+				- we deselect the option
+			- otherwise, we show the option
+		- if no sub-option is visible and selected, we select the first sub-option
+
+	*/
+
+	var rootOptions = {};
+
+	var optionLookup = {};
+
+	function MachineOption(domElement) {
+		this.element = domElement;
+		this.subOptions = [];
+	}
+	MachineOption.prototype.addSubOption = function() {
+		for (int i = 0; i < arguments.length; i++) {
+			this.subOptions.push(arguments[i]);
+			arguments[i].parent = this;
+		}
+		return this;
+	}
+	MachineOption.prototype.subStep = function(step) {
+		step.addSubOptions(this.subOptions);
+	}
+	MachineOption.prototype.container = function() {
+		return this.element.closest("li");
+	}
+	MachineOption.prototype.select = function() {
+		this.step
+	}
+
+	function MO(selector) {
+		var option = new MachineOption($(selector));
+
+		// This lets us look up the option by ID
+		var lookupList = optionLookup[option.element.attr('id')];
+		if (lookupList === undefined) {
+			lookupList = [option];
+			optionLookup[option.element.attr('id')] = lookupList;
+		}
+		else {
+			lookupList.push(option);
+		}
+
+		return option;
+	}
+
+	function ConfigurationStep(domElement) {
+		this.element = domElement;
+		this.options = [];
+	}
+	ConfigurationStep.prototype.addOption() {
+		this.addOptions(arguments);
+	}
+	ConfigurationStep.prototype.addOptions(list) {
+		for (int i = 0; i < list.length; i++) {
+			this.options.push(list[i]);
+			list[i].step = this;
+		}
+	}
+
+	// Intialize the Steps
+	var modelStep = new ConfigurationStep($("#step-1"));
+	var weighHopperStep = new ConfigurationStep($("#step-2"));
+
+	// Initialize the S4 Model Heiarachy
+	var s4Option = MO($("#s4")).addSubOption(
+			MO($("#stwh")),
+			MO($("#lrgwh"))
+		).subStep(weighHopperStep);
+
+	var s5Option = MO($("#s5")).addSubOption(
+			MO($("#no-wh"))
+		).subStep(weighHopperStep);
+
+	var s6Option = MO($("#s6").addSubOption(
+			MO($("stwh")),
+			MO($("lrgwh"))
+		).subStep(weighHopperStep);
+
+	var s7Option = MO($("#s7"));
+
+	modelStep.addOption(s4Option, s5Option, s6Option, s7Option);
+
 	/*
 	* Document ready JS
 	*/
@@ -395,8 +498,11 @@ $(document).ready(function() {
      */
 
 	$fieldContainer.on('change', 'input[type=radio]', function(e) { // Action when choosing options - registers & indicates selection, determines knock-on choices, updates image, updates cost.
+		var id = this.id;
+
 		
-		selectOption(this);
+
+		//selectOption(this);
 		calculateTotalPrice();
 	});
 

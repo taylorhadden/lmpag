@@ -189,7 +189,8 @@ include_once 'bin/php_validation.php';
 									<li class="s4">
 										<input type="radio" id="s4" class="radio" name="machinemodel" value="S-4" 
 										/>
-										<label for="s4"><h4><span class="name"><?php echo $settings["machinemodel"]["S-4"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-4"]["type"]; ?></span></h4>
+										<label for="s4">
+											<h4><span class="name"><?php echo $settings["machinemodel"]["S-4"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-4"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-4"]["description"]; ?>
 												<h5>S-4 Specifications:</h5>
@@ -239,7 +240,8 @@ include_once 'bin/php_validation.php';
 											</div>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-4"]["price"]; ?></span>
-											</p></label>
+											</p>
+										</label>
 									</li>
 
 									<li class="s5">
@@ -249,7 +251,8 @@ include_once 'bin/php_validation.php';
 												echo 'checked';
 											}
 										?>/>
-										<label for="s5"><h4><span class="name"><?php echo $settings["machinemodel"]["S-5"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-5"]["type"]; ?></span></h4>
+										<label for="s5">
+											<h4><span class="name"><?php echo $settings["machinemodel"]["S-5"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-5"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-5"]["description"]; ?>
 												<h5>S-5 Specifications:</h5>
@@ -299,7 +302,8 @@ include_once 'bin/php_validation.php';
 											</div>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-5"]["price"]; ?></span>
-											</p></label>
+											</p>
+										</label>
 									</li>
 									<li class="s6">
 										<input type="radio" id="s6" name="machinemodel" value="S-6" 
