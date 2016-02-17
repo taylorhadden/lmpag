@@ -445,7 +445,7 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 								</p>
 								<ul id="field-name-weigh-hopper" class="field-type-radio field-container label-format-block">
 									<li class="small">
-										<input type="radio" id="no-wh" class="active" name="weighhopper" value="small-weigh-hopper" 
+										<input type="radio" id="no-wh" class="" name="weighhopper" value="small-weigh-hopper" 
 										/>
 										<label for="no-wh" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["no-weigh-hopper"]["name"]; ?></h4>
 											<div class="component-image ir">
@@ -460,7 +460,7 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 
 									</li>
 									<li class="small">
-										<input type="radio" id="smwh" class="active" name="weighhopper" value="small-weigh-hopper" 
+										<input type="radio" id="smwh" class="" name="weighhopper" value="small-weigh-hopper" 
 										/>
 										<label for="smwh" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["small-weigh-hopper"]["name"]; ?></h4>
 											<div class="component-image ir">
@@ -475,7 +475,7 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 
 									</li>
 									<li class="small s4">
-										<input type="radio" id="stwh" class="active" name="weighhopper" value="standard-weigh-hopper" 
+										<input type="radio" id="stwh" class="" name="weighhopper" value="standard-weigh-hopper" 
 										<?php
 if (!$_POST || ($_POST && $_POST['weighhopper'] == 'standard-weigh-hopper')) {
 	echo 'checked';

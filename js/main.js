@@ -133,20 +133,66 @@ $(document).ready(function() {
 		this.subOptions = [];
 	}
 	MachineOption.prototype.addSubOption = function() {
-		for (int i = 0; i < arguments.length; i++) {
+		for (var i = 0; i < arguments.length; i++) {
 			this.subOptions.push(arguments[i]);
 			arguments[i].parent = this;
 		}
 		return this;
 	}
-	MachineOption.prototype.subStep = function(step) {
-		step.addSubOptions(this.subOptions);
+	MachineOption.prototype.useSubStep = function(step) {
+		step.addOptions(this.subOptions);
+		return this;
 	}
 	MachineOption.prototype.container = function() {
 		return this.element.closest("li");
 	}
+	MachineOption.prototype.isSelected = function() {
+		return this.element.hasClass("active");
+	}
+	MachineOption.prototype.hasSelectedChild = function() {
+		for (var i = 0; i < this.subOptions.length; i++) {
+			if (this.subOptions[i].isSelected()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	MachineOption.prototype.pathName = function(name) {
+		if (name === undefined) {
+			name = this.element.attr('id');
+		}
+		else {
+			name = this.element.attr('id') + "/" + name;
+		}
+		if (this.parent !== undefined) {
+			name = this.parent.pathName(name);
+		}
+		return name
+	}
 	MachineOption.prototype.select = function() {
-		this.step
+		console.log("selecting: " + this.pathName());
+
+		this.step.options.forEach(function(option) {
+			option.element.removeClass('active');
+		});
+
+		this.element.addClass('active');
+
+		if (this.subOptions.length > 0) {
+			var subStep = this.subOptions[0].step;
+
+			subStep.options.forEach(function(option) {
+				option.container().hide();
+			});
+
+			this.subOptions.forEach(function(option) {
+				option.container().show();
+			});
+
+			if (!this.hasSelectedChild()) {
+				this.subOptions[0].select();
+			}
+		}
 	}
 
 	function MO(selector) {
@@ -169,14 +215,18 @@ $(document).ready(function() {
 		this.element = domElement;
 		this.options = [];
 	}
-	ConfigurationStep.prototype.addOption() {
+	ConfigurationStep.prototype.addOption = function() {
 		this.addOptions(arguments);
 	}
-	ConfigurationStep.prototype.addOptions(list) {
-		for (int i = 0; i < list.length; i++) {
+	ConfigurationStep.prototype.addOptions = function(list) {
+		for (var i = 0; i < list.length; i++) {
 			this.options.push(list[i]);
 			list[i].step = this;
 		}
+	}
+	ConfigurationStep.prototype.hideAll = function() {
+		// This hides all real dom children
+		this.element.find("li").hide();
 	}
 
 	// Intialize the Steps
@@ -184,23 +234,27 @@ $(document).ready(function() {
 	var weighHopperStep = new ConfigurationStep($("#step-2"));
 
 	// Initialize the S4 Model Heiarachy
-	var s4Option = MO($("#s4")).addSubOption(
-			MO($("#stwh")),
-			MO($("#lrgwh"))
-		).subStep(weighHopperStep);
+	var s4Option = MO("#s4").addSubOption(
+			MO("#stwh"),
+			MO("#lrgwh")
+		).useSubStep(weighHopperStep);
 
-	var s5Option = MO($("#s5")).addSubOption(
-			MO($("#no-wh"))
-		).subStep(weighHopperStep);
+	var s5Option = MO("#s5").addSubOption(
+			MO("#no-wh")
+		).useSubStep(weighHopperStep);
 
-	var s6Option = MO($("#s6").addSubOption(
-			MO($("stwh")),
-			MO($("lrgwh"))
-		).subStep(weighHopperStep);
+	var s6Option = MO("#s6").addSubOption(
+			MO("#stwh"),
+			MO("#lrgwh")
+		).useSubStep(weighHopperStep);
 
-	var s7Option = MO($("#s7"));
+	var s7Option = MO("#s7");
 
 	modelStep.addOption(s4Option, s5Option, s6Option, s7Option);
+
+	weighHopperStep.hideAll();
+	console.log(optionLookup);
+	// Prepare
 
 	/*
 	* Document ready JS
@@ -498,9 +552,26 @@ $(document).ready(function() {
      */
 
 	$fieldContainer.on('change', 'input[type=radio]', function(e) { // Action when choosing options - registers & indicates selection, determines knock-on choices, updates image, updates cost.
+		// Get the machine option that has a selected parent that has this ID
 		var id = this.id;
 
-		
+		console.log("Clicked on: " + id);
+
+		var list = optionLookup[id];
+		var clickedOption = null;
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].parent === undefined || list[i].parent.isSelected()) {
+				clickedOption = list[i];
+				break;
+			}
+		}
+
+		if (clickedOption != null) {
+			clickedOption.select();
+		}
+		else {
+			console.log("Did not find option");
+		}
 
 		//selectOption(this);
 		calculateTotalPrice();
