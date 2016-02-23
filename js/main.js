@@ -124,10 +124,13 @@ $(document).ready(function() {
 
 	*/
 
-	var rootOptions = {};
+	/*
+	
+	Establishing the Object API
 
-	var optionLookup = {};
+	*/
 
+	// Machine Option
 	function MachineOption(domElement) {
 		this.element = domElement;
 		this.subOptions = [];
@@ -167,7 +170,7 @@ $(document).ready(function() {
 		if (this.parent !== undefined) {
 			name = this.parent.pathName(name);
 		}
-		return name
+		return name;
 	}
 	MachineOption.prototype.select = function() {
 		console.log("selecting: " + this.pathName());
@@ -177,6 +180,12 @@ $(document).ready(function() {
 		});
 
 		this.element.addClass('active');
+
+		if (this.onSelects !== undefined) {
+			for (var i = 0; i < this.onSelects.length; i++) {
+				this.onSelects[i].call(this);
+			}
+		}
 
 		if (this.subOptions.length > 0) {
 			var subStep = this.subOptions[0].step;
@@ -194,23 +203,21 @@ $(document).ready(function() {
 			}
 		}
 	}
-
-	function MO(selector) {
-		var option = new MachineOption($(selector));
-
-		// This lets us look up the option by ID
-		var lookupList = optionLookup[option.element.attr('id')];
-		if (lookupList === undefined) {
-			lookupList = [option];
-			optionLookup[option.element.attr('id')] = lookupList;
+	MachineOption.prototype.onSelect = function(method, override) {
+		if (!override) {
+			if (this.onSelects === undefined) {
+				this.onSelects = [];
+			}
+			this.onSelects.push(method);
 		}
 		else {
-			lookupList.push(option);
+			this.select = method;
 		}
-
-		return option;
+		return this;
 	}
 
+	
+	// Configuration Steps
 	function ConfigurationStep(domElement) {
 		this.element = domElement;
 		this.options = [];
@@ -229,28 +236,100 @@ $(document).ready(function() {
 		this.element.find("li").hide();
 	}
 
+	/*
+
+	Creating the logical objects
+
+	*/
+	// Lookup dictionaries
+	var rootOptions = {};
+	var optionLookup = {};
+
 	// Intialize the Steps
 	var modelStep = new ConfigurationStep($("#step-1"));
 	var weighHopperStep = new ConfigurationStep($("#step-2"));
+	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
+
+
+	// Creation Methods
+	function MO(selector) {
+		var option = new MachineOption($(selector));
+
+		// This lets us look up the option by ID
+		var lookupList = optionLookup[option.element.attr('id')];
+		if (lookupList === undefined) {
+			lookupList = [option];
+			optionLookup[option.element.attr('id')] = lookupList;
+		}
+		else {
+			lookupList.push(option);
+		}
+
+		return option;
+	}
+
+	function makeMachine(selector) {
+		var machineOption = MO(selector);
+
+		modelStep.addOption(machineOption);
+
+		// Tack on other furnctions
+		machineOption.onSelect(function() {
+			var label = this.element.next("label");
+
+			machine.id = this.element.attr('id');
+			machine.name = label.find('.name').text();
+			machine.type = label.find('.type').text();
+			machine.description = $.trim(label.find('.description').text());
+			machine.price = label.find('.amount').text();
+
+			// Show/Hide descriptions
+			$machineData.children(':not(h4,.price)').hide();
+			label.find('*').show();
+
+			// Assign classes to machine image and change name displayed below
+			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
+			$nextMachineImage.html(machine.name + " " + machine.type);
+		});
+
+		return machineOption;
+	}
+
+	function makeWeighHopper(selector) {
+		var weighHopper = MO(selector);
+
+		weighHopperStep.addOption(weighHopper);
+
+		weighHopper.onSelect(function() {
+			var label = this.element.next("label");
+			machine.weighHopper.id = this.element.attr('id');
+			machine.weighHopper.name = label.find('.name').text();
+			machine.weighHopper.description = $.trim(label.find('.description').text());
+			machine.weighHopper.price = label.find('.amount').text();
+
+			// Assign classes to machine image
+			$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(this.element.attr('id') + ' std-fnl');
+		});
+
+		return weighHopper;
+	}
 
 	// Initialize the S4 Model Heiarachy
-	var s4Option = MO("#s4").addSubOption(
-			MO("#stwh"),
-			MO("#lrgwh")
-		).useSubStep(weighHopperStep);
+	var s4Option = makeMachine("#s4").addSubOption(
+			makeWeighHopper("#stwh"),
+			makeWeighHopper("#lrgwh")
+		);
 
-	var s5Option = MO("#s5").addSubOption(
-			MO("#no-wh")
-		).useSubStep(weighHopperStep);
+	var s5Option = makeMachine("#s5").addSubOption(
+			makeWeighHopper("#no-wh")
+		);
 
-	var s6Option = MO("#s6").addSubOption(
-			MO("#stwh"),
-			MO("#lrgwh")
-		).useSubStep(weighHopperStep);
+	var s6Option = makeMachine("#s6").addSubOption(
+			makeWeighHopper("#stwh"),
+			makeWeighHopper("#lrgwh")
+		);
 
-	var s7Option = MO("#s7");
-
-	modelStep.addOption(s4Option, s5Option, s6Option, s7Option);
+	var s7Option = makeMachine("#s7");
 
 	weighHopperStep.hideAll();
 	console.log(optionLookup);
