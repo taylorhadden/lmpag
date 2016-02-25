@@ -1187,12 +1187,12 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 										</fieldset>
 
 									</div>
-									<div id = "ChuteOptions">
-										Hear are where chute options go.
-									</div>
 									<button type="button" id="btnAdd" value="Add another spout" class="hidden">
 										Add another spout
 									</button>
+								</div>
+								<div id = "ChuteOptions">
+									Hear are where chute options go.
 								</div>
 							</div><!-- id="step-4" -->
 

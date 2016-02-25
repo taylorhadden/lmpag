@@ -363,8 +363,11 @@ $(document).ready(function() {
 		insertionStep.addOption(inserter);
 
 		inserter.onSelect(function() {
-
-		});
+			this.step.options.forEach(function(option) {
+				option.element.hide();
+			});
+			this.element.show();
+		}, true);
 
 		return inserter;
 	}
@@ -560,29 +563,6 @@ $(document).ready(function() {
 		switchToStep(stepID);
 	});
 
-
-	
-	function defaultHopperS4 () {
-		$('#stwh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultHopperS5 () {
-		$('#no-wh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultHopperS6 () {
-		$('#smwh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultFunnelS6 () {
-		$('#discharge-cht').prop('checked', true).trigger('change');
-		$('.fu6').show();
-	}
-	function defaultSpoutS6 () {
-		$('.not-s6').hide();
-		$('#field-name-spout').hide();
-		$('.s6-sp').show();
-	}
 
 	// Display Base Price as title on the front page and Price as Configured on every other page
 	function changeCostContainerText() {
