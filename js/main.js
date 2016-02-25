@@ -343,7 +343,12 @@ $(document).ready(function() {
 				}
 			}
 			else {
-				$machineImage.toggleClass('std-fnl steep-fnl');
+				if ( machine.dischargeFunnel.id == 'small-std-fnl') {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
+				}
+				else {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
+				}
 			}
 		});
 

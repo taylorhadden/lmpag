@@ -445,22 +445,17 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 
 							<div id="step-2" class="step-container" name="step-2">
 								<h3>Select your Weigh Hopper</h3>
-								<p class="not-wh5">
+								<p>
 									The <b>Weigh Hopper</b> is the scale portion of the unit which handles and weighs your products. Select a hopper by clicking its image.
-								</p>
-								<p class="wh5">
-									The S-5 uses a table-style scale instead of a Weigh Hopper. Please click the "Next Step” arrow below to select a Discharge Funnel.
 								</p>
 								<ul id="field-name-weigh-hopper" class="field-type-radio field-container label-format-block">
 									<li class="small">
 										<input type="radio" id="no-wh" class="" name="weighhopper" value="small-weigh-hopper" 
 										/>
 										<label for="no-wh" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["no-weigh-hopper"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Small Weigh Hopper image
-											</div>
 											<p class="description">
 												<?php echo $settings["weighhopper"]["no-weigh-hopper"]["description"]; ?>
+												Please click the "Next Step” arrow below to select a Discharge Funnel.
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["weighhopper"]["no-weigh-hopper"]["price"]; ?></span> included on standard <span class="machine-name"></span>
@@ -579,34 +574,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 										</label>
 									</li>
-									<li class="discharge-cht hidden">
-										<input type="radio" id="discharge-cht" name="dischargefunnel" value="discharge-cht" />
-										<label for="discharge-cht" class="discharge-cht clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["discharge"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Discharge Chute
-											</div>
-											<p class="description">
-												<?php echo $settings["dischargefunnel"]["discharge"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge"]["price"]; ?></span> upcharge <span class="machine-name"></span>
-											</p>
-										</label>
-									</li>
-									<li class="discharge-cht-free hidden">
-										<input type="radio" id="discharge-cht-free" name="dischargefunnel" value="discharge-cht" />
-										<label for="discharge-cht-free" class="discharge-cht clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["discharge-free"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Discharge Chute
-											</div>
-											<p class="description">
-												<?php echo $settings["dischargefunnel"]["discharge-free"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge-free"]["price"]; ?></span> included on standard <span class="machine-name"></span>
-											</p>
-										</label>
-									</li>
 									<li class="large hidden">
 										<input type="radio" id="large-std-fnl" name="dischargefunnel" value="large-standard-funnel" />
 										<label for="large-std-fnl" class="std-fnl clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["large"]["standard"]["name"]; ?></h4>
@@ -632,6 +599,34 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["steep"]["price"]; ?></span> upcharge
+											</p>
+										</label>
+									</li>
+									<li class="discharge-cht hidden">
+										<input type="radio" id="discharge-cht" name="dischargefunnel" value="discharge-cht" />
+										<label for="discharge-cht" class="discharge-cht clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["discharge"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Discharge Chute
+											</div>
+											<p class="description">
+												<?php echo $settings["dischargefunnel"]["discharge"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge"]["price"]; ?></span> upcharge <span class="machine-name"></span>
+											</p>
+										</label>
+									</li>
+									<li class="discharge-cht-free hidden">
+										<input type="radio" id="discharge-cht-free" name="dischargefunnel" value="discharge-cht" />
+										<label for="discharge-cht-free" class="discharge-cht clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["discharge-free"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Discharge Chute
+											</div>
+											<p class="description">
+												<?php echo $settings["dischargefunnel"]["discharge-free"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge-free"]["price"]; ?></span> included on standard <span class="machine-name"></span>
 											</p>
 										</label>
 									</li>
