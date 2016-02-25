@@ -634,561 +634,566 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 							</div><!-- id="step-3" -->
 
 							<div id="step-4" class="step-container" name="step-4">
-							<input type="hidden" name="spout-price" value="<?php echo $settings["spout"]["price"] ?>" />
-							<input type="hidden" name="spout-sizes" value="<?php echo $spoutSizes ?>" />
-								<h3>Select your Spout</h3>
-								<div class="spout-sprite main-spout-image ir">
-									Spout image
-								</div>
-								<p class="s6-sp">
-									The S-6 uses Discharge Chutes exclusively. Please click on the “Next Step” button to proceed to your Summary.
-								</p>
-								<p class="not-s6">
-									The spout attaches to the bottom of the discharge funnel and directs the materials into your container.
-								</p>
-								<p class="not-s6">
-									Use the <b>Spout Calculator</b> below to help you determine which size spout is right for your container. Please start with your smallest container first, then add larger ones if you have them.
-								</p>
-								<div id="field-name-spout" class="field-container label-format-column">
-									<div id="spout1" class="spout-wrapper">
-									<fieldset class="field-spout hidden">
-										<legend>
-											Spout 1
-										</legend>
-										<ul class="field-type-radio field-name-spout-type">
-											<li class="flat-bag">
-												<input type="radio" id="type1Spout1" name="typeSpout1" value="flat-bag" />
-												<label for="type1Spout1">
-													<div class="spout-sprite ir">
-														Flat bag spout image
-													</div><h4 class="name">Flat bag</h4></label>
-											</li>
-											<li class="four-sided-bag">
-												<input type="radio" id="type2Spout1" name="typeSpout1" value="four-sided-bag" />
-												<label for="type2Spout1">
-													<div class="spout-sprite ir">
-														4 sided bag spout image
-													</div><h4 class="name">4 sided bag</h4></label>
-											</li>
-											<li class="can-jar">
-												<input type="radio" id="type3Spout1" name="typeSpout1" value="can-jar" />
-												<label for="type3Spout1">
-													<div class="spout-sprite ir">
-														Bottle or Jar spout image
-													</div><h4 class="name">Bottle or Jar</h4></label>
-											</li>
-										</ul>
-										<div class="instructions">
-											<p class="spout-selection">
-												Click on the diagram above that most accurately depicts your container.
-											</p>
-											<p class="flat-bag">
-												Enter the width of the bag opening (W).
-											</p>
-											<p class="four-sided-bag">
-												Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
-											</p>
-											<p class="can-jar">
-												Enter the inside diameter of the bottle or can opening (D).
-											</p>
-										</div>
-										<ul class="field-type-textfield field-name-dimensions">
-											<li class="width flat-bag">
-												<label>Width in inches</label>
-												<input class="required number" type="text" name="widthSpout1" />
-											</li>
-											<li class="d1 four-sided-bag">
-												<label>D1</label>
-												<input class="required number" type="text" name="d1Spout1" />
-											</li>
-											<li class="d2 four-sided-bag">
-												<label>D2</label>
-												<input class="required number" type="text" name="d2Spout1" />
-											</li>
-											<li class="diameter can-jar">
-												<label>Diameter in inches</label>
-												<input class="required number" type="text" name="diameterSpout1" />
-											</li>
-										</ul>
-										<div class="container-shape-images">
-											<div class="spout-sprite flat-bag ir">
-												Flat bag spout shape image
-											</div>
-											<div class="spout-sprite four-sided-bag ir">
-												4 sided bag spout shape image
-											</div>
-											<div class="spout-sprite can-jar ir">
-												Bottle or Jar spout shape image
-											</div>
-										</div>
-										<button type="button" value="Calculate" class="calculate">
-											Calculate
-										</button>
-										<p class="warning">The calculated spout size of <span class="calculatedSpoutSize"></span>" is the same as a spout that you have already added.<br/>Please enter different dimensions<br/>or remove this spout.<br/><button type="button" class="btnRemove" value="Remove spout">Remove</button></p>
-									</fieldset>
+								<div id = "SpoutSelector">
+									<input type="hidden" name="spout-price" value="<?php echo $settings["spout"]["price"] ?>" />
+									<input type="hidden" name="spout-sizes" value="<?php echo $spoutSizes ?>" />
+									<h3>Select your Spout</h3>
+									<div class="spout-sprite main-spout-image ir">
+										Spout image
 									</div>
-
-									<fieldset id="fallbackSpout1" class="fallback-field-spout">
-										<legend>
-											Spout 1
-										</legend>	
-										<div class="instructions">
-											<p>
-												Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-											</p>
-										</div>								
-										<ul class="field-type-radio field-name-spout-type">
-											<li class="flat-bag">
-												<input type="radio" id="type1Spout1Fallback" name="typeSpout1Fallback" value="flat-bag" 
-												<?php
-if ($_POST && $_POST['typeSpout1Fallback'] == 'flat-bag') {
-	echo 'checked';
-}
-												?>/>
-
-												<label for="type1Spout1Fallback">
-													<div class="spout-sprite flat-bag-spout ir">
-														Flat bag spout image
-													</div><h4>Flat bag</h4></label>
-											</li>
-											<li class="four-sided-bag">
-												<input type="radio" id="type2Spout1Fallback" name="typeSpout1Fallback" value="four-sided-bag" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout1Fallback']
-																== 'four-sided-bag') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type2Spout1Fallback">
-													<div class="spout-sprite four-sided-bag-spout ir">
-														4 sided bag spout image
-													</div><h4>4 sided bag</h4></label>
-											</li>
-											<li class="can-jar">
-												<input type="radio" id="type3Spout1Fallback" name="typeSpout1Fallback" value="can-jar" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout1Fallback']
-																== 'can-jar') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type3Spout1Fallback">
-													<div class="spout-sprite can-or-jar-spout ir">
-														Can or Jar spout image
-													</div><h4>Can or Jar</h4></label>
-											</li>
-										</ul>
-										<div class="instructions">
-											<p>
-												Please enter:
-											</p>
-											<ul>
-												<li>
-													<b>Flat Bag:</b> Enter the width of the bag opening (W).
+									<p class="s6-sp">
+										The S-6 uses Discharge Chutes exclusively. Please click on the “Next Step” button to proceed to your Summary.
+									</p>
+									<p class="not-s6">
+										The spout attaches to the bottom of the discharge funnel and directs the materials into your container.
+									</p>
+									<p class="not-s6">
+										Use the <b>Spout Calculator</b> below to help you determine which size spout is right for your container. Please start with your smallest container first, then add larger ones if you have them.
+									</p>
+									<div id="field-name-spout" class="field-container label-format-column">
+										<div id="spout1" class="spout-wrapper">
+										<fieldset class="field-spout hidden">
+											<legend>
+												Spout 1
+											</legend>
+											<ul class="field-type-radio field-name-spout-type">
+												<li class="flat-bag">
+													<input type="radio" id="type1Spout1" name="typeSpout1" value="flat-bag" />
+													<label for="type1Spout1">
+														<div class="spout-sprite ir">
+															Flat bag spout image
+														</div><h4 class="name">Flat bag</h4></label>
 												</li>
-												<li>
-													<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+												<li class="four-sided-bag">
+													<input type="radio" id="type2Spout1" name="typeSpout1" value="four-sided-bag" />
+													<label for="type2Spout1">
+														<div class="spout-sprite ir">
+															4 sided bag spout image
+														</div><h4 class="name">4 sided bag</h4></label>
 												</li>
-												<li>
-													<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+												<li class="can-jar">
+													<input type="radio" id="type3Spout1" name="typeSpout1" value="can-jar" />
+													<label for="type3Spout1">
+														<div class="spout-sprite ir">
+															Bottle or Jar spout image
+														</div><h4 class="name">Bottle or Jar</h4></label>
 												</li>
 											</ul>
-										</div>
-										<ul class="field-type-textfield field-name-dimensions">
-											<li class="width">
-												<label>Width in inches</label>
-												<input type="text" name="widthSpout1Fallback" <?php if (!empty(
-														$widthSpout1Fallback)
-														&& ($missing || $errors)) {
-													echo 'value="'
-															. htmlentities(
-																	$widthSpout1Fallback,
-																	ENT_COMPAT,
-																	'UTF-8')
-															. '"';
-												}
-																							  ?>/>
-											</li>
-											<li class="d1">
-												<label>D1</label>
-												<input type="text" name="d1Spout1Fallback" <?php if (!empty(
-																									  $d1Spout1Fallback)
-																									  && ($missing
-																											  || $errors)) {
-																								  echo 'value="'
-																										  . htmlentities(
-																												  $d1Spout1Fallback,
-																												  ENT_COMPAT,
-																												  'UTF-8')
-																										  . '"';
-																							  }
-																						   ?>/>
-											</li>
-											<li class="d2">
-												<label>D2</label>
-												<input type="text" name="d2Spout1Fallback" <?php if (!empty(
-																								   $d2Spout1Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $d2Spout1Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																						   ?>/>
-											</li>
-											<li class="diameter">
-												<label>Diameter in inches</label>
-												<input type="text" name="diameterSpout1Fallback" <?php if (!empty(
-																								   $diameterSpout1Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $d2Spout1Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																								 ?>/>
-											</li>
-										</ul>
-										<?php if (isset($errors['widthSpout1'])) { ?>
-                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-                						<?php } elseif (isset(
-		$errors['d1d2Spout1'])) {
-										?>
-                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-                						<?php } elseif (isset(
-		$errors['diameterSpout1'])) {
-										?>
-                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-                						<?php } ?>
-										<div class="container-shape-images">
-											<div class="spout-sprite flat-bag ir">
-												Flat bag spout shape image
+											<div class="instructions">
+												<p class="spout-selection">
+													Click on the diagram above that most accurately depicts your container.
+												</p>
+												<p class="flat-bag">
+													Enter the width of the bag opening (W).
+												</p>
+												<p class="four-sided-bag">
+													Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+												</p>
+												<p class="can-jar">
+													Enter the inside diameter of the bottle or can opening (D).
+												</p>
 											</div>
-											<div class="spout-sprite four-sided-bag ir">
-												4 sided bag spout shape image
-											</div>
-											<div class="spout-sprite can-jar ir">
-												Can or Jar spout shape image
-											</div>
-										</div>
-									</fieldset>
-
-									<fieldset id="fallbackSpout2" class="fallback-field-spout">
-										<legend>
-											Spout 2
-										</legend>	
-										<div class="instructions">
-											<p>
-												Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-											</p>
-										</div>								
-										<ul class="field-type-radio field-name-spout-type">
-											<li class="flat-bag">
-												<input type="radio" id="type1Spout2Fallback" name="typeSpout2Fallback" value="flat-bag" 
-												<?php
-if ($_POST && $_POST['typeSpout2Fallback'] == 'flat-bag') {
-	echo 'checked';
-}
-												?>/>
-												<label for="type1Spout2Fallback">
-													<div class="spout-sprite flat-bag-spout ir">
-														Flat bag spout image
-													</div><h4>Flat bag</h4></label>
-											</li>
-											<li class="four-sided-bag">
-												<input type="radio" id="type2Spout2Fallback" name="typeSpout2Fallback" value="four-sided-bag" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout2Fallback']
-																== 'four-sided-bag') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type2Spout2Fallback">
-													<div class="spout-sprite four-sided-bag-spout ir">
-														4 sided bag spout image
-													</div><h4>4 sided bag</h4></label>
-											</li>
-											<li class="can-jar">
-												<input type="radio" id="type3Spout2Fallback" name="typeSpout2Fallback" value="can-jar" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout2Fallback']
-																== 'can-jar') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type3Spout2Fallback">
-													<div class="spout-sprite can-or-jar-spout ir">
-														Can or Jar spout image
-													</div><h4>Can or Jar</h4></label>
-											</li>
-										</ul>
-										<div class="instructions">
-											<p>
-												Please enter:
-											</p>
-											<ul>
-												<li>
-													<b>Flat Bag:</b> Enter the width of the bag opening (W).
+											<ul class="field-type-textfield field-name-dimensions">
+												<li class="width flat-bag">
+													<label>Width in inches</label>
+													<input class="required number" type="text" name="widthSpout1" />
 												</li>
-												<li>
-													<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+												<li class="d1 four-sided-bag">
+													<label>D1</label>
+													<input class="required number" type="text" name="d1Spout1" />
 												</li>
-												<li>
-													<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+												<li class="d2 four-sided-bag">
+													<label>D2</label>
+													<input class="required number" type="text" name="d2Spout1" />
+												</li>
+												<li class="diameter can-jar">
+													<label>Diameter in inches</label>
+													<input class="required number" type="text" name="diameterSpout1" />
 												</li>
 											</ul>
+											<div class="container-shape-images">
+												<div class="spout-sprite flat-bag ir">
+													Flat bag spout shape image
+												</div>
+												<div class="spout-sprite four-sided-bag ir">
+													4 sided bag spout shape image
+												</div>
+												<div class="spout-sprite can-jar ir">
+													Bottle or Jar spout shape image
+												</div>
+											</div>
+											<button type="button" value="Calculate" class="calculate">
+												Calculate
+											</button>
+											<p class="warning">The calculated spout size of <span class="calculatedSpoutSize"></span>" is the same as a spout that you have already added.<br/>Please enter different dimensions<br/>or remove this spout.<br/><button type="button" class="btnRemove" value="Remove spout">Remove</button></p>
+										</fieldset>
 										</div>
-										<ul class="field-type-textfield field-name-dimensions">
-											<li class="width">
-												<label>Width in inches</label>
-												<input type="text" name="widthSpout2Fallback" <?php if (!empty(
-														$widthSpout2Fallback)
-														&& ($missing || $errors)) {
-													echo 'value="'
-															. htmlentities(
-																	$widthSpout2Fallback,
-																	ENT_COMPAT,
-																	'UTF-8')
-															. '"';
-												}
-																							  ?>/>
-											</li>
-											<li class="d1">
-												<label>D1</label>
-												<input type="text" name="d1Spout2Fallback" <?php if (!empty(
-																									  $d1Spout2Fallback)
-																									  && ($missing
-																											  || $errors)) {
-																								  echo 'value="'
-																										  . htmlentities(
-																												  $d1Spout2Fallback,
-																												  ENT_COMPAT,
-																												  'UTF-8')
-																										  . '"';
-																							  }
-																						   ?>/>
-											</li>
-											<li class="d2">
-												<label>D2</label>
-												<input type="text" name="d2Spout2Fallback" <?php if (!empty(
-																								   $d2Spout2Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $d2Spout2Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																						   ?>/>
-											</li>
-											<li class="diameter">
-												<label>Diameter in inches</label>
-												<input type="text" name="diameterSpout2Fallback" <?php if (!empty(
-																								   $diameterSpout2Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $d2Spout2Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																								 ?>/>
-											</li>
-										</ul>
-										<?php if (isset($errors['widthSpout2'])) { ?>
-                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-                						<?php } elseif (isset(
-		$errors['d1d2Spout2'])) {
-										?>
-                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-                						<?php } elseif (isset(
-		$errors['diameterSpout2'])) {
-										?>
-                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-                						<?php } ?>
-										<div class="container-shape-images">
-											<div class="spout-sprite flat-bag ir">
-												Flat bag spout shape image
-											</div>
-											<div class="spout-sprite four-sided-bag ir">
-												4 sided bag spout shape image
-											</div>
-											<div class="spout-sprite can-jar ir">
-												Can or Jar spout shape image
-											</div>
-										</div>
-									</fieldset>
-									
-									<fieldset id="fallbackSpout3" class="fallback-field-spout">
-										<legend>
-											Spout 3
-										</legend>	
-										<div class="instructions">
-											<p>
-												Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-											</p>
-										</div>								
-										<ul class="field-type-radio field-name-spout-type">
-											<li class="flat-bag">
-												<input type="radio" id="type1Spout3Fallback" name="typeSpout3Fallback" value="flat-bag" 
-												<?php
-if ($_POST && $_POST['typeSpout3Fallback'] == 'flat-bag') {
-	echo 'checked';
-}
-												?>/>
-												<label for="type1Spout3Fallback">
-													<div class="spout-sprite flat-bag-spout ir">
-														Flat bag spout image
-													</div><h4>Flat bag</h4></label>
-											</li>
-											<li class="four-sided-bag">
-												<input type="radio" id="type2Spout3Fallback" name="typeSpout3Fallback" value="four-sided-bag" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout3Fallback']
-																== 'four-sided-bag') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type2Spout3Fallback">
-													<div class="spout-sprite four-sided-bag-spout ir">
-														4 sided bag spout image
-													</div><h4>4 sided bag</h4></label>
-											</li>
-											<li class="can-jar">
-												<input type="radio" id="type3Spout3Fallback" name="typeSpout3Fallback" value="can-jar" 
-												<?php
-												if ($_POST
-														&& $_POST['typeSpout3Fallback']
-																== 'can-jar') {
-													echo 'checked';
-												}
-												?>/>
-												<label for="type3Spout3Fallback">
-													<div class="spout-sprite can-or-jar-spout ir">
-														Can or Jar spout image
-													</div><h4>Can or Jar</h4></label>
-											</li>
-										</ul>
-										<div class="instructions">
-											<p>
-												Please enter:
-											</p>
-											<ul>
-												<li>
-													<b>Flat Bag:</b> Enter the width of the bag opening (W).
+
+										<fieldset id="fallbackSpout1" class="fallback-field-spout">
+											<legend>
+												Spout 1
+											</legend>	
+											<div class="instructions">
+												<p>
+													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
+												</p>
+											</div>								
+											<ul class="field-type-radio field-name-spout-type">
+												<li class="flat-bag">
+													<input type="radio" id="type1Spout1Fallback" name="typeSpout1Fallback" value="flat-bag" 
+													<?php
+	if ($_POST && $_POST['typeSpout1Fallback'] == 'flat-bag') {
+		echo 'checked';
+	}
+													?>/>
+
+													<label for="type1Spout1Fallback">
+														<div class="spout-sprite flat-bag-spout ir">
+															Flat bag spout image
+														</div><h4>Flat bag</h4></label>
 												</li>
-												<li>
-													<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+												<li class="four-sided-bag">
+													<input type="radio" id="type2Spout1Fallback" name="typeSpout1Fallback" value="four-sided-bag" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout1Fallback']
+																	== 'four-sided-bag') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type2Spout1Fallback">
+														<div class="spout-sprite four-sided-bag-spout ir">
+															4 sided bag spout image
+														</div><h4>4 sided bag</h4></label>
 												</li>
-												<li>
-													<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+												<li class="can-jar">
+													<input type="radio" id="type3Spout1Fallback" name="typeSpout1Fallback" value="can-jar" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout1Fallback']
+																	== 'can-jar') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type3Spout1Fallback">
+														<div class="spout-sprite can-or-jar-spout ir">
+															Can or Jar spout image
+														</div><h4>Can or Jar</h4></label>
 												</li>
 											</ul>
-										</div>
-										<ul class="field-type-textfield field-name-dimensions">
-											<li class="width">
-												<label>Width in inches</label>
-												<input type="text" name="widthSpout3Fallback" <?php if (!empty(
-														$widthSpout3Fallback)
-														&& ($missing || $errors)) {
-													echo 'value="'
-															. htmlentities(
-																	$widthSpout3Fallback,
-																	ENT_COMPAT,
-																	'UTF-8')
-															. '"';
-												}
-																							  ?>/>
-											</li>
-											<li class="d1">
-												<label>D1</label>
-												<input type="text" name="d1Spout3Fallback" <?php if (!empty(
-																									  $d1Spout3Fallback)
-																									  && ($missing
-																											  || $errors)) {
-																								  echo 'value="'
-																										  . htmlentities(
-																												  $d1Spout3Fallback,
-																												  ENT_COMPAT,
-																												  'UTF-8')
-																										  . '"';
-																							  }
-																						   ?>/>
-											</li>
-											<li class="d2">
-												<label>D2</label>
-												<input type="text" name="d2Spout3Fallback" <?php if (!empty(
-																								   $d2Spout3Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $d2Spout3Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																						   ?>/>
-											</li>
-											<li class="diameter">
-												<label>Diameter in inches</label>
-												<input type="text" name="diameterSpout3Fallback" <?php if (!empty(
-																								   $diameterSpout3Fallback)
-																								   && ($missing
-																										   || $errors)) {
-																							   echo 'value="'
-																									   . htmlentities(
-																											   $diameterSpout3Fallback,
-																											   ENT_COMPAT,
-																											   'UTF-8')
-																									   . '"';
-																						   }
-																								 ?>/>
-											</li>
-										</ul>
-										<?php if (isset($errors['widthSpout3'])) { ?>
-                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-                						<?php } elseif (isset(
-		$errors['d1d2Spout3'])) {
-										?>
-                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-                						<?php } elseif (isset(
-		$errors['diameterSpout3'])) {
-										?>
-                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-                						<?php } ?>
-										<div class="container-shape-images">
-											<div class="spout-sprite flat-bag ir">
-												Flat bag spout shape image
+											<div class="instructions">
+												<p>
+													Please enter:
+												</p>
+												<ul>
+													<li>
+														<b>Flat Bag:</b> Enter the width of the bag opening (W).
+													</li>
+													<li>
+														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+													</li>
+													<li>
+														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+													</li>
+												</ul>
 											</div>
-											<div class="spout-sprite four-sided-bag ir">
-												4 sided bag spout shape image
+											<ul class="field-type-textfield field-name-dimensions">
+												<li class="width">
+													<label>Width in inches</label>
+													<input type="text" name="widthSpout1Fallback" <?php if (!empty(
+															$widthSpout1Fallback)
+															&& ($missing || $errors)) {
+														echo 'value="'
+																. htmlentities(
+																		$widthSpout1Fallback,
+																		ENT_COMPAT,
+																		'UTF-8')
+																. '"';
+													}
+																								  ?>/>
+												</li>
+												<li class="d1">
+													<label>D1</label>
+													<input type="text" name="d1Spout1Fallback" <?php if (!empty(
+																										  $d1Spout1Fallback)
+																										  && ($missing
+																												  || $errors)) {
+																									  echo 'value="'
+																											  . htmlentities(
+																													  $d1Spout1Fallback,
+																													  ENT_COMPAT,
+																													  'UTF-8')
+																											  . '"';
+																								  }
+																							   ?>/>
+												</li>
+												<li class="d2">
+													<label>D2</label>
+													<input type="text" name="d2Spout1Fallback" <?php if (!empty(
+																									   $d2Spout1Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $d2Spout1Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																							   ?>/>
+												</li>
+												<li class="diameter">
+													<label>Diameter in inches</label>
+													<input type="text" name="diameterSpout1Fallback" <?php if (!empty(
+																									   $diameterSpout1Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $d2Spout1Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																									 ?>/>
+												</li>
+											</ul>
+											<?php if (isset($errors['widthSpout1'])) { ?>
+	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
+	                						<?php } elseif (isset(
+			$errors['d1d2Spout1'])) {
+											?>
+	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
+	                						<?php } elseif (isset(
+			$errors['diameterSpout1'])) {
+											?>
+	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
+	                						<?php } ?>
+											<div class="container-shape-images">
+												<div class="spout-sprite flat-bag ir">
+													Flat bag spout shape image
+												</div>
+												<div class="spout-sprite four-sided-bag ir">
+													4 sided bag spout shape image
+												</div>
+												<div class="spout-sprite can-jar ir">
+													Can or Jar spout shape image
+												</div>
 											</div>
-											<div class="spout-sprite can-jar ir">
-												Can or Jar spout shape image
-											</div>
-										</div>
-									</fieldset>
+										</fieldset>
 
+										<fieldset id="fallbackSpout2" class="fallback-field-spout">
+											<legend>
+												Spout 2
+											</legend>	
+											<div class="instructions">
+												<p>
+													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
+												</p>
+											</div>								
+											<ul class="field-type-radio field-name-spout-type">
+												<li class="flat-bag">
+													<input type="radio" id="type1Spout2Fallback" name="typeSpout2Fallback" value="flat-bag" 
+													<?php
+	if ($_POST && $_POST['typeSpout2Fallback'] == 'flat-bag') {
+		echo 'checked';
+	}
+													?>/>
+													<label for="type1Spout2Fallback">
+														<div class="spout-sprite flat-bag-spout ir">
+															Flat bag spout image
+														</div><h4>Flat bag</h4></label>
+												</li>
+												<li class="four-sided-bag">
+													<input type="radio" id="type2Spout2Fallback" name="typeSpout2Fallback" value="four-sided-bag" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout2Fallback']
+																	== 'four-sided-bag') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type2Spout2Fallback">
+														<div class="spout-sprite four-sided-bag-spout ir">
+															4 sided bag spout image
+														</div><h4>4 sided bag</h4></label>
+												</li>
+												<li class="can-jar">
+													<input type="radio" id="type3Spout2Fallback" name="typeSpout2Fallback" value="can-jar" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout2Fallback']
+																	== 'can-jar') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type3Spout2Fallback">
+														<div class="spout-sprite can-or-jar-spout ir">
+															Can or Jar spout image
+														</div><h4>Can or Jar</h4></label>
+												</li>
+											</ul>
+											<div class="instructions">
+												<p>
+													Please enter:
+												</p>
+												<ul>
+													<li>
+														<b>Flat Bag:</b> Enter the width of the bag opening (W).
+													</li>
+													<li>
+														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+													</li>
+													<li>
+														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+													</li>
+												</ul>
+											</div>
+											<ul class="field-type-textfield field-name-dimensions">
+												<li class="width">
+													<label>Width in inches</label>
+													<input type="text" name="widthSpout2Fallback" <?php if (!empty(
+															$widthSpout2Fallback)
+															&& ($missing || $errors)) {
+														echo 'value="'
+																. htmlentities(
+																		$widthSpout2Fallback,
+																		ENT_COMPAT,
+																		'UTF-8')
+																. '"';
+													}
+																								  ?>/>
+												</li>
+												<li class="d1">
+													<label>D1</label>
+													<input type="text" name="d1Spout2Fallback" <?php if (!empty(
+																										  $d1Spout2Fallback)
+																										  && ($missing
+																												  || $errors)) {
+																									  echo 'value="'
+																											  . htmlentities(
+																													  $d1Spout2Fallback,
+																													  ENT_COMPAT,
+																													  'UTF-8')
+																											  . '"';
+																								  }
+																							   ?>/>
+												</li>
+												<li class="d2">
+													<label>D2</label>
+													<input type="text" name="d2Spout2Fallback" <?php if (!empty(
+																									   $d2Spout2Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $d2Spout2Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																							   ?>/>
+												</li>
+												<li class="diameter">
+													<label>Diameter in inches</label>
+													<input type="text" name="diameterSpout2Fallback" <?php if (!empty(
+																									   $diameterSpout2Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $d2Spout2Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																									 ?>/>
+												</li>
+											</ul>
+											<?php if (isset($errors['widthSpout2'])) { ?>
+	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
+	                						<?php } elseif (isset(
+			$errors['d1d2Spout2'])) {
+											?>
+	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
+	                						<?php } elseif (isset(
+			$errors['diameterSpout2'])) {
+											?>
+	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
+	                						<?php } ?>
+											<div class="container-shape-images">
+												<div class="spout-sprite flat-bag ir">
+													Flat bag spout shape image
+												</div>
+												<div class="spout-sprite four-sided-bag ir">
+													4 sided bag spout shape image
+												</div>
+												<div class="spout-sprite can-jar ir">
+													Can or Jar spout shape image
+												</div>
+											</div>
+										</fieldset>
+										
+										<fieldset id="fallbackSpout3" class="fallback-field-spout">
+											<legend>
+												Spout 3
+											</legend>	
+											<div class="instructions">
+												<p>
+													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
+												</p>
+											</div>								
+											<ul class="field-type-radio field-name-spout-type">
+												<li class="flat-bag">
+													<input type="radio" id="type1Spout3Fallback" name="typeSpout3Fallback" value="flat-bag" 
+													<?php
+	if ($_POST && $_POST['typeSpout3Fallback'] == 'flat-bag') {
+		echo 'checked';
+	}
+													?>/>
+													<label for="type1Spout3Fallback">
+														<div class="spout-sprite flat-bag-spout ir">
+															Flat bag spout image
+														</div><h4>Flat bag</h4></label>
+												</li>
+												<li class="four-sided-bag">
+													<input type="radio" id="type2Spout3Fallback" name="typeSpout3Fallback" value="four-sided-bag" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout3Fallback']
+																	== 'four-sided-bag') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type2Spout3Fallback">
+														<div class="spout-sprite four-sided-bag-spout ir">
+															4 sided bag spout image
+														</div><h4>4 sided bag</h4></label>
+												</li>
+												<li class="can-jar">
+													<input type="radio" id="type3Spout3Fallback" name="typeSpout3Fallback" value="can-jar" 
+													<?php
+													if ($_POST
+															&& $_POST['typeSpout3Fallback']
+																	== 'can-jar') {
+														echo 'checked';
+													}
+													?>/>
+													<label for="type3Spout3Fallback">
+														<div class="spout-sprite can-or-jar-spout ir">
+															Can or Jar spout image
+														</div><h4>Can or Jar</h4></label>
+												</li>
+											</ul>
+											<div class="instructions">
+												<p>
+													Please enter:
+												</p>
+												<ul>
+													<li>
+														<b>Flat Bag:</b> Enter the width of the bag opening (W).
+													</li>
+													<li>
+														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
+													</li>
+													<li>
+														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
+													</li>
+												</ul>
+											</div>
+											<ul class="field-type-textfield field-name-dimensions">
+												<li class="width">
+													<label>Width in inches</label>
+													<input type="text" name="widthSpout3Fallback" <?php if (!empty(
+															$widthSpout3Fallback)
+															&& ($missing || $errors)) {
+														echo 'value="'
+																. htmlentities(
+																		$widthSpout3Fallback,
+																		ENT_COMPAT,
+																		'UTF-8')
+																. '"';
+													}
+																								  ?>/>
+												</li>
+												<li class="d1">
+													<label>D1</label>
+													<input type="text" name="d1Spout3Fallback" <?php if (!empty(
+																										  $d1Spout3Fallback)
+																										  && ($missing
+																												  || $errors)) {
+																									  echo 'value="'
+																											  . htmlentities(
+																													  $d1Spout3Fallback,
+																													  ENT_COMPAT,
+																													  'UTF-8')
+																											  . '"';
+																								  }
+																							   ?>/>
+												</li>
+												<li class="d2">
+													<label>D2</label>
+													<input type="text" name="d2Spout3Fallback" <?php if (!empty(
+																									   $d2Spout3Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $d2Spout3Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																							   ?>/>
+												</li>
+												<li class="diameter">
+													<label>Diameter in inches</label>
+													<input type="text" name="diameterSpout3Fallback" <?php if (!empty(
+																									   $diameterSpout3Fallback)
+																									   && ($missing
+																											   || $errors)) {
+																								   echo 'value="'
+																										   . htmlentities(
+																												   $diameterSpout3Fallback,
+																												   ENT_COMPAT,
+																												   'UTF-8')
+																										   . '"';
+																							   }
+																									 ?>/>
+												</li>
+											</ul>
+											<?php if (isset($errors['widthSpout3'])) { ?>
+	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
+	                						<?php } elseif (isset(
+			$errors['d1d2Spout3'])) {
+											?>
+	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
+	                						<?php } elseif (isset(
+			$errors['diameterSpout3'])) {
+											?>
+	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
+	                						<?php } ?>
+											<div class="container-shape-images">
+												<div class="spout-sprite flat-bag ir">
+													Flat bag spout shape image
+												</div>
+												<div class="spout-sprite four-sided-bag ir">
+													4 sided bag spout shape image
+												</div>
+												<div class="spout-sprite can-jar ir">
+													Can or Jar spout shape image
+												</div>
+											</div>
+										</fieldset>
+
+									</div>
+									<div id = "ChuteOptions">
+										Hear are where chute options go.
+									</div>
+									<button type="button" id="btnAdd" value="Add another spout" class="hidden">
+										Add another spout
+									</button>
 								</div>
-								<button type="button" id="btnAdd" value="Add another spout" class="hidden">
-									Add another spout
-								</button>
 							</div><!-- id="step-4" -->
 
 							<div id="step-5" class="step-container" name="step-5">

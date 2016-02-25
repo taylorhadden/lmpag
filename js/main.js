@@ -255,6 +255,7 @@ $(document).ready(function() {
 	var modelStep = new ConfigurationStep($("#step-1"));
 	var weighHopperStep = new ConfigurationStep($("#step-2"));
 	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
+	var insertionStep = new ConfigurationStep($("#step-4"));
 
 
 	// Creation Methods
@@ -355,40 +356,67 @@ $(document).ready(function() {
 		return dischargeFunnel;
 	}
 
+	// For Spouts and Chutes
+	function makeInsertionOption(selector) {
+		var inserter = MO(selector);
+
+		insertionStep.addOption(inserter);
+
+		inserter.onSelect(function() {
+
+		});
+
+		return inserter;
+	}
+
+	function spoutSelector() {
+		var spoutSelector = makeInsertionOption("#SpoutSelector");
+		return spoutSelector;
+	}
+
+	function chuteOptions() {
+		var chuteOptions = makeInsertionOption("#ChuteOptions");
+		return chuteOptions;
+	}
+
+	function freeChuteOptions() {
+		return chuteOptions();
+	}
 
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
 			makeWeighHopper("#stwh").addSubOption(
-				makeDischargeFunnel("#small-std-fnl"),
-				makeDischargeFunnel("#small-steep-fnl"),
-				makeDischargeFunnel("#discharge-cht")
+				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
 			),
 			makeWeighHopper("#lrgwh").addSubOption(
-				makeDischargeFunnel("#large-std-fnl"),
-				makeDischargeFunnel("#large-steep-fnl"),
-				makeDischargeFunnel("#discharge-cht")
+				makeDischargeFunnel("#large-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#large-steep-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
 			)
 		);
 
 	var s5Option = makeMachine("#s5").addSubOption(
 			makeWeighHopper("#no-wh").addSubOption(
-				makeDischargeFunnel("#small-std-fnl"),
-				makeDischargeFunnel("#small-steep-fnl")
+				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector())
 			)
 		);
 
 	var s6Option = makeMachine("#s6").addSubOption(
 			makeWeighHopper("#stwh").addSubOption(
-				makeDischargeFunnel("#discharge-cht-free")
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(freeChuteOptions())
 			),
 			makeWeighHopper("#lrgwh").addSubOption(
-				makeDischargeFunnel("#discharge-cht-free")
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(freeChuteOptions())
 			)
 		);
 
 	var s7Option = makeMachine("#s7");
 
 	weighHopperStep.hideAll();
+	dischargeFunnelStep.hideAll();
 	console.log(optionLookup);
 	// Prepare
 
