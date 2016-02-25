@@ -248,6 +248,7 @@ form#logical-machines-quote-generator {
 	width: 100px;
 	padding: 6px;
 	margin-bottom: -1px;
+	cursor: pointer;
 }
 .lt-ie8 #pag-navigation ol li a {
 	display: block;
@@ -255,6 +256,7 @@ form#logical-machines-quote-generator {
 #pag-navigation ol li a.active,
 #pag-navigation ol li a.active:hover {
 	color: #0c4b81;
+	cursor: default;
 }
 #pag-navigation ol li a:hover {
 	color: #090;
