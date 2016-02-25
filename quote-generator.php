@@ -17,7 +17,8 @@ $settings = array(
 				"S-7" => array("name" => "S-7",
 						"type" => "Dual-Lane Weigh Filler",
 						"description" => "The S-7 includes two standard Weigh Hoppers, standard S-7 Discharge Chute, and two Logical Controller IIs. It comes fully assembled and ready to operate. ",
-						"price" => "12000")),
+						"price" => "12000")
+				),
 		// Weigh hopper settings
 		"weighhopper" => array(
 				"no-weigh-hopper" => array("name" => " ",
@@ -34,15 +35,16 @@ $settings = array(
 						"price" => "100"),
 				"large-weigh-hopper-two" => array("name" => "650 cubic inch Large Weigh Hopper",
 						"description" => "For larger volumes, the large weigh hopper's 650 cubic inch capacity (about 2.5 gallons of dry measure) handles net weights from 2 oz. to 10 lbs.",
-						"price" => "200")),
+						"price" => "200")
+				),
 		// Discharge funnel settings > Fallback copy for use when Javascript is disabled
 		"dischargefunnel" => array(
-				"standard" => array("name" => "Standard Discharge Funnel",
-						"description" => "This is the standard funnel for use with the standard and large weigh hoppers. It is practical for most free-flowing materials."),
+				"discharge-free" => array("name" => "Discharge Chute",
+						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
+						"price" => "0"),
 				"discharge" => array("name" => "Discharge Chute",
-						"description" => 'Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes with a standard 5" Discharge Chute.'),
-				"steep" => array("name" => "Steep-Sided Discharge Funnel",
-						"description" => "This steep sided funnel is used for fine powdered materials such as flour or other products that can stick to metal surfaces."),
+						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
+						"price" => "285"),
 				// Discharge funnel settings > Normal copy for use when Javascript is enabled
 				"small" => array(
 						"standard" => array(
@@ -55,7 +57,8 @@ $settings = array(
 						"steep" => array(
 								"name" => "Steep-Sided Discharge Funnel",
 								"description" => "This steep sided funnel is used for fine powdered materials such as flour or other products that can stick to metal surfaces.",
-								"price" => "125")),
+								"price" => "125")
+						),
 				"large" => array(
 						"standard" => array(
 								"name" => "Large Discharge Funnel",
@@ -64,11 +67,16 @@ $settings = array(
 						"steep" => array(
 								"name" => "Large Steep-Sided Discharge Funnel",
 								"description" => "This steep sided funnel is used for fine powdered materials such as flour or other products that can stick to metal surfaces.",
-								"price" => "400"))),
+								"price" => "400")
+						)
+				),
 		"spout" => array("price" => "150",
 				"type" => array("flat-bag" => array("width"),
 						"four-sided-bag" => array("d1", "d2"),
-						"can-jar" => array("diameter"))));
+						"can-jar" => array("diameter")
+						)
+				)
+		);
 
 
 include_once 'bin/php_validation.php';
@@ -477,7 +485,7 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 									<li class="small s4">
 										<input type="radio" id="stwh" class="" name="weighhopper" value="standard-weigh-hopper" 
 										<?php
-if (!$_POST || ($_POST && $_POST['weighhopper'] == 'standard-weigh-hopper')) {
+if ($_POST && $_POST['weighhopper'] == 'standard-weigh-hopper') {
 	echo 'checked';
 }
 										?>/>
@@ -554,7 +562,8 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["standard"]["price"]; ?></span> included on standard <span class="machine-name"></span>
-											</p></label>
+											</p>
+										</label>
 									</li>
 									<li class="small hidden">
 										<input type="radio" id="small-steep-fnl" name="dischargefunnel" value="small-steep-funnel" />
@@ -567,7 +576,8 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["steep"]["price"]; ?></span> upcharge
-											</p></label>
+											</p>
+										</label>
 									</li>
 									<li class="discharge-cht hidden">
 										<input type="radio" id="discharge-cht" name="dischargefunnel" value="discharge-cht" />
@@ -576,11 +586,26 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 												Discharge Chute
 											</div>
 											<p class="description">
-												<?php echo $settings["dischargefunnel"]["small"]["discharge"]["description"]; ?>
+												<?php echo $settings["dischargefunnel"]["discharge"]["description"]; ?>
 											</p>
 											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["discharge"]["price"]; ?></span> included on standard <span class="machine-name"></span>
-											</p></label>
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge"]["price"]; ?></span> upcharge <span class="machine-name"></span>
+											</p>
+										</label>
+									</li>
+									<li class="discharge-cht-free hidden">
+										<input type="radio" id="discharge-cht-free" name="dischargefunnel" value="discharge-cht" />
+										<label for="discharge-cht-free" class="discharge-cht clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["discharge-free"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Discharge Chute
+											</div>
+											<p class="description">
+												<?php echo $settings["dischargefunnel"]["discharge-free"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge-free"]["price"]; ?></span> included on standard <span class="machine-name"></span>
+											</p>
+										</label>
 									</li>
 									<li class="large hidden">
 										<input type="radio" id="large-std-fnl" name="dischargefunnel" value="large-standard-funnel" />
@@ -593,7 +618,8 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["standard"]["price"]; ?></span>
-											</p></label>
+											</p>
+										</label>
 									</li>
 									<li class="large hidden">
 										<input type="radio" id="large-steep-fnl" name="dischargefunnel" value="large-steep-funnel" />
@@ -606,56 +632,8 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["steep"]["price"]; ?></span> upcharge
-											</p></label>
-									</li>
-									<li class="small fallback-discharge-funnel">
-										<input type="radio" id="std-fnl" class="active" name="dischargefunnel" value="standard-funnel" 
-										<?php
-if (!$_POST || ($_POST && $_POST['dischargefunnel'] == 'standard-funnel')) {
-	echo 'checked';
-}
-										?>/>
-										<label for="std-fnl" class="std-fnl clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["standard"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Standard Discharge Funnel image
-											</div>
-											<p class="description">
-												<?php echo $settings["dischargefunnel"]["standard"]["description"]; ?>
 											</p>
-											<p class="price clear">
-												<b>Price with Standard Weigh Hopper: </b>
-												<br/>
-												$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["standard"]["price"]; ?></span> included on standard <span class="machine-name"></span>
-												<br />
-												<b>Price with Large Weigh Hopper: </b>
-												<br/>
-												$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["steep"]["price"]; ?></span>
-											</p></label>
-
-									</li>
-									<li class="small fallback-discharge-funnel">
-										<input type="radio" id="steep-fnl" name="dischargefunnel" value="steep-funnel" 
-										<?php
-if ($_POST && $_POST['dischargefunnel'] == 'steep-funnel') {
-	echo 'checked';
-}
-										?>/>
-										<label for="steep-fnl" class="steep-fnl clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["steep"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Steep-Sided Discharge image
-											</div>
-											<p class="description">
-												<?php echo $settings["dischargefunnel"]["steep"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price with Small Weigh Hopper: </b>
-												<br/>
-												$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["standard"]["price"]; ?></span> upcharge
-												<br />
-												<b>Price with Large Weigh Hopper: </b>
-												<br/>
-												$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["steep"]["price"]; ?></span> upcharge
-											</p></label>
+										</label>
 									</li>
 								</ul>
 							</div><!-- id="step-3" -->

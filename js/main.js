@@ -152,13 +152,13 @@ $(document).ready(function() {
 	MachineOption.prototype.isSelected = function() {
 		return this.element.hasClass("active");
 	}
-	MachineOption.prototype.hasSelectedChild = function() {
+	MachineOption.prototype.selectedChild = function() {
 		for (var i = 0; i < this.subOptions.length; i++) {
 			if (this.subOptions[i].isSelected()) {
-				return true;
+				return this.subOptions[i];
 			}
 		}
-		return false;
+		return null;
 	}
 	MachineOption.prototype.pathName = function(name) {
 		if (name === undefined) {
@@ -181,6 +181,8 @@ $(document).ready(function() {
 
 		this.element.addClass('active');
 
+		this.element.prop("checked", true);
+
 		if (this.onSelects !== undefined) {
 			for (var i = 0; i < this.onSelects.length; i++) {
 				this.onSelects[i].call(this);
@@ -198,8 +200,12 @@ $(document).ready(function() {
 				option.container().show();
 			});
 
-			if (!this.hasSelectedChild()) {
+			var selectedChild = this.selectedChild();
+			if (selectedChild === null) {
 				this.subOptions[0].select();
+			}
+			else {
+				selectedChild.select();
 			}
 		}
 	}
@@ -314,19 +320,65 @@ $(document).ready(function() {
 		return weighHopper;
 	}
 
+	function makeDischargeFunnel(selector) {
+		var dischargeFunnel = MO(selector);
+
+		dischargeFunnelStep.addOption(dischargeFunnel);
+
+		dischargeFunnel.onSelect(function() {
+			var label = this.element.next("label");
+
+			machine.dischargeFunnel.id = this.element.attr('id');
+			machine.dischargeFunnel.name = label.find('.name').text();
+			machine.dischargeFunnel.description = $.trim(label.find('.description').text());
+			machine.dischargeFunnel.price = label.find('.amount').text();
+
+			// Assign classes to machine image
+			if (machine.weighHopper.id == 'lrgwh') {
+				if ( machine.dischargeFunnel.id == 'large-std-fnl') {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
+				}
+				else {
+					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
+				}
+			}
+			else {
+				$machineImage.toggleClass('std-fnl steep-fnl');
+			}
+		});
+
+		return dischargeFunnel;
+	}
+
+
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
-			makeWeighHopper("#stwh"),
-			makeWeighHopper("#lrgwh")
+			makeWeighHopper("#stwh").addSubOption(
+				makeDischargeFunnel("#small-std-fnl"),
+				makeDischargeFunnel("#small-steep-fnl"),
+				makeDischargeFunnel("#discharge-cht")
+			),
+			makeWeighHopper("#lrgwh").addSubOption(
+				makeDischargeFunnel("#large-std-fnl"),
+				makeDischargeFunnel("#large-steep-fnl"),
+				makeDischargeFunnel("#discharge-cht")
+			)
 		);
 
 	var s5Option = makeMachine("#s5").addSubOption(
-			makeWeighHopper("#no-wh")
+			makeWeighHopper("#no-wh").addSubOption(
+				makeDischargeFunnel("#small-std-fnl"),
+				makeDischargeFunnel("#small-steep-fnl")
+			)
 		);
 
 	var s6Option = makeMachine("#s6").addSubOption(
-			makeWeighHopper("#stwh"),
-			makeWeighHopper("#lrgwh")
+			makeWeighHopper("#stwh").addSubOption(
+				makeDischargeFunnel("#discharge-cht-free")
+			),
+			makeWeighHopper("#lrgwh").addSubOption(
+				makeDischargeFunnel("#discharge-cht-free")
+			)
 		);
 
 	var s7Option = makeMachine("#s7");
@@ -508,7 +560,7 @@ $(document).ready(function() {
 	}
 	
 
-	// Recursive selection based on the radio input that is selected
+	// selection based on the radio input that is selected
 	function selectOption(optionElement) {
 		var input = $(optionElement);
 		var label = input.next("label");
@@ -652,7 +704,7 @@ $(document).ready(function() {
 			console.log("Did not find option");
 		}
 
-		//selectOption(this);
+		//selectOption(this);</div>
 		calculateTotalPrice();
 	});
 
@@ -879,6 +931,7 @@ $(document).ready(function() {
 	
 	// Retrieve form values for display on summary
 	function showValues() {
+		console.log("Showing values");
 		// Create the machine type, weight hopper and discharge funnel rows for the summary table
 		var resultsHTML = '<tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.name + ' ' + machine.type + '</th><td>' + machine.description + '</td><td>$' + machine.price + '</td></tr><tr><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.weighHopper.name + '</th><td>' + machine.weighHopper.description + '</td><td>$' + machine.weighHopper.price + '</td></tr><tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.dischargeFunnel.name + '</th><td>' + machine.dischargeFunnel.description + '</td><td>$' + machine.dischargeFunnel.price + '</td></tr>',
 		// Create the spout rows for the summary table
