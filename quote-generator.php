@@ -43,7 +43,7 @@ $settings = array(
 						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
 						"price" => "0"),
 				"discharge" => array("name" => "Discharge Chute",
-						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
+						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 5” standard size.",
 						"price" => "285"),
 				// Discharge funnel settings > Normal copy for use when Javascript is enabled
 				"small" => array(
@@ -1193,6 +1193,27 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								</div>
 								<div id = "ChuteOptions">
 									Hear are where chute options go.
+
+									<div id = "ChuteSizeFree">
+										Chute Size:
+										<select name = "chuteSize">
+											<option value="3.5">3.5"</option>
+											<option value="4.5">4.5"</option>
+											<option value="5">5"</option>
+										</select>
+									</div>
+									<div id = "ChuteSizeUpcharge">
+										Chute Size:
+										<select name = "chuteSize">
+											<option value="3.5">3.5" ($100)</option>
+											<option value="4.5">4.5" ($100)</option>
+											<option value="5" selected>5" (Standard)</option>
+										</select>
+									</div>
+
+									<div>
+										<input type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250)</input>
+									</div>
 								</div>
 							</div><!-- id="step-4" -->
 
