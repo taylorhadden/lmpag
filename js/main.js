@@ -77,11 +77,13 @@ $(document).ready(function() {
 
 	// Create an instance of the machine object and default assign properties
 	var machine = {
-		id : $machineData.first().attr('for'),
-		name : $machineData.first().find('.name').text(),
-		type : $machineData.first().find('.type').text(),
-		description : $.trim($machineData.first().find('.description').text()),//.trim(),
-		price : $machineData.first().find('.amount').text(),
+		model : {
+			id : $machineData.first().attr('for'),
+			name : $machineData.first().find('.name').text(),
+			type : $machineData.first().find('.type').text(),
+			description : $.trim($machineData.first().find('.description').text()),//.trim(),
+			price : $machineData.first().find('.amount').text(),
+		},
 		weighHopper : {
 			id : $weighHopperData.first().attr('for'),
 			name : $weighHopperData.first().find('.name').text(),
@@ -93,6 +95,7 @@ $(document).ready(function() {
 			name : $dischargeFunnelData.first().find('.name').text(),
 			description : $.trim($dischargeFunnelData.first().find('.description').text()),//.trim(),
 			price : $dischargeFunnelData.first().find('.amount').text()
+			// chuteSize : 3.5 or 4.5 or 5
 		},
 		spouts : {
 			// This is a dictionary of spouts
@@ -284,19 +287,19 @@ $(document).ready(function() {
 		machineOption.onSelect(function() {
 			var label = this.element.next("label");
 
-			machine.id = this.element.attr('id');
-			machine.name = label.find('.name').text();
-			machine.type = label.find('.type').text();
-			machine.description = $.trim(label.find('.description').text());
-			machine.price = label.find('.amount').text();
+			machine.model.id = this.element.attr('id');
+			machine.model.name = label.find('.name').text();
+			machine.model.type = label.find('.type').text();
+			machine.model.description = $.trim(label.find('.description').text());
+			machine.model.price = label.find('.amount').text();
 
 			// Show/Hide descriptions
 			$machineData.children(':not(h4,.price)').hide();
 			label.find('*').show();
 
 			// Assign classes to machine image and change name displayed below
-			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
-			$nextMachineImage.html(machine.name + " " + machine.type);
+			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.model.id);
+			$nextMachineImage.html(machine.model.name + " " + machine.model.type);
 		});
 
 		return machineOption;
@@ -374,6 +377,7 @@ $(document).ready(function() {
 
 	function spoutSelector() {
 		var spoutSelector = makeInsertionOption("#SpoutSelector");
+
 		return spoutSelector;
 	}
 
@@ -487,12 +491,15 @@ $(document).ready(function() {
 	function calculateTotalPrice($fieldID) {
 		var price = 0;
 
-		price += parseFloat(machine.price);
-		price += parseFloat(machine.weighHopper.price);
-		price += parseFloat(machine.dischargeFunnel.price);
-
-		for (var id in machine.spouts) {
-			price += parseFloat(machine.spouts[id].price);
+		for (var key in machine) {
+			if (key !== "spouts") {
+				price += parseFloat(machine[key].price);
+			}
+			else {
+				for (var id in machine[key]) {
+					price += parseFloat(machine[key][id].price);
+				}
+			}
 		}
 
 		$grandTotalContainer.html(price);
@@ -571,85 +578,19 @@ $(document).ready(function() {
 			$('#cost-container .title').text('Price as Configured:');
 		}
 	}
-	
 
-	// selection based on the radio input that is selected
-	function selectOption(optionElement) {
-		var input = $(optionElement);
-		var label = input.next("label");
-		var optionID = input.attr('id');
+    /*
+     * Pages 1 - 4 selection actions
+     */
 
-		var name = input.attr('name');
-		
-		var previousInput = $("input[name='" + name + "'].active").not(input);
-		
-		input.addClass('active');
-		previousInput.removeClass('active');
+	$fieldContainer.on('change', 'input[type=radio]', function(e) {
+		// Get the machine option that has a selected parent that has this ID
+		var input = $(this);
 
 		fieldContainerID = input.closest($fieldContainer).attr('id')
 
-		console.log("Selected a " + name);
-		console.log("Changing selection from " + previousInput.attr('id') + ", to " + input.attr('id'));
-
-		var nextOptionSet = null;
-		var nextOptionTag = null;
-
-		// Selecting a base machine
-		if (name === "machinemodel") {
-			
-			// Update the machine object
-			machine.id = optionID;
-			machine.name = label.find('.name').text();
-			machine.type = label.find('.type').text();
-			machine.description = $.trim(label.find('.description').text())//.trim();
-			machine.price = label.find('.amount').text();
-
-			// Show/Hide descriptions
-			$machineData.children(':not(h4,.price)').hide();
-			label.find('*').show();
-
-			// Assign classes to machine image and change name displayed below
-			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
-			$nextMachineImage.html(machine.name + " " + machine.type);
-
-			// Check machine type and show relevant weigh hoppers
-			nextOptionSet = $weighHopper;
-			nextOptionTag = "." + input.closest('li').attr('class');
-		}
-		else if (name === 'weighhopper') {
-			// Assign properties to the machine.weighHopper object
-			machine.weighHopper.id = optionID;
-			machine.weighHopper.name = label.find('.name').text();
-			machine.weighHopper.description = $.trim(label.find('.description').text())//.trim();
-			machine.weighHopper.price = label.find('.amount').text();
-
-			// Assign classes to machine image
-			$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(optionID + ' std-fnl');
-
-			nextOptionSet = $dischargeFunnel;
-			nextOptionTag = "." + $machineModel.find('input[type=radio].active').closest('li').attr('class')
-		}
-		else if (name === 'dischargefunnel') {
-			// Assign properties to the machine.dischargeFunnel object
-			machine.dischargeFunnel.id = input.attr('id');
-			machine.dischargeFunnel.name = input.find('.name').text();
-			machine.dischargeFunnel.description = $.trim(label.find('.description').text())//.trim();
-			machine.dischargeFunnel.price = label.find('.amount').text();
-
-			// Assign classes to machine image
-			if (machine.weighHopper.id == 'lrgwh') {
-				if ( machine.dischargeFunnel.id == 'large-std-fnl') {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
-				}
-				else {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
-				}
-			}
-			else {
-				$machineImage.toggleClass('std-fnl steep-fnl');
-			}
-		}
-		else if (fieldContainerID === 'field-name-spout') {
+		// This is the old spout code and I see no reason to mess with it
+		if (fieldContainerID === 'field-name-spout') {
 			var fieldVal = input.val(), 
 			$spoutContainer = input.closest('fieldset');
 
@@ -670,54 +611,26 @@ $(document).ready(function() {
 			$spoutContainer.find('.field-name-dimensions .' + fieldVal).show();
 			$spoutContainer.find('.container-shape-images .' + fieldVal).show();
 		}
-
-		if (nextOptionSet != null && nextOptionTag != null) {
-			// Closes all sets and opens the ones with the appropriate tag
-			nextOptionSet.find('li').hide().filter('.' + nextOptionTag).show();
-
-			var foundVisibleSelectedOption = false;
-			nextOptionSet.find('li .' + nextOptionTag).each(function() {
-				if (this.style.display != 'none') {
-					foundVisibleSelectedOption = true;
-					return false;
-				}
-			});
-
-			if (!foundVisibleSelectedOption) {
-				// Select the first visible option
-				selectOption(nextOptionSet.find('li ' + nextOptionTag).first().find("input[type=radio]")[0]);
-			}
-		}
-		
-	}
-
-    /*
-     * Pages 1 - 4 selection actions
-     */
-
-	$fieldContainer.on('change', 'input[type=radio]', function(e) { // Action when choosing options - registers & indicates selection, determines knock-on choices, updates image, updates cost.
-		// Get the machine option that has a selected parent that has this ID
-		var id = this.id;
-
-		console.log("Clicked on: " + id);
-
-		var list = optionLookup[id];
-		var clickedOption = null;
-		for (var i = 0; i < list.length; i++) {
-			if (list[i].parent === undefined || list[i].parent.isSelected()) {
-				clickedOption = list[i];
-				break;
-			}
-		}
-
-		if (clickedOption != null) {
-			clickedOption.select();
-		}
 		else {
-			console.log("Did not find option");
-		}
+			var id = this.id;
+			console.log("Clicked on: " + id);
 
-		//selectOption(this);</div>
+			var list = optionLookup[id];
+			var clickedOption = null;
+			for (var i = 0; i < list.length; i++) {
+				if (list[i].parent === undefined || list[i].parent.isSelected()) {
+					clickedOption = list[i];
+					break;
+				}
+			}
+
+			if (clickedOption != null) {
+				clickedOption.select();
+			}
+			else {
+				console.log("Did not find option");
+			}
+		}
 		calculateTotalPrice();
 	});
 
@@ -795,20 +708,21 @@ $(document).ready(function() {
 		// Slide the fieldset up and display the results and edit button
 		$spoutContainer.slideUp('fast', function() {    
 			$spoutContainer.after('<p class="spout-calculation"><span class="spoutNum">' + spoutTitle + '</span>: <span class="spout-size">' + spoutSize + '</span>"<button type="button" class="btnRemove" value="Remove spout">Remove</button><button type="button" class="btnEdit" value="Edit spout">Edit</button></p>');
-		});
-		// Show delete button
-		$btnDel.show().prop('disabled', false);
-		// Adjust the grand total
-		// Show the spout image
-		if ($spoutImage.hasClass('hidden')) {
-			$spoutImage.removeClass('hidden');
-			$machineImage.removeClass('no-spout');
-			$machineImage.addClass('spout');
-		}
 
-		var spout = spoutObjectForSpoutWrapperElement($spoutContainer.closest(".spout-wrapper"));
-		machine.spouts[spout.id] = spout;
-		calculateTotalPrice();
+			var spout = spoutObjectForSpoutWrapperElement($spoutContainer.closest(".spout-wrapper"));
+			machine.spouts[spout.id] = spout;
+			calculateTotalPrice();
+
+			// Show delete button
+			$btnDel.show().prop('disabled', false);
+			// Adjust the grand total
+			// Show the spout image
+			if ($spoutImage.hasClass('hidden')) {
+				$spoutImage.removeClass('hidden');
+				$machineImage.removeClass('no-spout');
+				$machineImage.addClass('spout');
+			}
+		});
 	}
 	
 	// Buttons for adding, removing and editing spouts
@@ -905,6 +819,8 @@ $(document).ready(function() {
 
 		var spoutObject = {
 			id : spoutWrapper.attr('id'),
+			name : "Spout",
+			description : spoutWrapper.find(".spout-size").text(),
 			price : spoutPrice
 		};
 
@@ -946,13 +862,26 @@ $(document).ready(function() {
 	function showValues() {
 		console.log("Showing values");
 		// Create the machine type, weight hopper and discharge funnel rows for the summary table
-		var resultsHTML = '<tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.name + ' ' + machine.type + '</th><td>' + machine.description + '</td><td>$' + machine.price + '</td></tr><tr><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.weighHopper.name + '</th><td>' + machine.weighHopper.description + '</td><td>$' + machine.weighHopper.price + '</td></tr><tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.dischargeFunnel.name + '</th><td>' + machine.dischargeFunnel.description + '</td><td>$' + machine.dischargeFunnel.price + '</td></tr>',
-		// Create the spout rows for the summary table
-		num = parseInt($('.spout-size').text());
-		if (!isNaN(num)) {
-			$('.spout-size').each(function() {
-				resultsHTML += '<tr><th style="text-align:right;border-right: 1px solid #0c4b81;">Spout</th><td>' + $(this).text() + ' inch</td><td>$' + spoutPrice + '</td></tr>';
-			});
+		var resultsHTML = '';
+
+		for (var key in machine) {
+
+			if (key !== "spouts") {
+				var piece = machine[key];
+
+				resultsHTML += '<tr><th>' + piece.name + '</th>';
+				resultsHTML += '<td>' + piece.description + '</td>';
+				resultsHTML += '<td>$' + piece.price + '</td></tr>';
+			}
+			else {
+				for (var spoutKey in machine[key]) {
+					var spout = machine[key][spoutKey];
+
+					resultsHTML += '<tr><th>' + spout.name + '</th>';
+					resultsHTML += '<td>' + spout.description + ' inch</td>';
+					resultsHTML += '<td>$' + spout.price + '</td></tr>';
+				}
+			}
 		}
 		// Create the total row for the summary table
 		resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + grandTotal + '</td></tr>';
@@ -1006,7 +935,7 @@ $(document).ready(function() {
 		$HTMLheader = '<table border=0 cellpadding=10 cellspacing=0 style=margin:14px;border-collapse:collapse;><thead style=border-bottom:1px solid #0c4b81;><tr><th style=text-align:right;>Item</th><th style=text-align:left;>Description</th><th style=text-align:left;>Price</th></tr></thead><tbody>', 
 		$HTMLfooter = '</tbody></table>',
 		quoteHTML =  encodeURIComponent($HTMLheader + $HTMLresults + $HTMLfooter), 
-		quoteText = encodeURIComponent(machine.name + " " + machine.type + " - $" + machine.price + "\r" + machine.description + "\r\r" + machine.weighHopper.name + " - $" + machine.weighHopper.price + "\r" + machine.weighHopper.description + "\r\r" + machine.dischargeFunnel.name + " - $" + machine.dischargeFunnel.price + "\r" + machine.dischargeFunnel.description + "\r\r" + spoutRowsText + "\rTotal: $" + grandTotal);
+		quoteText = encodeURIComponent(machine.model.name + " " + machine.model.type + " - $" + machine.model.price + "\r" + machine.model.description + "\r\r" + machine.weighHopper.name + " - $" + machine.weighHopper.price + "\r" + machine.weighHopper.description + "\r\r" + machine.dischargeFunnel.name + " - $" + machine.dischargeFunnel.price + "\r" + machine.dischargeFunnel.description + "\r\r" + spoutRowsText + "\rTotal: $" + grandTotal);
 		// Create the datastring from the form values
 		var dataString = 'to=' + to + '&cc=' + cc + '&name=' + name + '&company=' + company + '&message=' + message + '&quoteHTML=' + quoteHTML + '&quoteText=' + quoteText;
 		// Send the email via an AJAX request the PHP script
