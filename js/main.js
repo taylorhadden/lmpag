@@ -178,13 +178,14 @@ $(document).ready(function() {
 	MachineOption.prototype.select = function() {
 		console.log("selecting: " + this.pathName());
 
-		this.step.options.forEach(function(option) {
-			option.element.removeClass('active');
-		});
+		for (var i = 0; i < this.step.options.length; i++) {
+			var option = this.step.options[i];
+			if (option.isSelected() && option.element.attr("id") != this.element.attr("id")) {
+				option.deselect();
+			}
+		}
 
-		this.element.addClass('active');
-
-		this.element.prop("checked", true);
+		this.selectElement();
 
 		if (this.onSelects !== undefined) {
 			for (var i = 0; i < this.onSelects.length; i++) {
@@ -212,16 +213,37 @@ $(document).ready(function() {
 			}
 		}
 	}
-	MachineOption.prototype.onSelect = function(method, override) {
-		if (!override) {
-			if (this.onSelects === undefined) {
-				this.onSelects = [];
+	// This is pulled out to make mucking with the odd sections easier
+	MachineOption.prototype.selectElement = function() {
+		this.element.addClass('active');
+		this.element.prop("checked", true);
+	}
+	MachineOption.prototype.onSelect = function(method) {
+		if (this.onSelects === undefined) {
+			this.onSelects = [];
+		}
+		this.onSelects.push(method);
+		return this;
+	}
+	MachineOption.prototype.deselect = function() {
+		console.log("Deselecting " + this.pathName());
+		this.deselectElement();
+		if (this.onDeselects !== undefined) {
+			for (var i = 0; i < this.onDeselects.length; i++) {
+				this.onDeselects[i].call(this);
 			}
-			this.onSelects.push(method);
 		}
-		else {
-			this.select = method;
+	}
+	// This is pulled out to make mucking with the odd sections easier
+	MachineOption.prototype.deselectElement = function() {
+		this.element.removeClass('active');
+		this.element.prop('checked', false);
+	}
+	MachineOption.prototype.onDeselect = function(method) {
+		if (this.onDeselects === undefined) {
+			this.onDeselects = [];
 		}
+		this.onDeselects.push(method);
 		return this;
 	}
 
@@ -361,16 +383,21 @@ $(document).ready(function() {
 
 	// For Spouts and Chutes
 	function makeInsertionOption(selector) {
+		// This overrides a number of elements of the base Machine Option setup,
+		// as it is structured differently.
 		var inserter = MO(selector);
 
 		insertionStep.addOption(inserter);
 
-		inserter.onSelect(function() {
-			this.step.options.forEach(function(option) {
-				option.element.hide();
-			});
+		inserter.isSelected = function() {
+			return this.element.css('display') != 'none';
+		}
+		inserter.selectElement = function() {
 			this.element.show();
-		}, true);
+		}
+		inserter.deselectElement = function() {
+			this.element.hide();
+		}
 
 		return inserter;
 	}
@@ -381,26 +408,56 @@ $(document).ready(function() {
 		return spoutSelector;
 	}
 
-	function chuteOptions() {
+	function paidChuteOptions() {
 		var chuteOptions = makeInsertionOption("#ChuteOptions");
+
+		chuteOptions.isSelected = function() {
+			return this.element.css('display') != 'none' && this.chuteOptionContainer().css('display') != 'none';
+		}
+
+		chuteOptions.chuteOptionContainer = function() {
+			return $("#ChuteSizeUpcharge");
+		}
+
+		chuteOptions.onSelect(function() {
+			this.chuteOptionContainer().show();
+		});
+
+		chuteOptions.onDeselect(function() {
+			this.chuteOptionContainer().hide();
+			delete machine["chuteAdapter"];
+			$("#ChuteAdapterSelector").prop("checked", false).trigger("change");
+		});
+
 		return chuteOptions;
 	}
 
 	function freeChuteOptions() {
-		return chuteOptions();
+		var chuteOptions = paidChuteOptions();
+
+		chuteOptions.chuteOptionContainer = function() {
+			return $("#ChuteSizeFree");
+		}
+
+		return chuteOptions;
 	}
+
+	// Establish callback for the chute option selector
+	$("#ChuteAdapterSelector").on("change", function() {
+		console.log("Chute Adapter is " + $(this).prop("checked"));
+	})
 
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
 			makeWeighHopper("#stwh").addSubOption(
 				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
 				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector()),
-				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
+				makeDischargeFunnel("#discharge-cht").addSubOption(paidChuteOptions())
 			),
 			makeWeighHopper("#lrgwh").addSubOption(
 				makeDischargeFunnel("#large-std-fnl").addSubOption(spoutSelector()),
 				makeDischargeFunnel("#large-steep-fnl").addSubOption(spoutSelector()),
-				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
+				makeDischargeFunnel("#discharge-cht").addSubOption(paidChuteOptions())
 			)
 		);
 

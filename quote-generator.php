@@ -1212,7 +1212,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									</div>
 
 									<div>
-										<input type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250)</input>
+										<input id = "ChuteAdapterSelector" type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250)</input>
 									</div>
 								</div>
 							</div><!-- id="step-4" -->
