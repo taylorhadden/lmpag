@@ -74,8 +74,11 @@ $(document).ready(function() {
 	$btnDel = $('#btnDel'), 
 	$btnEmail = $('#btnEmail'), 
 	$btnSubmit = $('#btnSubmit');
+	// Chute Size Controls
+	$chuteSizeSelection = $(".chuteSizeSelection");
 
 	// Create an instance of the machine object and default assign properties
+	// Note that "priceSupplement" and "descriptionSupplement" are also supported options for a part model
 	var machine = {
 		model : {
 			id : $machineData.first().attr('for'),
@@ -95,8 +98,8 @@ $(document).ready(function() {
 			name : $dischargeFunnelData.first().find('.name').text(),
 			description : $.trim($dischargeFunnelData.first().find('.description').text()),//.trim(),
 			price : $dischargeFunnelData.first().find('.amount').text()
-			// chuteSize : 3.5 or 4.5 or 5
 		},
+		// Chute size and apapters are added as necessary
 		spouts : {
 			// This is a dictionary of spouts
 		}
@@ -412,7 +415,7 @@ $(document).ready(function() {
 		var chuteOptions = makeInsertionOption("#ChuteOptions");
 
 		chuteOptions.isSelected = function() {
-			return this.element.css('display') != 'none' && this.chuteOptionContainer().css('display') != 'none';
+			return this.element.css('display') != 'none' || this.chuteOptionContainer().css('display') != 'none';
 		}
 
 		chuteOptions.chuteOptionContainer = function() {
@@ -421,12 +424,17 @@ $(document).ready(function() {
 
 		chuteOptions.onSelect(function() {
 			this.chuteOptionContainer().show();
+			$chuteSizeSelection.trigger("change");
 		});
 
 		chuteOptions.onDeselect(function() {
 			this.chuteOptionContainer().hide();
-			delete machine["chuteAdapter"];
+			// Deselect the chute adapter and tell it to update;
 			$("#ChuteAdapterSelector").prop("checked", false).trigger("change");
+			// Reset the chute size customizers and remove the item
+			$chuteSizeSelection.val("5");
+			delete machine["dischargeFunnel"].priceSupplement;
+			delete machine["dischargeFunnel"].descriptionSupplement;
 		});
 
 		return chuteOptions;
@@ -444,8 +452,46 @@ $(document).ready(function() {
 
 	// Establish callback for the chute option selector
 	$("#ChuteAdapterSelector").on("change", function() {
-		console.log("Chute Adapter is " + $(this).prop("checked"));
-	})
+		if ($(this).prop("checked")) {
+			machine["chuteAdapter"] = {
+				name : "Chute Adapter",
+				description : "Include a Chute Adapter",
+				price : 250
+			}
+		}
+		else {
+			delete machine["chuteAdapter"];
+		}
+		calculateTotalPrice();
+	});
+
+	$chuteSizeSelection.on("change", function() {
+		var selector = $(this);
+		var option = selector.find("option[value='" + selector.val() + "']");
+
+		var price = 0;
+		if (option.attr("data")) {
+			price = parseInt(option.attr("data"));
+		}
+
+		var piece = machine["dischargeFunnel"];
+		piece.priceSupplement = price;
+		var description = undefined;
+		if (option.index() > 0) {
+			description = "Specified " + option.attr('value') + "\" chute";
+			if (price > 0) {
+				description += " ($" + price + ").";
+			}
+			else {
+				description += ".";
+			}
+		}
+		piece.descriptionSupplement = description;
+
+		console.log("Updating Weigh Hopper Size");
+		console.log(piece);
+		calculateTotalPrice();
+	});
 
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
@@ -551,6 +597,9 @@ $(document).ready(function() {
 		for (var key in machine) {
 			if (key !== "spouts") {
 				price += parseFloat(machine[key].price);
+				if (machine[key].priceSupplement) {
+					price += parseFloat(machine[key].priceSupplement);
+				}
 			}
 			else {
 				for (var id in machine[key]) {
@@ -927,8 +976,27 @@ $(document).ready(function() {
 				var piece = machine[key];
 
 				resultsHTML += '<tr><th>' + piece.name + '</th>';
-				resultsHTML += '<td>' + piece.description + '</td>';
-				resultsHTML += '<td>$' + piece.price + '</td></tr>';
+
+				// Description
+				resultsHTML += '<td>' + piece.description;
+				if (piece.descriptionSupplement) {
+					resultsHTML += " " + piece.descriptionSupplement;
+				}
+				resultsHTML += '</td>';
+
+				// Price
+				resultsHTML += '<td>';
+				if (parseFloat(piece.price) > 0) {
+					resultsHTML += "$" + piece.price;
+				}
+				else {
+					resultsHTML += "Included";
+				}
+				
+				if (piece.priceSupplement) {
+					resultsHTML += " + $" + piece.priceSupplement;
+				}
+				resultsHTML += '</td></tr>'
 			}
 			else {
 				for (var spoutKey in machine[key]) {
@@ -941,7 +1009,7 @@ $(document).ready(function() {
 			}
 		}
 		// Create the total row for the summary table
-		resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + grandTotal + '</td></tr>';
+		resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + $("#cost-container .amount").text() + '</td></tr>';
 		// Empty the current summary table and add the new rows in
 		$('#results').empty().append(resultsHTML);
 		// Stripe the results table

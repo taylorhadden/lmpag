@@ -1196,23 +1196,23 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 
 									<div id = "ChuteSizeFree">
 										Chute Size:
-										<select name = "chuteSize">
-											<option value="3.5">3.5"</option>
-											<option value="4.5">4.5"</option>
+										<select class = "chuteSizeSelection" name = "chuteSize">
 											<option value="5">5"</option>
+											<option value="4.5">4.5"</option>
+											<option value="3.5">3.5"</option>
 										</select>
 									</div>
 									<div id = "ChuteSizeUpcharge">
 										Chute Size:
-										<select name = "chuteSize">
-											<option value="3.5">3.5" ($100)</option>
-											<option value="4.5">4.5" ($100)</option>
-											<option value="5" selected>5" (Standard)</option>
+										<select class = "chuteSizeSelection" name = "chuteSize">
+											<option value="5">5" (Standard)</option>
+											<option value="4.5" data = "100">4.5" ($100)</option>
+											<option value="3.5" data = "100">3.5" ($100)</option>
 										</select>
 									</div>
 
 									<div>
-										<input id = "ChuteAdapterSelector" type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250)</input>
+										<input id = "ChuteAdapterSelector" type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250 upcharge)</input>
 									</div>
 								</div>
 							</div><!-- id="step-4" -->
