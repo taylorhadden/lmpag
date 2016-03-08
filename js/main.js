@@ -281,6 +281,8 @@ $(document).ready(function() {
 
 	// Intialize the Steps
 	var modelStep = new ConfigurationStep($("#step-1"));
+	var supplyHopperStep = new ConfigurationStep($("#step-1_5"));
+	supplyHopperStep.tab = $("#step-1_5-tab");
 	var weighHopperStep = new ConfigurationStep($("#step-2"));
 	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
 	var insertionStep = new ConfigurationStep($("#step-4"));
@@ -523,7 +525,13 @@ $(document).ready(function() {
 			)
 		);
 
-	var s7Option = makeMachine("#s7");
+	var s7Option = makeMachine("#s7").onSelect(function() {
+		console.log("S7 Select");
+		supplyHopperStep.tab.show();
+	}).onDeselect(function() {
+		console.log("S7 Deselect");
+		supplyHopperStep.tab.hide();
+	});
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();
@@ -639,7 +647,7 @@ $(document).ready(function() {
 		// Remove active state from old step tab
 		$('#pag-navigation a').removeClass('active');
 		// Set active state for current step tab
-		$('#pag-navigation a[data*=' + stepID + ']').addClass('active');
+		$('#pag-navigation a[data=' + stepID + ']').addClass('active');
 
 		$('.step-container').hide();
 		stepContainer.show();
@@ -658,12 +666,27 @@ $(document).ready(function() {
 		// Determine the next step ID
 		var $stepContainer = $(this).closest('.step-container');
 		
+		// We need to handle skipping steps with invisible tabs
 		var switchingToID;
+
+		var iteratorName; // Checkout this hack!
 		if ($(this).is('.next')) {
-			switchingToID = $stepContainer.next().attr('id');
+			iteratorName = "next";
 		}
 		else {
-			switchingToID = $stepContainer.prev().attr('id');
+			iteratorName = "prev";
+		}
+
+		while(true) {
+			// This bit lets us do this without having to ask "is next" every time
+			$stepContainer = $stepContainer[iteratorName]();
+			switchingToID = $stepContainer.attr('id');
+
+			// Check to see that the tab for the step is visible
+			if ($("#pag-navigation a[data='" + switchingToID + "']:visible").length > 0) {
+				break;
+			}
+			// Otherwise we keep going
 		}
 
 		// Apply the switch to the ID

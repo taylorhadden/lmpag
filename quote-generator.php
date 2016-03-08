@@ -19,6 +19,14 @@ $settings = array(
 						"description" => "The S-7 includes two standard Weigh Hoppers, standard S-7 Discharge Chute, and two Logical Controller IIs. It comes fully assembled and ready to operate. ",
 						"price" => "12000")
 				),
+		"supplyHopper" => array(
+				"standard-supply-hopper" => array("name" => "Standard Supply Hopper",
+						"description" => "FILL IN STANDARD SUPPLY HOPPER DESCRIPTION",
+						"price" => "0"),
+				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
+						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
+						"price" => "150"),
+				),
 		// Weigh hopper settings
 		"weighhopper" => array(
 				"no-weigh-hopper" => array("name" => " ",
@@ -120,6 +128,11 @@ include_once 'bin/php_validation.php';
 						<a data="step-1" class="active"><span class="list-no">1</span>
 						<br/>
 						Select your machine</a>
+					</li>
+					<li id = "step-1_5-tab" style="display: none;">
+						<a data="step-1_5"><span class="list-no">1.5</span>
+						<br/>
+						Select your Supply Hopper</a>
 					</li>
 					<li>
 						<a data="step-2"><span class="list-no">2</span>
@@ -442,6 +455,42 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 									</li>
 								</ul>
 							</div><!-- id="step-1" -->
+
+							<div id="step-1_5" class="step-container" name="step-1_5" style="display: none;">
+								<h3>Select your Supply Hopper</h3>
+								<p>
+									The <b>Supply Hopper</b> is the portion of the unit which moves your product to the weigh hoppers. Select a hopper by clicking its image.
+								</p>
+								<ul id="field-name-supply-hopper" class="field-type-radio field-container label-format-block">
+									<li>
+										<input type="radio" id="standard-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
+										/>
+										<label for="standard-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["supplyHopper"]["standard-supply-hopper"]["name"]; ?></h4>
+											<p class="description">
+												<?php echo $settings["supplyHopper"]["standard-supply-hopper"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["supplyHopper"]["standard-supply-hopper"]["price"]; ?></span> included on standard <span class="machine-name"></span>
+											</p></label>
+
+									</li>
+									<li>
+										<input type="radio" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
+										/>
+										<label for="divided-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["supplyHopper"]["divided-supply-hopper"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Small Weigh Hopper image
+											</div>
+											<p class="description">
+												<?php echo $settings["supplyHopper"]["divided-supply-hopper"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["supplyHopper"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
+											</p></label>
+
+									</li>
+								</ul>
+							</div><!-- id="step-1_5" -->
 
 							<div id="step-2" class="step-container" name="step-2">
 								<h3>Select your Weigh Hopper</h3>
