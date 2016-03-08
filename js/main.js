@@ -80,26 +80,28 @@ $(document).ready(function() {
 	// Create an instance of the machine object and default assign properties
 	// Note that "priceSupplement" and "descriptionSupplement" are also supported options for a part model
 	var machine = {
-		model : {
-			id : $machineData.first().attr('for'),
-			name : $machineData.first().find('.name').text(),
-			type : $machineData.first().find('.type').text(),
-			description : $.trim($machineData.first().find('.description').text()),//.trim(),
-			price : $machineData.first().find('.amount').text(),
-		},
-		weighHopper : {
-			id : $weighHopperData.first().attr('for'),
-			name : $weighHopperData.first().find('.name').text(),
-			description : $.trim($weighHopperData.first().find('.description').text()),//.trim(),
-			price : $weighHopperData.first().find('.amount').text()
-		},
-		dischargeFunnel : {
-			id : $dischargeFunnelData.first().attr('for'),
-			name : $dischargeFunnelData.first().find('.name').text(),
-			description : $.trim($dischargeFunnelData.first().find('.description').text()),//.trim(),
-			price : $dischargeFunnelData.first().find('.amount').text()
-		},
+		// The machine does not auto-fill values. The schema is as follows:
+		/*
+		part-id : {
+			id : the part id,
+			name : the part name
+			type : (optional) the part type
+			description : the description of the part
+			price : the price of the part
+		}
+		*/
+
+		// The expected values are as follows:
+		/*
+		model : the actual model of the machine,
+		supplyHopper : (optional) the supply hopper for the S7
+		weighHopper : the weigh hopper for the machine
+		dischargeFunnel : the discharge funnel, includes the discharge chute
+		*/
+
 		// Chute size and apapters are added as necessary
+		
+		// The "spouts" name is special. It is a list of sub-parts, each using the base part schema
 		spouts : {
 			// This is a dictionary of spouts
 		}
@@ -305,6 +307,17 @@ $(document).ready(function() {
 		return option;
 	}
 
+	function partFromElement(element) {
+		var label = element.next("label");
+		var part = {
+			id : element.attr("id"),
+			name : label.find(".name").text(),
+			description : $.trim(label.find('.description').text()),
+			price : label.find('.amount').text()
+		}
+		return part;
+	}
+
 	function makeMachine(selector) {
 		var machineOption = MO(selector);
 
@@ -312,16 +325,11 @@ $(document).ready(function() {
 
 		// Tack on other furnctions
 		machineOption.onSelect(function() {
-			var label = this.element.next("label");
-
-			machine.model.id = this.element.attr('id');
-			machine.model.name = label.find('.name').text();
-			machine.model.type = label.find('.type').text();
-			machine.model.description = $.trim(label.find('.description').text());
-			machine.model.price = label.find('.amount').text();
+			machine.model = partFromElement(this.element);
 
 			// Show/Hide descriptions
 			$machineData.children(':not(h4,.price)').hide();
+			var label = this.element.next("label");
 			label.find('*').show();
 
 			// Assign classes to machine image and change name displayed below
@@ -332,17 +340,26 @@ $(document).ready(function() {
 		return machineOption;
 	}
 
+	function makeSupplyHopper(selector) {
+		var supplyHopper = MO(selector);
+		supplyHopperStep.addOption(supplyHopper);
+
+		supplyHopper.onSelect(function() {
+			machine.supplyHopper = partFromElement(this.element);
+
+			// TODO: Will need to add picture here
+			console.log("Selected for some reason ");
+		});
+		return supplyHopper;
+	}
+
 	function makeWeighHopper(selector) {
 		var weighHopper = MO(selector);
 
 		weighHopperStep.addOption(weighHopper);
 
 		weighHopper.onSelect(function() {
-			var label = this.element.next("label");
-			machine.weighHopper.id = this.element.attr('id');
-			machine.weighHopper.name = label.find('.name').text();
-			machine.weighHopper.description = $.trim(label.find('.description').text());
-			machine.weighHopper.price = label.find('.amount').text();
+			machine.weighHopper = partFromElement(this.element);
 
 			// Assign classes to machine image
 			$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(this.element.attr('id') + ' std-fnl');
@@ -359,10 +376,7 @@ $(document).ready(function() {
 		dischargeFunnel.onSelect(function() {
 			var label = this.element.next("label");
 
-			machine.dischargeFunnel.id = this.element.attr('id');
-			machine.dischargeFunnel.name = label.find('.name').text();
-			machine.dischargeFunnel.description = $.trim(label.find('.description').text());
-			machine.dischargeFunnel.price = label.find('.amount').text();
+			machine.dischargeFunnel = partFromElement(this.element);
 
 			// Assign classes to machine image
 			if (machine.weighHopper.id == 'lrgwh') {
@@ -526,12 +540,14 @@ $(document).ready(function() {
 		);
 
 	var s7Option = makeMachine("#s7").onSelect(function() {
-		console.log("S7 Select");
-		supplyHopperStep.tab.show();
-	}).onDeselect(function() {
-		console.log("S7 Deselect");
-		supplyHopperStep.tab.hide();
-	});
+			supplyHopperStep.tab.show();
+		}).onDeselect(function() {
+			supplyHopperStep.tab.hide();
+			delete machine.supplyHopper;
+		}).addSubOption(
+			makeSupplyHopper("#standard-supply-hopper"),
+			makeSupplyHopper("#divided-supply-hopper")
+		);
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();
