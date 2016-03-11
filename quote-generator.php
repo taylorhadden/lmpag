@@ -19,14 +19,6 @@ $settings = array(
 						"description" => "The S-7 includes two standard Weigh Hoppers, standard S-7 Discharge Chute, and two Logical Controller IIs. It comes fully assembled and ready to operate. ",
 						"price" => "12000")
 				),
-		"supplyHopper" => array(
-				"standard-supply-hopper" => array("name" => "Standard Supply Hopper",
-						"description" => "FILL IN STANDARD SUPPLY HOPPER DESCRIPTION",
-						"price" => "0"),
-				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
-						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
-						"price" => "150"),
-				),
 		// Weigh hopper settings
 		"weighhopper" => array(
 				"no-weigh-hopper" => array("name" => " ",
@@ -38,14 +30,17 @@ $settings = array(
 				"standard-weigh-hopper" => array("name" => "250 cubic inch Standard Weigh Hopper",
 						"description" => "The standard weigh hopper comes by default. Its 250 cubic inch capacity (about a gallon of dry measure) handles net weights from a few grams to 3 lbs.",
 						"price" => "0"),
+				"standard-weigh-hopper-two" => array("name" => "Two 250 cubic inch Standard Weigh Hoppers",
+						"description" => "The standard weigh hoppers come by default. Each has 250 cubic inch capacity (about a gallon of dry measure) and handles net weights from a few grams to 3 lbs.",
+						"price" => "0"),
 				"large-weigh-hopper" => array("name" => "650 cubic inch Large Weigh Hopper",
 						"description" => "For larger volumes, the large weigh hopper's 650 cubic inch capacity (about 2.5 gallons of dry measure) handles net weights from 2 oz. to 10 lbs.",
 						"price" => "100"),
-				"large-weigh-hopper-two" => array("name" => "650 cubic inch Large Weigh Hopper",
+				"large-weigh-hopper-two" => array("name" => "Two 650 cubic inch Large Weigh Hoppers",
 						"description" => "For larger volumes, the large weigh hopper's 650 cubic inch capacity (about 2.5 gallons of dry measure) handles net weights from 2 oz. to 10 lbs.",
 						"price" => "200")
 				),
-		// Discharge funnel settings > Fallback copy for use when Javascript is disabled
+		// Discharge funnel settings 
 		"dischargefunnel" => array(
 				"discharge-free" => array("name" => "Discharge Chute",
 						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
@@ -53,20 +48,25 @@ $settings = array(
 				"discharge" => array("name" => "Discharge Chute",
 						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 5” standard size.",
 						"price" => "285"),
-				// Discharge funnel settings > Normal copy for use when Javascript is enabled
 				"small" => array(
 						"standard" => array(
 								"name" => "Standard Discharge Funnel",
 								"description" => "This is the standard funnel for use with the standard weigh hopper. It works best for free flowing products.",
 								"price" => "0"),
-						"discharge" => array("name" => "Discharge Chute",
-							"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
-							"price" => "0"),
+						"discharge" => array(
+								"name" => "Discharge Chute",
+								"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. Comes in 3.5”, 4.5”, 5” standard sizes.",
+								"price" => "0"),
 						"steep" => array(
 								"name" => "Steep-Sided Discharge Funnel",
 								"description" => "This steep sided funnel is used for fine powdered materials such as flour or other products that can stick to metal surfaces.",
-								"price" => "125")
+								"price" => "125"),
+						"dual-lane" => array(
+								"name" => "Small Dual Lane Discharge Funnel",
+								"description" => "This is the standard funnel for use with two standard weigh hoppers. It works best for free flowing products.",
+								"price" => "0")
 						),
+
 				"large" => array(
 						"standard" => array(
 								"name" => "Large Discharge Funnel",
@@ -75,7 +75,12 @@ $settings = array(
 						"steep" => array(
 								"name" => "Large Steep-Sided Discharge Funnel",
 								"description" => "This steep sided funnel is used for fine powdered materials such as flour or other products that can stick to metal surfaces.",
-								"price" => "400")
+								"price" => "400"),
+
+						"dual-lane" => array(
+								"name" => "Large Dual Lane Discharge Funnel",
+								"description" => "This is the standard funnel for use with two large weigh hoppers. It works best for free flowing products.",
+								"price" => "0")
 						)
 				),
 		"spout" => array("price" => "150",
@@ -83,6 +88,11 @@ $settings = array(
 						"four-sided-bag" => array("d1", "d2"),
 						"can-jar" => array("diameter")
 						)
+				),
+		"accessory" => array(
+				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
+						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
+						"price" => "150"),
 				)
 		);
 
@@ -129,11 +139,6 @@ include_once 'bin/php_validation.php';
 						<br/>
 						Select your machine</a>
 					</li>
-					<li id = "step-1_5-tab" style="display: none;">
-						<a data="step-1_5"><span class="list-no">1.5</span>
-						<br/>
-						Select your Supply Hopper</a>
-					</li>
 					<li>
 						<a data="step-2"><span class="list-no">2</span>
 						<br/>
@@ -150,7 +155,12 @@ include_once 'bin/php_validation.php';
 						Select Spouts</a>
 					</li>
 					<li>
-						<a data="step-5"><span class="list-no">5</span>
+						<a data="step-5" style="font-size: 16px;"><span class="list-no">5</span>
+						<br/>
+						Select Accessories</a>
+					</li>
+					<li>
+						<a data="step-6"><span class="list-no">6</span>
 						<br/>
 						Your Quote Summary</a>
 					</li>
@@ -456,42 +466,6 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 								</ul>
 							</div><!-- id="step-1" -->
 
-							<div id="step-1_5" class="step-container" name="step-1_5" style="display: none;">
-								<h3>Select your Supply Hopper</h3>
-								<p>
-									The <b>Supply Hopper</b> is the portion of the unit which moves your product to the weigh hoppers. Select a hopper by clicking its image.
-								</p>
-								<ul id="field-name-supply-hopper" class="field-type-radio field-container label-format-block">
-									<li>
-										<input type="radio" id="standard-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
-										/>
-										<label for="standard-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["supplyHopper"]["standard-supply-hopper"]["name"]; ?></h4>
-											<p class="description">
-												<?php echo $settings["supplyHopper"]["standard-supply-hopper"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["supplyHopper"]["standard-supply-hopper"]["price"]; ?></span> included on standard <span class="machine-name"></span>
-											</p></label>
-
-									</li>
-									<li>
-										<input type="radio" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
-										/>
-										<label for="divided-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["supplyHopper"]["divided-supply-hopper"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Small Weigh Hopper image
-											</div>
-											<p class="description">
-												<?php echo $settings["supplyHopper"]["divided-supply-hopper"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["supplyHopper"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
-											</p></label>
-
-									</li>
-								</ul>
-							</div><!-- id="step-1_5" -->
-
 							<div id="step-2" class="step-container" name="step-2">
 								<h3>Select your Weigh Hopper</h3>
 								<p>
@@ -561,6 +535,25 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["weighhopper"]["large-weigh-hopper"]["price"]; ?></span> upcharge
+											</p></label>
+
+									</li>
+									<li class="small">
+										<input type="radio" id="stwh2" class="" name="weighhopper" value="large-weigh-hopper-two" 
+										<?php
+if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
+	echo 'checked';
+}
+										?>/>
+										<label for="stwh2" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["standard-weigh-hopper-two"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Standard Weigh Hopper image
+											</div>
+											<p class="description">
+												<?php echo $settings["weighhopper"]["standard-weigh-hopper-two"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["weighhopper"]["standard-weigh-hopper-two"]["price"]; ?></span> upcharge
 											</p></label>
 
 									</li>
@@ -676,6 +669,34 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["discharge-free"]["price"]; ?></span> included on standard <span class="machine-name"></span>
+											</p>
+										</label>
+									</li>
+									<li class="small hidden">
+										<input type="radio" id="small-dl-fnl" name="dischargefunnel" value="small-dl-funnel" />
+										<label for="small-dl-fnl" class="std-fnl clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["small"]["dual-lane"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Small Dual Lane Discharge Funnel image
+											</div>
+											<p class="description">
+												<?php echo $settings["dischargefunnel"]["small"]["dual-lane"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["small"]["dual-lane"]["price"]; ?></span> included on standard <span class="machine-name"></span>
+											</p>
+										</label>
+									</li>
+									<li class="large hidden">
+										<input type="radio" id="large-dl-fnl" name="dischargefunnel" value="large-dl-funnel" />
+										<label for="large-dl-fnl" class="std-fnl clearfix"><h4 class="name"><?php echo $settings["dischargefunnel"]["large"]["dual-lane"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Small Dual Lane Discharge Funnel image
+											</div>
+											<p class="description">
+												<?php echo $settings["dischargefunnel"]["large"]["dual-lane"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["dischargefunnel"]["large"]["dual-lane"]["price"]; ?></span> included on standard <span class="machine-name"></span>
 											</p>
 										</label>
 									</li>
@@ -1266,7 +1287,32 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								</div>
 							</div><!-- id="step-4" -->
 
-							<div id="step-5" class="step-container" name="step-5">
+
+							<div id="step-5" class="step-container" name="step-5" style="display: none;">
+								<h3>Select your Supply Hopper</h3>
+								<p>
+									The <b>Supply Hopper</b> is the portion of the unit which moves your product to the weigh hoppers. Select a hopper by clicking its image.
+								</p>
+								<ul id="field-name-supply-hopper" class="field-type-radio field-container label-format-block">
+									<li>
+										<input type="checkbox" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
+										/>
+										<label for="divided-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["accessory"]["divided-supply-hopper"]["name"]; ?></h4>
+											<div class="component-image ir">
+												Small Weigh Hopper image
+											</div>
+											<p class="description">
+												<?php echo $settings["accessory"]["divided-supply-hopper"]["description"]; ?>
+											</p>
+											<p class="price clear">
+												<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
+											</p></label>
+
+									</li>
+								</ul>
+							</div><!-- id="step-5" -->
+
+							<div id="step-6" class="step-container" name="step-6">
 								<div id="quote-summary" class="hidden">
 									<h3>Your Quote Summary</h3>
 									<table>

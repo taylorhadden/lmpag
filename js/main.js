@@ -101,9 +101,12 @@ $(document).ready(function() {
 
 		// Chute size and apapters are added as necessary
 		
-		// The "spouts" name is special. It is a list of sub-parts, each using the base part schema
+		// The "spouts" and "accessories" name is special. It is a list of sub-parts, each using the base part schema
 		spouts : {
 			// This is a dictionary of spouts
+		},
+		accessories : {
+			// This is a dictionary of accessories
 		}
 	};
 	
@@ -283,11 +286,10 @@ $(document).ready(function() {
 
 	// Intialize the Steps
 	var modelStep = new ConfigurationStep($("#step-1"));
-	var supplyHopperStep = new ConfigurationStep($("#step-1_5"));
-	supplyHopperStep.tab = $("#step-1_5-tab");
 	var weighHopperStep = new ConfigurationStep($("#step-2"));
 	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
 	var insertionStep = new ConfigurationStep($("#step-4"));
+	var accessoryStep = new ConfigurationStep($("#step-5"));
 
 
 	// Creation Methods
@@ -315,6 +317,11 @@ $(document).ready(function() {
 			description : $.trim(label.find('.description').text()),
 			price : label.find('.amount').text()
 		}
+		// Optional values
+		var type = label.find(".type").text();
+		if (type) {
+			part.type = type;
+		}
 		return part;
 	}
 
@@ -334,23 +341,14 @@ $(document).ready(function() {
 
 			// Assign classes to machine image and change name displayed below
 			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.model.id);
-			$nextMachineImage.html(machine.model.name + " " + machine.model.type);
+			var name = machine.model.name;
+			if (machine.model.type) {
+				name += " " + machine.model.type;
+			}
+			$nextMachineImage.html(name);
 		});
 
 		return machineOption;
-	}
-
-	function makeSupplyHopper(selector) {
-		var supplyHopper = MO(selector);
-		supplyHopperStep.addOption(supplyHopper);
-
-		supplyHopper.onSelect(function() {
-			machine.supplyHopper = partFromElement(this.element);
-
-			// TODO: Will need to add picture here
-			console.log("Selected for some reason ");
-		});
-		return supplyHopper;
 	}
 
 	function makeWeighHopper(selector) {
@@ -509,6 +507,23 @@ $(document).ready(function() {
 		calculateTotalPrice();
 	});
 
+	function makeAccessory(selector) {
+		var accessory = MO(selector);
+		accessoryStep.addOption(accessory);
+
+		accessory.onSelect(function() {
+			var part = partFromElement(this.element);
+			machine.accessories[part.id] = part;
+
+			// TODO: Will need to add picture here
+			console.log("Selected for some reason ");
+		});
+		accessory.onDeselect(function() {
+			delete machine.accessories[this.element.attr('id')];
+		});
+		return accessory;
+	}
+
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
 			makeWeighHopper("#stwh").addSubOption(
@@ -539,14 +554,13 @@ $(document).ready(function() {
 			)
 		);
 
-	var s7Option = makeMachine("#s7").onSelect(function() {
-			supplyHopperStep.tab.show();
-		}).onDeselect(function() {
-			supplyHopperStep.tab.hide();
-			delete machine.supplyHopper;
-		}).addSubOption(
-			makeSupplyHopper("#standard-supply-hopper"),
-			makeSupplyHopper("#divided-supply-hopper")
+	var s7Option = makeMachine("#s7").addSubOption(
+			makeWeighHopper("#stwh2").addSubOption(
+				makeDischargeFunnel("#small-dl-fnl").addSubOption(spoutSelector())
+			),
+			makeWeighHopper("#lrgwh2").addSubOption(
+				makeDischargeFunnel("#large-dl-fnl").addSubOption(spoutSelector())
+			)
 		);
 
 	weighHopperStep.hideAll();
@@ -559,7 +573,7 @@ $(document).ready(function() {
 	*/
 
 	// Hide fallback content, add and delete button
-	$('#field-name-discharge-funnel .large, .field-name-dimensions li, #step-2, #step-3, #step-4, #step-5, #hidden-accessories-page, .container-shape-images > *, #btnAdd, #btnDel, .calculate, .spout-calculation, .field-spout .instructions p, #emailQuote, .field-spout .warning, #sending').hide();
+	$('#field-name-discharge-funnel .large, .field-name-dimensions li, #step-2, #step-3, #step-4, #step-5, #step-6, #hidden-accessories-page, .container-shape-images > *, #btnAdd, #btnDel, .calculate, .spout-calculation, .field-spout .instructions p, #emailQuote, .field-spout .warning, #sending').hide();
 	$('.field-spout .instructions p.spout-selection').show();
 	// Remove fallback form elements
 	$('.fallback-field-spout,.fallback-discharge-funnel,input[name=nojs]').remove();
@@ -619,7 +633,7 @@ $(document).ready(function() {
 		var price = 0;
 
 		for (var key in machine) {
-			if (key !== "spouts") {
+			if (key !== "spouts" && key !== "accessories") {
 				price += parseFloat(machine[key].price);
 				if (machine[key].priceSupplement) {
 					price += parseFloat(machine[key].priceSupplement);
@@ -668,7 +682,7 @@ $(document).ready(function() {
 		$('.step-container').hide();
 		stepContainer.show();
 
-		if (stepID === "step-5") {
+		if (stepID === "step-6") {
 			showValues();
 		}
 
@@ -992,9 +1006,6 @@ $(document).ready(function() {
 	 *  Hidden accessories page
 	 */
 
-	$('#hidden-accessories-page-btn').click(function() {
-		$('#hidden-accessories-page').show();
-	});
 	$('#btnClose,#btnContinue').click(function() {
 		$(this).closest('.step-container').hide();
 	});
@@ -1011,7 +1022,7 @@ $(document).ready(function() {
 
 		for (var key in machine) {
 
-			if (key !== "spouts") {
+			if (key !== "spouts" && key !== "accessories") {
 				var piece = machine[key];
 
 				resultsHTML += '<tr><th>' + piece.name + '</th>';
