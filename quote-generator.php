@@ -21,7 +21,7 @@ $settings = array(
 				),
 		// Weigh hopper settings
 		"weighhopper" => array(
-				"no-weigh-hopper" => array("name" => " ",
+				"no-weigh-hopper" => array("name" => "S-5 Table Scale",
 						"description" => "The S-5 uses a table-style scale instead of a Weigh Hopper.",
 						"price" => "0"),
 				"small-weigh-hopper" => array("name" => "250 cubic inch Small Weigh Hopper",
@@ -224,51 +224,51 @@ include_once 'bin/php_validation.php';
 											<h4><span class="name"><?php echo $settings["machinemodel"]["S-4"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-4"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-4"]["description"]; ?>
-												<h5>S-4 Specifications:</h5>
-												<ul>
-													<li>
-														Self-adjusting controller
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lb
-													</li>
-													<li>
-														Controller range up to 10lbs.
-													</li>
-													<li>
-														Supply Hopper cap. 3.5 cu.ft.
-													</li>
-													<li>
-														 Standard chassis:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 4.6 sq.ft., 67" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														All product contact surfaces 304 stainless steel
-													</li>
-													<li>
-														 120V 60Hz (240V 50Hz option)
-													</li>
-													<li>
-														Handles all dry bulk from powders to large parts 
-													</li>
-													<li>
-														Can be used with all bags and rigid containers
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 800 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-4 Specifications:</h5>
+											<ul>
+												<li>
+													Self-adjusting controller
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lb
+												</li>
+												<li>
+													Controller range up to 10lbs.
+												</li>
+												<li>
+													Supply Hopper cap. 3.5 cu.ft.
+												</li>
+												<li>
+													 Standard chassis:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 4.6 sq.ft., 67" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													All product contact surfaces 304 stainless steel
+												</li>
+												<li>
+													 120V 60Hz (240V 50Hz option)
+												</li>
+												<li>
+													Handles all dry bulk from powders to large parts 
+												</li>
+												<li>
+													Can be used with all bags and rigid containers
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 800 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-4"]["price"]; ?></span>
 											</p>
@@ -286,51 +286,51 @@ include_once 'bin/php_validation.php';
 											<h4><span class="name"><?php echo $settings["machinemodel"]["S-5"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-5"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-5"]["description"]; ?>
-												<h5>S-5 Specifications:</h5>
-												<ul>
-													<li>
-														Bulk filling for weights of up to 50lbs.
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to .01 lbs.
-													</li>
-													<li>
-														Controller range up to 50lbs., 3.5cu.ft. hopper
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 4.6 sq.ft., 67" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														All product contact surfaces 304 stainless steel
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Can be used with all bags or rigid containers 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 400 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-5 Specifications:</h5>
+											<ul>
+												<li>
+													Bulk filling for weights of up to 50lbs.
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to .01 lbs.
+												</li>
+												<li>
+													Controller range up to 50lbs., 3.5cu.ft. hopper
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 4.6 sq.ft., 67" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													All product contact surfaces 304 stainless steel
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Can be used with all bags or rigid containers 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 400 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-5"]["price"]; ?></span>
 											</p>
@@ -346,57 +346,57 @@ if ($_POST && $_POST['machinemodel'] == 'S-6') {
 										<label for="s6"><h4><span class="name"><?php echo $settings["machinemodel"]["S-6"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-6"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-6"]["description"]; ?>
-												<h5>S-6 Specifications:</h5>
-												<ul>
-													<li>
-														Cascading feed pans 
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lbs.
-													</li>
-													<li>
-														Controller range up to 10 lbs.
-													</li>
-													<li>
-														Supply hopper 3.5 cu.ft.
-													</li>
-													<li>
-														All product surfaces 304 stainless steel
-													</li>
-													<li>
-														Discharge Chute
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 7.5 sq.ft., 74.5" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Compatible with all bags, rigid containers, bagging machines and conveyors 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 800 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-6 Specifications:</h5>
+											<ul>
+												<li>
+													Cascading feed pans 
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lbs.
+												</li>
+												<li>
+													Controller range up to 10 lbs.
+												</li>
+												<li>
+													Supply hopper 3.5 cu.ft.
+												</li>
+												<li>
+													All product surfaces 304 stainless steel
+												</li>
+												<li>
+													Discharge Chute
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 7.5 sq.ft., 74.5" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Compatible with all bags, rigid containers, bagging machines and conveyors 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 800 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-6"]["price"]; ?></span>
 											</p></label>
@@ -411,54 +411,55 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 										<label for="s7"><h4><span class="name"><?php echo $settings["machinemodel"]["S-7"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-7"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-7"]["description"]; ?>
-												<h5>S-7 Specifications:</h5>
-												<ul>
-													<li>
-														Two lanes for twice the speed 
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lbs.
-													</li>
-													<li>
-														Controller range up to 10 lbs.
-													</li>
-													<li>
-														5.1 cu.ft. supply hopper
-													</li>
-													<li>
-														All product surfaces 304 stainless steel
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 7.25 sq.ft., 68" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Compatible with all bags, rigid containers, and bagging machines 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 1500 fills/hour
-													</li>
-												</ul>
+												
 											</div>
+											<h5>S-7 Specifications:</h5>
+											<ul>
+												<li>
+													Two lanes for twice the speed 
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lbs.
+												</li>
+												<li>
+													Controller range up to 10 lbs.
+												</li>
+												<li>
+													5.1 cu.ft. supply hopper
+												</li>
+												<li>
+													All product surfaces 304 stainless steel
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 7.25 sq.ft., 68" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Compatible with all bags, rigid containers, and bagging machines 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 1500 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-7"]["price"]; ?></span>
 											</p></label>
@@ -478,6 +479,8 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 										<label for="no-wh" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["no-weigh-hopper"]["name"]; ?></h4>
 											<p class="description">
 												<?php echo $settings["weighhopper"]["no-weigh-hopper"]["description"]; ?>
+											</p>
+											<p>
 												Please click the "Next Step” arrow below to select a Discharge Funnel.
 											</p>
 											<p class="price clear">
