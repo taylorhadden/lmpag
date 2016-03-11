@@ -1289,11 +1289,11 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 
 
 							<div id="step-5" class="step-container" name="step-5" style="display: none;">
-								<h3>Select your Supply Hopper</h3>
+								<h3>Select Accessories</h3>
 								<p>
-									The <b>Supply Hopper</b> is the portion of the unit which moves your product to the weigh hoppers. Select a hopper by clicking its image.
+									Accessories are optional add-ons to your machine.
 								</p>
-								<ul id="field-name-supply-hopper" class="field-type-radio field-container label-format-block">
+								<ul id="field-name-supply-hopper" class="field-type-checkbox field-container label-format-block">
 									<li>
 										<input type="checkbox" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
 										/>
@@ -1306,8 +1306,8 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</p>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
-											</p></label>
-
+											</p>
+										</label>
 									</li>
 								</ul>
 							</div><!-- id="step-5" -->
@@ -1322,18 +1322,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											</tr>
 										</thead>
 										<tbody id="results">
-											<tr>
-												<td>Model S-4</td><td>Standard with standard weigh hopper and small discharge funnel</td><td>$6,150</td>
-											</tr>
-											<tr>
-												<td>Standard weigh hopper</td><td>Standard weigh hopper</td><td>$0</td>
-											</tr>
-											<tr>
-												<td>Small Funnel</td><td>Standard sized funnel</td><td>$0</td>
-											</tr>
-											<tr class="total">
-												<td colspan="2">Total Price:</td><td>$6,150</td>
-											</tr>
 										</tbody>
 									</table>
 								</div>

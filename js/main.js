@@ -188,7 +188,7 @@ $(document).ready(function() {
 
 		for (var i = 0; i < this.step.options.length; i++) {
 			var option = this.step.options[i];
-			if (option.isSelected() && option.element.attr("id") != this.element.attr("id")) {
+			if (option.isSelected() && option.element.attr("id") != this.element.attr("id") && option.step.exclusive) {
 				option.deselect();
 			}
 		}
@@ -260,6 +260,7 @@ $(document).ready(function() {
 	function ConfigurationStep(domElement) {
 		this.element = domElement;
 		this.options = [];
+		this.exclusive = true;
 	}
 	ConfigurationStep.prototype.addOption = function() {
 		this.addOptions(arguments);
@@ -290,6 +291,7 @@ $(document).ready(function() {
 	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
 	var insertionStep = new ConfigurationStep($("#step-4"));
 	var accessoryStep = new ConfigurationStep($("#step-5"));
+	accessoryStep.exclusive = false;
 
 
 	// Creation Methods
@@ -346,6 +348,27 @@ $(document).ready(function() {
 				name += " " + machine.model.type;
 			}
 			$nextMachineImage.html(name);
+
+			// Check for accessory compatibility
+			for (var i = 0; i < accessoryStep.options.length; i++) {
+				var accessory = accessoryStep.options[i];
+				var approved = false;
+				for (var j = 0; j < accessory.applicableMachines.length; j++) {
+					if (accessory.applicableMachines[j] === this) {
+						approved = true;
+						break;
+					}
+				}
+				if (approved) {
+					accessory.container().show();
+				}
+				else {
+					if (accessory.isSelected()) {
+						accessory.deselect();	
+					}
+					accessory.container().hide();
+				}
+			}
 		});
 
 		return machineOption;
@@ -507,20 +530,23 @@ $(document).ready(function() {
 		calculateTotalPrice();
 	});
 
-	function makeAccessory(selector) {
+	function makeAccessory() {
+		var selector = arguments[0];
 		var accessory = MO(selector);
 		accessoryStep.addOption(accessory);
 
 		accessory.onSelect(function() {
 			var part = partFromElement(this.element);
 			machine.accessories[part.id] = part;
-
-			// TODO: Will need to add picture here
-			console.log("Selected for some reason ");
 		});
 		accessory.onDeselect(function() {
 			delete machine.accessories[this.element.attr('id')];
 		});
+
+		accessory.applicableMachines = [];
+		for (var i = 1; i < arguments.length; i++) {
+			accessory.applicableMachines.push(arguments[i]);
+		}
 		return accessory;
 	}
 
@@ -562,6 +588,9 @@ $(document).ready(function() {
 				makeDischargeFunnel("#large-dl-fnl").addSubOption(spoutSelector())
 			)
 		);
+
+	// Create accessories along with the machines they are applicable to
+	makeAccessory("#divided-supply-hopper", s7Option);
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();
@@ -742,7 +771,7 @@ $(document).ready(function() {
      * Pages 1 - 4 selection actions
      */
 
-	$fieldContainer.on('change', 'input[type=radio]', function(e) {
+	$fieldContainer.on('change', 'input[type=radio], input[type=checkbox]', function(e) {
 		// Get the machine option that has a selected parent that has this ID
 		var input = $(this);
 
@@ -784,7 +813,12 @@ $(document).ready(function() {
 			}
 
 			if (clickedOption != null) {
-				clickedOption.select();
+				if (!clickedOption.isSelected()) {
+					clickedOption.select();
+				}
+				else if (clickedOption.step === accessoryStep) {
+					clickedOption.deselect();
+				}
 			}
 			else {
 				console.log("Did not find option");
@@ -1020,44 +1054,29 @@ $(document).ready(function() {
 		// Create the machine type, weight hopper and discharge funnel rows for the summary table
 		var resultsHTML = '';
 
+		// Standard Machine Options
 		for (var key in machine) {
 
 			if (key !== "spouts" && key !== "accessories") {
 				var piece = machine[key];
 
-				resultsHTML += '<tr><th>' + piece.name + '</th>';
-
-				// Description
-				resultsHTML += '<td>' + piece.description;
-				if (piece.descriptionSupplement) {
-					resultsHTML += " " + piece.descriptionSupplement;
-				}
-				resultsHTML += '</td>';
-
-				// Price
-				resultsHTML += '<td>';
-				if (parseFloat(piece.price) > 0) {
-					resultsHTML += "$" + piece.price;
-				}
-				else {
-					resultsHTML += "Included";
-				}
-				
-				if (piece.priceSupplement) {
-					resultsHTML += " + $" + piece.priceSupplement;
-				}
-				resultsHTML += '</td></tr>'
-			}
-			else {
-				for (var spoutKey in machine[key]) {
-					var spout = machine[key][spoutKey];
-
-					resultsHTML += '<tr><th>' + spout.name + '</th>';
-					resultsHTML += '<td>' + spout.description + ' inch</td>';
-					resultsHTML += '<td>$' + spout.price + '</td></tr>';
-				}
+				resultsHTML += displayPiece(piece);
 			}
 		}
+		// Display Spouts
+		for (var spoutKey in machine["spouts"]) {
+			var spout = machine["spouts"][spoutKey];
+
+			resultsHTML += '<tr><th>' + spout.name + '</th>';
+			resultsHTML += '<td>' + spout.description + ' inch</td>';
+			resultsHTML += '<td>$' + spout.price + '</td></tr>';
+		}
+
+		// Display Accesssories
+		for (var accessoryKey in machine["accessories"]) {
+			resultsHTML += displayPiece(machine["accessories"][accessoryKey]);
+		}
+
 		// Create the total row for the summary table
 		resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + $("#cost-container .amount").text() + '</td></tr>';
 		// Empty the current summary table and add the new rows in
@@ -1065,6 +1084,33 @@ $(document).ready(function() {
 		// Stripe the results table
 		$('#results tr').filter(':even').addClass('even').css("background-color", "#EBFFEA");
 		return resultsHTML;
+	}
+
+	function displayPiece(piece) {
+		var result = "";
+		result += '<tr><th>' + piece.name + '</th>';
+
+		// Description
+		result += '<td>' + piece.description;
+		if (piece.descriptionSupplement) {
+			result += " " + piece.descriptionSupplement;
+		}
+		result += '</td>';
+
+		// Price
+		result += '<td>';
+		if (parseFloat(piece.price) > 0) {
+			result += "$" + piece.price;
+		}
+		else {
+			result += "Included";
+		}
+		
+		if (piece.priceSupplement) {
+			result += " + $" + piece.priceSupplement;
+		}
+		result += '</td></tr>'
+		return result;
 	}
 
 	// Print button action
