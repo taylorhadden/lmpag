@@ -1088,7 +1088,12 @@ $(document).ready(function() {
 
 	function displayPiece(piece) {
 		var result = "";
-		result += '<tr><th>' + piece.name + '</th>';
+		result += '<tr><th>';
+		result += piece.name;
+		if (piece.type) {
+			result += " " + piece.type;
+		}
+		result += '</th>';
 
 		// Description
 		result += '<td>' + piece.description;
@@ -1137,12 +1142,7 @@ $(document).ready(function() {
 	// Email send button action
 	$btnSubmit.on('click', function() {
 		var $disabled = $form.find('input:disabled').prop('disabled', false), quoteSummary = $('#quote-summary').html(), spoutRowsText = '', num = parseInt($('.spout-size').text());
-		// Add spout rows to the email
-		if (!isNaN(num)) {
-			$('.spout-size').each(function() {
-				spoutRowsText += 'Spout: ' + $(this).text() + ' inch $ - ' + spoutPrice + '\r';
-			});
-		}
+		
 		// Compile the values from the form
 		var to = $('#to').val(),
 		cc = $('#cc').val(),
@@ -1156,7 +1156,7 @@ $(document).ready(function() {
 		$HTMLheader = '<table border=0 cellpadding=10 cellspacing=0 style=margin:14px;border-collapse:collapse;><thead style=border-bottom:1px solid #0c4b81;><tr><th style=text-align:right;>Item</th><th style=text-align:left;>Description</th><th style=text-align:left;>Price</th></tr></thead><tbody>', 
 		$HTMLfooter = '</tbody></table>',
 		quoteHTML =  encodeURIComponent($HTMLheader + $HTMLresults + $HTMLfooter), 
-		quoteText = encodeURIComponent(machine.model.name + " " + machine.model.type + " - $" + machine.model.price + "\r" + machine.model.description + "\r\r" + machine.weighHopper.name + " - $" + machine.weighHopper.price + "\r" + machine.weighHopper.description + "\r\r" + machine.dischargeFunnel.name + " - $" + machine.dischargeFunnel.price + "\r" + machine.dischargeFunnel.description + "\r\r" + spoutRowsText + "\rTotal: $" + grandTotal);
+		quoteText = encodeURIComponent(summaryPlainText());
 		// Create the datastring from the form values
 		var dataString = 'to=' + to + '&cc=' + cc + '&name=' + name + '&company=' + company + '&message=' + message + '&quoteHTML=' + quoteHTML + '&quoteText=' + quoteText;
 		// Send the email via an AJAX request the PHP script
@@ -1179,5 +1179,69 @@ $(document).ready(function() {
 			return false;
 		}
 	});
+
+	function summaryPlainText() {
+		// Create the machine type, weight hopper and discharge funnel rows for the summary table
+		var result = '';
+
+		// Standard Machine Options
+		for (var key in machine) {
+
+			if (key !== "spouts" && key !== "accessories") {
+				var piece = machine[key];
+
+				result += displayPlainTextPiece(piece);
+			}
+		}
+		// Display Spouts
+		for (var spoutKey in machine["spouts"]) {
+			var spout = machine["spouts"][spoutKey];
+
+			result += spout.name + ' - ';
+			result += "$" + spout.price + "\r";
+			result += spout.description + " inch\r\r";
+		}
+
+		// Display Accesssories
+		for (var accessoryKey in machine["accessories"]) {
+			result += displayPlainTextPiece(machine["accessories"][accessoryKey]);
+		}
+
+		// Create the total row for the summary table
+		result += '\rTotal: $' + $("#cost-container .amount").text();
+		return result;
+	}
+
+	function displayPlainTextPiece(piece) {
+		var result = "";
+		result += piece.name;
+		if (piece.type) {
+			result += " " + piece.type;
+		}
+		result += ' - ';
+
+		// Price
+		if (parseFloat(piece.price) > 0) {
+			result += "$" + piece.price;
+		}
+		else {
+			result += "Included";
+		}
+		
+		if (piece.priceSupplement) {
+			result += " + $" + piece.priceSupplement;
+		}
+
+		result += "\r";
+
+		// Description
+		result += piece.description;
+		if (piece.descriptionSupplement) {
+			result += " " + piece.descriptionSupplement;
+		}
+
+		result += '\r\r';
+		return result;
+	}
 
 });
