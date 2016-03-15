@@ -21,7 +21,7 @@ $settings = array(
 				),
 		// Weigh hopper settings
 		"weighhopper" => array(
-				"no-weigh-hopper" => array("name" => " ",
+				"no-weigh-hopper" => array("name" => "S-5 Table Scale",
 						"description" => "The S-5 uses a table-style scale instead of a Weigh Hopper.",
 						"price" => "0"),
 				"small-weigh-hopper" => array("name" => "250 cubic inch Small Weigh Hopper",
@@ -90,10 +90,59 @@ $settings = array(
 						)
 				),
 		"accessory" => array(
+
+				// Proper Accessories
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
 						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
 						"price" => "150"),
-				)
+				"heavyDutyVibrator" => array("name" => "Heavy Duty Vibrator",
+						"description" => "FILL IN HEAVY DUTY VIBRATOR DESCRIPTION",
+						"price" => "100"),
+				"dribbleFeedGate" => array("name" => "Dribble Feed Gate",
+						"description" => "FILL IN Dribble Feed Gate DESCRIPTION",
+						"price" => "750"),
+				"dualLaneDribbleFeedGate" => array("name" => "Dual Lane Dribble Feed gate",
+						"description" => "FILL IN Dual Lane Dribble Feed gate DESCRIPTION",
+						"price" => "1500"),
+				"supplyHopperVibratorAndControls" => array("name" => "Supply Hopper Vibrator and Controls",
+						"description" => "FILL IN Supply Hopper Vibrator and Controls DESCRIPTION",
+						"price" => "975"),
+				"baggerHookupAndSupport" => array("name" => "Bagger Hookup and Support",
+						"description" => "FILL IN Bagger Hookup and Support DESCRIPTION",
+						"price" => "250"),
+				"240V50hzPackage" => array("name" => "240V 50Hz Package",
+						"description" => "FILL IN 240V 50Hz Package DESCRIPTION",
+						"price" => "400"),
+				"tableAdjustable" => array("name" => "Table, Adjustable",
+						"description" => "FILL IN Table, Adjustable DESCRIPTION",
+						"price" => "475"),
+				"j1Jogger" => array("name" => "J1 Jogger",
+						"description" => "FILL IN J1 Jogger DESCRIPTION",
+						"price" => "703"),
+				"adjustableSupplyHopperBaffle" => array("name" => "Adjustable Supply Hopper Baffle",
+						"description" => "FILL IN Adjustable Supply Hopper Baffle DESCRIPTION",
+						"price" => "200"),
+
+				// Additional Elements
+				"smallStandardDischargeFunnel" => array("name" => "Small Standard Discharge Funnel",
+						"description" => "FILL IN Small Standard Funnel DESCRIPTION",
+						"price" => "175"),
+				"smallSteepDischargeFunnel" => array("name" => "Small Steep Discharge Funnel",
+						"description" => "FILL IN Small Standard Steep Funnel DESCRIPTION",
+						"price" => "300"),
+				"largeStandardDischargeFunnel" => array("name" => "Large Standard Discharge Funnel",
+						"description" => "FILL IN Large Standard Discharge Funnel DESCRIPTION",
+						"price" => "325"),
+				"largeSteepDischargeFunnel" => array("name" => "Large Steep Discharge Funnel",
+						"description" => "FILL IN Large Steep Discharge Funnel DESCRIPTION",
+						"price" => "575"),
+				"dischargeChute5" => array("name" => "5\" Discharge Chute",
+						"description" => "FILL IN 5\" Discharge Chute DESCRIPTION",
+						"price" => "495"),
+				"dischargeChuteCustom" => array("name" => "Custom Discharge Chute",
+						"description" => "FILL IN Custom Discharge Chute DESCRIPTION",
+						"price" => "595"),
+			)
 		);
 
 
@@ -131,7 +180,15 @@ include_once 'bin/php_validation.php';
 		<![endif]-->
 
 		<!-- Add your site or application content here -->
-		<div id="PageDiv" class="top">
+		<div id = "NoJS">
+			<p>The Quote Generator requires JavaScript. Please enable JavaScript or switch to a JavaScript capable browser to use the Quote Generator.</p>
+			<p>If that is not possible, please call Logical Machines at (802) 425-2888 to get a quote.</p>
+		</div>
+		<div id="PageDiv" class="top" style="display: none;">
+			<script type="text/javascript">
+				document.getElementById("NoJS").style.display = "none";
+				document.getElementById("PageDiv").style.display = "block";
+			</script>
 			<nav id="pag-navigation" class="clearfix">
 				<ol>
 					<li>
@@ -224,51 +281,51 @@ include_once 'bin/php_validation.php';
 											<h4><span class="name"><?php echo $settings["machinemodel"]["S-4"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-4"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-4"]["description"]; ?>
-												<h5>S-4 Specifications:</h5>
-												<ul>
-													<li>
-														Self-adjusting controller
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lb
-													</li>
-													<li>
-														Controller range up to 10lbs.
-													</li>
-													<li>
-														Supply Hopper cap. 3.5 cu.ft.
-													</li>
-													<li>
-														 Standard chassis:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 4.6 sq.ft., 67" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														All product contact surfaces 304 stainless steel
-													</li>
-													<li>
-														 120V 60Hz (240V 50Hz option)
-													</li>
-													<li>
-														Handles all dry bulk from powders to large parts 
-													</li>
-													<li>
-														Can be used with all bags and rigid containers
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 800 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-4 Specifications:</h5>
+											<ul>
+												<li>
+													Self-adjusting controller
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lb
+												</li>
+												<li>
+													Controller range up to 10lbs.
+												</li>
+												<li>
+													Supply Hopper cap. 3.5 cu.ft.
+												</li>
+												<li>
+													 Standard chassis:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 4.6 sq.ft., 67" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													All product contact surfaces 304 stainless steel
+												</li>
+												<li>
+													 120V 60Hz (240V 50Hz option)
+												</li>
+												<li>
+													Handles all dry bulk from powders to large parts 
+												</li>
+												<li>
+													Can be used with all bags and rigid containers
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 800 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-4"]["price"]; ?></span>
 											</p>
@@ -286,51 +343,51 @@ include_once 'bin/php_validation.php';
 											<h4><span class="name"><?php echo $settings["machinemodel"]["S-5"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-5"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-5"]["description"]; ?>
-												<h5>S-5 Specifications:</h5>
-												<ul>
-													<li>
-														Bulk filling for weights of up to 50lbs.
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to .01 lbs.
-													</li>
-													<li>
-														Controller range up to 50lbs., 3.5cu.ft. hopper
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 4.6 sq.ft., 67" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														All product contact surfaces 304 stainless steel
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Can be used with all bags or rigid containers 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 400 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-5 Specifications:</h5>
+											<ul>
+												<li>
+													Bulk filling for weights of up to 50lbs.
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to .01 lbs.
+												</li>
+												<li>
+													Controller range up to 50lbs., 3.5cu.ft. hopper
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 4.6 sq.ft., 67" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													All product contact surfaces 304 stainless steel
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Can be used with all bags or rigid containers 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 400 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-5"]["price"]; ?></span>
 											</p>
@@ -346,57 +403,57 @@ if ($_POST && $_POST['machinemodel'] == 'S-6') {
 										<label for="s6"><h4><span class="name"><?php echo $settings["machinemodel"]["S-6"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-6"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-6"]["description"]; ?>
-												<h5>S-6 Specifications:</h5>
-												<ul>
-													<li>
-														Cascading feed pans 
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lbs.
-													</li>
-													<li>
-														Controller range up to 10 lbs.
-													</li>
-													<li>
-														Supply hopper 3.5 cu.ft.
-													</li>
-													<li>
-														All product surfaces 304 stainless steel
-													</li>
-													<li>
-														Discharge Chute
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 7.5 sq.ft., 74.5" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Compatible with all bags, rigid containers, bagging machines and conveyors 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 800 fills/hour
-													</li>
-												</ul>
 											</div>
+											<h5>S-6 Specifications:</h5>
+											<ul>
+												<li>
+													Cascading feed pans 
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lbs.
+												</li>
+												<li>
+													Controller range up to 10 lbs.
+												</li>
+												<li>
+													Supply hopper 3.5 cu.ft.
+												</li>
+												<li>
+													All product surfaces 304 stainless steel
+												</li>
+												<li>
+													Discharge Chute
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 7.5 sq.ft., 74.5" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Compatible with all bags, rigid containers, bagging machines and conveyors 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 800 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-6"]["price"]; ?></span>
 											</p></label>
@@ -411,54 +468,55 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 										<label for="s7"><h4><span class="name"><?php echo $settings["machinemodel"]["S-7"]["name"]; ?></span>&nbsp;<span class="type"><?php echo $settings["machinemodel"]["S-7"]["type"]; ?></span></h4>
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-7"]["description"]; ?>
-												<h5>S-7 Specifications:</h5>
-												<ul>
-													<li>
-														Two lanes for twice the speed 
-													</li>
-													<li>
-														Self-adjusting controller 
-													</li>
-													<li>
-														Reads out to 1 gram or .001 lbs.
-													</li>
-													<li>
-														Controller range up to 10 lbs.
-													</li>
-													<li>
-														5.1 cu.ft. supply hopper
-													</li>
-													<li>
-														All product surfaces 304 stainless steel
-													</li>
-													<li>
-														 Support Frame:
-														<ul>
-															<li>Powder Coated</li>
-															<li>Footprint 7.25 sq.ft., 68" high</li>
-															<li>4 locking casters</li>
-														</ul>
-													</li>
-													<li>
-														120V, 60Hz (240V, 50Hz option)
-													</li>
-													<li>
-														 Handles all dry bulk products from powders to large parts
-													</li>
-													<li>
-														Compatible with all bags, rigid containers, and bagging machines 
-													</li>
-													<li>
-														Automatic tare adjustment
-													</li>
-													<li>
-														On-the-fly, self-adjusting bulk &amp; dribble speed control
-													</li>
-													<li>
-														Up to 1500 fills/hour
-													</li>
-												</ul>
+												
 											</div>
+											<h5>S-7 Specifications:</h5>
+											<ul>
+												<li>
+													Two lanes for twice the speed 
+												</li>
+												<li>
+													Self-adjusting controller 
+												</li>
+												<li>
+													Reads out to 1 gram or .001 lbs.
+												</li>
+												<li>
+													Controller range up to 10 lbs.
+												</li>
+												<li>
+													5.1 cu.ft. supply hopper
+												</li>
+												<li>
+													All product surfaces 304 stainless steel
+												</li>
+												<li>
+													 Support Frame:
+													<ul>
+														<li>Powder Coated</li>
+														<li>Footprint 7.25 sq.ft., 68" high</li>
+														<li>4 locking casters</li>
+													</ul>
+												</li>
+												<li>
+													120V, 60Hz (240V, 50Hz option)
+												</li>
+												<li>
+													 Handles all dry bulk products from powders to large parts
+												</li>
+												<li>
+													Compatible with all bags, rigid containers, and bagging machines 
+												</li>
+												<li>
+													Automatic tare adjustment
+												</li>
+												<li>
+													On-the-fly, self-adjusting bulk &amp; dribble speed control
+												</li>
+												<li>
+													Up to 1500 fills/hour
+												</li>
+											</ul>
 											<p class="price clear">
 												<b>Price: </b>$<span class="amount"><?php echo $settings["machinemodel"]["S-7"]["price"]; ?></span>
 											</p></label>
@@ -478,6 +536,8 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 										<label for="no-wh" class="clearfix"><h4 class="name"><?php echo $settings["weighhopper"]["no-weigh-hopper"]["name"]; ?></h4>
 											<p class="description">
 												<?php echo $settings["weighhopper"]["no-weigh-hopper"]["description"]; ?>
+											</p>
+											<p>
 												Please click the "Next Step” arrow below to select a Discharge Funnel.
 											</p>
 											<p class="price clear">
@@ -798,464 +858,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											<p class="warning">The calculated spout size of <span class="calculatedSpoutSize"></span>" is the same as a spout that you have already added.<br/>Please enter different dimensions<br/>or remove this spout.<br/><button type="button" class="btnRemove" value="Remove spout">Remove</button></p>
 										</fieldset>
 										</div>
-
-										<fieldset id="fallbackSpout1" class="fallback-field-spout">
-											<legend>
-												Spout 1
-											</legend>	
-											<div class="instructions">
-												<p>
-													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-												</p>
-											</div>								
-											<ul class="field-type-radio field-name-spout-type">
-												<li class="flat-bag">
-													<input type="radio" id="type1Spout1Fallback" name="typeSpout1Fallback" value="flat-bag" 
-													<?php
-	if ($_POST && $_POST['typeSpout1Fallback'] == 'flat-bag') {
-		echo 'checked';
-	}
-													?>/>
-
-													<label for="type1Spout1Fallback">
-														<div class="spout-sprite flat-bag-spout ir">
-															Flat bag spout image
-														</div><h4>Flat bag</h4></label>
-												</li>
-												<li class="four-sided-bag">
-													<input type="radio" id="type2Spout1Fallback" name="typeSpout1Fallback" value="four-sided-bag" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout1Fallback']
-																	== 'four-sided-bag') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type2Spout1Fallback">
-														<div class="spout-sprite four-sided-bag-spout ir">
-															4 sided bag spout image
-														</div><h4>4 sided bag</h4></label>
-												</li>
-												<li class="can-jar">
-													<input type="radio" id="type3Spout1Fallback" name="typeSpout1Fallback" value="can-jar" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout1Fallback']
-																	== 'can-jar') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type3Spout1Fallback">
-														<div class="spout-sprite can-or-jar-spout ir">
-															Can or Jar spout image
-														</div><h4>Can or Jar</h4></label>
-												</li>
-											</ul>
-											<div class="instructions">
-												<p>
-													Please enter:
-												</p>
-												<ul>
-													<li>
-														<b>Flat Bag:</b> Enter the width of the bag opening (W).
-													</li>
-													<li>
-														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
-													</li>
-													<li>
-														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
-													</li>
-												</ul>
-											</div>
-											<ul class="field-type-textfield field-name-dimensions">
-												<li class="width">
-													<label>Width in inches</label>
-													<input type="text" name="widthSpout1Fallback" <?php if (!empty(
-															$widthSpout1Fallback)
-															&& ($missing || $errors)) {
-														echo 'value="'
-																. htmlentities(
-																		$widthSpout1Fallback,
-																		ENT_COMPAT,
-																		'UTF-8')
-																. '"';
-													}
-																								  ?>/>
-												</li>
-												<li class="d1">
-													<label>D1</label>
-													<input type="text" name="d1Spout1Fallback" <?php if (!empty(
-																										  $d1Spout1Fallback)
-																										  && ($missing
-																												  || $errors)) {
-																									  echo 'value="'
-																											  . htmlentities(
-																													  $d1Spout1Fallback,
-																													  ENT_COMPAT,
-																													  'UTF-8')
-																											  . '"';
-																								  }
-																							   ?>/>
-												</li>
-												<li class="d2">
-													<label>D2</label>
-													<input type="text" name="d2Spout1Fallback" <?php if (!empty(
-																									   $d2Spout1Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $d2Spout1Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																							   ?>/>
-												</li>
-												<li class="diameter">
-													<label>Diameter in inches</label>
-													<input type="text" name="diameterSpout1Fallback" <?php if (!empty(
-																									   $diameterSpout1Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $d2Spout1Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																									 ?>/>
-												</li>
-											</ul>
-											<?php if (isset($errors['widthSpout1'])) { ?>
-	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-	                						<?php } elseif (isset(
-			$errors['d1d2Spout1'])) {
-											?>
-	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-	                						<?php } elseif (isset(
-			$errors['diameterSpout1'])) {
-											?>
-	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-	                						<?php } ?>
-											<div class="container-shape-images">
-												<div class="spout-sprite flat-bag ir">
-													Flat bag spout shape image
-												</div>
-												<div class="spout-sprite four-sided-bag ir">
-													4 sided bag spout shape image
-												</div>
-												<div class="spout-sprite can-jar ir">
-													Can or Jar spout shape image
-												</div>
-											</div>
-										</fieldset>
-
-										<fieldset id="fallbackSpout2" class="fallback-field-spout">
-											<legend>
-												Spout 2
-											</legend>	
-											<div class="instructions">
-												<p>
-													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-												</p>
-											</div>								
-											<ul class="field-type-radio field-name-spout-type">
-												<li class="flat-bag">
-													<input type="radio" id="type1Spout2Fallback" name="typeSpout2Fallback" value="flat-bag" 
-													<?php
-	if ($_POST && $_POST['typeSpout2Fallback'] == 'flat-bag') {
-		echo 'checked';
-	}
-													?>/>
-													<label for="type1Spout2Fallback">
-														<div class="spout-sprite flat-bag-spout ir">
-															Flat bag spout image
-														</div><h4>Flat bag</h4></label>
-												</li>
-												<li class="four-sided-bag">
-													<input type="radio" id="type2Spout2Fallback" name="typeSpout2Fallback" value="four-sided-bag" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout2Fallback']
-																	== 'four-sided-bag') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type2Spout2Fallback">
-														<div class="spout-sprite four-sided-bag-spout ir">
-															4 sided bag spout image
-														</div><h4>4 sided bag</h4></label>
-												</li>
-												<li class="can-jar">
-													<input type="radio" id="type3Spout2Fallback" name="typeSpout2Fallback" value="can-jar" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout2Fallback']
-																	== 'can-jar') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type3Spout2Fallback">
-														<div class="spout-sprite can-or-jar-spout ir">
-															Can or Jar spout image
-														</div><h4>Can or Jar</h4></label>
-												</li>
-											</ul>
-											<div class="instructions">
-												<p>
-													Please enter:
-												</p>
-												<ul>
-													<li>
-														<b>Flat Bag:</b> Enter the width of the bag opening (W).
-													</li>
-													<li>
-														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
-													</li>
-													<li>
-														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
-													</li>
-												</ul>
-											</div>
-											<ul class="field-type-textfield field-name-dimensions">
-												<li class="width">
-													<label>Width in inches</label>
-													<input type="text" name="widthSpout2Fallback" <?php if (!empty(
-															$widthSpout2Fallback)
-															&& ($missing || $errors)) {
-														echo 'value="'
-																. htmlentities(
-																		$widthSpout2Fallback,
-																		ENT_COMPAT,
-																		'UTF-8')
-																. '"';
-													}
-																								  ?>/>
-												</li>
-												<li class="d1">
-													<label>D1</label>
-													<input type="text" name="d1Spout2Fallback" <?php if (!empty(
-																										  $d1Spout2Fallback)
-																										  && ($missing
-																												  || $errors)) {
-																									  echo 'value="'
-																											  . htmlentities(
-																													  $d1Spout2Fallback,
-																													  ENT_COMPAT,
-																													  'UTF-8')
-																											  . '"';
-																								  }
-																							   ?>/>
-												</li>
-												<li class="d2">
-													<label>D2</label>
-													<input type="text" name="d2Spout2Fallback" <?php if (!empty(
-																									   $d2Spout2Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $d2Spout2Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																							   ?>/>
-												</li>
-												<li class="diameter">
-													<label>Diameter in inches</label>
-													<input type="text" name="diameterSpout2Fallback" <?php if (!empty(
-																									   $diameterSpout2Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $d2Spout2Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																									 ?>/>
-												</li>
-											</ul>
-											<?php if (isset($errors['widthSpout2'])) { ?>
-	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-	                						<?php } elseif (isset(
-			$errors['d1d2Spout2'])) {
-											?>
-	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-	                						<?php } elseif (isset(
-			$errors['diameterSpout2'])) {
-											?>
-	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-	                						<?php } ?>
-											<div class="container-shape-images">
-												<div class="spout-sprite flat-bag ir">
-													Flat bag spout shape image
-												</div>
-												<div class="spout-sprite four-sided-bag ir">
-													4 sided bag spout shape image
-												</div>
-												<div class="spout-sprite can-jar ir">
-													Can or Jar spout shape image
-												</div>
-											</div>
-										</fieldset>
-										
-										<fieldset id="fallbackSpout3" class="fallback-field-spout">
-											<legend>
-												Spout 3
-											</legend>	
-											<div class="instructions">
-												<p>
-													Click on the diagram that most accurately depicts your container and then enter the size of the bags to be filled in inches.
-												</p>
-											</div>								
-											<ul class="field-type-radio field-name-spout-type">
-												<li class="flat-bag">
-													<input type="radio" id="type1Spout3Fallback" name="typeSpout3Fallback" value="flat-bag" 
-													<?php
-	if ($_POST && $_POST['typeSpout3Fallback'] == 'flat-bag') {
-		echo 'checked';
-	}
-													?>/>
-													<label for="type1Spout3Fallback">
-														<div class="spout-sprite flat-bag-spout ir">
-															Flat bag spout image
-														</div><h4>Flat bag</h4></label>
-												</li>
-												<li class="four-sided-bag">
-													<input type="radio" id="type2Spout3Fallback" name="typeSpout3Fallback" value="four-sided-bag" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout3Fallback']
-																	== 'four-sided-bag') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type2Spout3Fallback">
-														<div class="spout-sprite four-sided-bag-spout ir">
-															4 sided bag spout image
-														</div><h4>4 sided bag</h4></label>
-												</li>
-												<li class="can-jar">
-													<input type="radio" id="type3Spout3Fallback" name="typeSpout3Fallback" value="can-jar" 
-													<?php
-													if ($_POST
-															&& $_POST['typeSpout3Fallback']
-																	== 'can-jar') {
-														echo 'checked';
-													}
-													?>/>
-													<label for="type3Spout3Fallback">
-														<div class="spout-sprite can-or-jar-spout ir">
-															Can or Jar spout image
-														</div><h4>Can or Jar</h4></label>
-												</li>
-											</ul>
-											<div class="instructions">
-												<p>
-													Please enter:
-												</p>
-												<ul>
-													<li>
-														<b>Flat Bag:</b> Enter the width of the bag opening (W).
-													</li>
-													<li>
-														<b>4 sided bag Bag:</b> Looking down at the top of your bag, enter the dimensions (D1) and (D2) of the bag opening.
-													</li>
-													<li>
-														<b>Bottle or Jar:</b> Enter the inside diameter of the bottle or can opening (D).
-													</li>
-												</ul>
-											</div>
-											<ul class="field-type-textfield field-name-dimensions">
-												<li class="width">
-													<label>Width in inches</label>
-													<input type="text" name="widthSpout3Fallback" <?php if (!empty(
-															$widthSpout3Fallback)
-															&& ($missing || $errors)) {
-														echo 'value="'
-																. htmlentities(
-																		$widthSpout3Fallback,
-																		ENT_COMPAT,
-																		'UTF-8')
-																. '"';
-													}
-																								  ?>/>
-												</li>
-												<li class="d1">
-													<label>D1</label>
-													<input type="text" name="d1Spout3Fallback" <?php if (!empty(
-																										  $d1Spout3Fallback)
-																										  && ($missing
-																												  || $errors)) {
-																									  echo 'value="'
-																											  . htmlentities(
-																													  $d1Spout3Fallback,
-																													  ENT_COMPAT,
-																													  'UTF-8')
-																											  . '"';
-																								  }
-																							   ?>/>
-												</li>
-												<li class="d2">
-													<label>D2</label>
-													<input type="text" name="d2Spout3Fallback" <?php if (!empty(
-																									   $d2Spout3Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $d2Spout3Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																							   ?>/>
-												</li>
-												<li class="diameter">
-													<label>Diameter in inches</label>
-													<input type="text" name="diameterSpout3Fallback" <?php if (!empty(
-																									   $diameterSpout3Fallback)
-																									   && ($missing
-																											   || $errors)) {
-																								   echo 'value="'
-																										   . htmlentities(
-																												   $diameterSpout3Fallback,
-																												   ENT_COMPAT,
-																												   'UTF-8')
-																										   . '"';
-																							   }
-																									 ?>/>
-												</li>
-											</ul>
-											<?php if (isset($errors['widthSpout3'])) { ?>
-	                  							<label class="error clear">Please enter a width measurement in the 'Width in inches' field</label>
-	                						<?php } elseif (isset(
-			$errors['d1d2Spout3'])) {
-											?>
-	                  							<label class="error clear">Please enter a measurement in both the 'D1' & 'D2' fields</label>
-	                						<?php } elseif (isset(
-			$errors['diameterSpout3'])) {
-											?>
-	                  								<label class="error clear">Please enter a diameter measurement in the 'Diameter in inches' field</label>
-	                						<?php } ?>
-											<div class="container-shape-images">
-												<div class="spout-sprite flat-bag ir">
-													Flat bag spout shape image
-												</div>
-												<div class="spout-sprite four-sided-bag ir">
-													4 sided bag spout shape image
-												</div>
-												<div class="spout-sprite can-jar ir">
-													Can or Jar spout shape image
-												</div>
-											</div>
-										</fieldset>
-
 									</div>
 									<button type="button" id="btnAdd" value="Add another spout" class="hidden">
 										Add another spout
@@ -1280,10 +882,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 											<option value="3.5" data = "100">3.5" ($100)</option>
 										</select>
 									</div>
-
-									<div>
-										<input id = "ChuteAdapterSelector" type="checkbox" name = "chuteAdapter">Include a Chute Adapter ($250 upcharge)</input>
-									</div>
 								</div>
 							</div><!-- id="step-4" -->
 
@@ -1294,21 +892,24 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									Accessories are optional add-ons to your machine.
 								</p>
 								<ul id="field-name-supply-hopper" class="field-type-checkbox field-container label-format-block">
-									<li>
-										<input type="checkbox" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
-										/>
-										<label for="divided-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["accessory"]["divided-supply-hopper"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Small Weigh Hopper image
-											</div>
-											<p class="description">
-												<?php echo $settings["accessory"]["divided-supply-hopper"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
-											</p>
-										</label>
-									</li>
+									<!-- Look! I'm actually using a template like a sane person! -->
+									<?php foreach ($settings["accessory"] as $key => $value) { ?>
+										<li>
+											<input type="checkbox" id="<?php echo $key; ?>"  name="supplyHopper" value="<?php echo $key; ?>" 
+											/>
+											<label for="<?php echo $key; ?>" class="clearfix"><h4 class="name"><?php echo $settings["accessory"][$key]["name"]; ?></h4>
+												<div class="component-image ir">
+													Image
+												</div>
+												<p class="description">
+													<?php echo $settings["accessory"][$key]["description"]; ?>
+												</p>
+												<p class="price clear">
+													<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"][$key]["price"]; ?></span> upcharge</span>
+												</p>
+											</label>
+										</li>
+									<?php } ?>
 								</ul>
 							</div><!-- id="step-5" -->
 
@@ -1446,7 +1047,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								&nbsp;
 							</div>
 						</div>
-						<h3 id="machine-title" class="hidden">S-4 Weigh/Fill System</h3>
+						<h3 id="machine-title" class="hidden">S-4 Weigh Fill System</h3>
 						<p id="cost-container">
 							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
 						</p>

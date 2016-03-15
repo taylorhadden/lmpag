@@ -131,6 +131,20 @@ thead th, .total td, .total th {
    Logical Machine's styles
    ========================================================================== */
 
+#NoJS {
+	margin: 20px 40px;
+	padding: 20px 40px;
+	border: 2px solid #911936;
+	border-radius: 12px;
+	color: #0c4b81;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}
+#NoJS p:last-child {
+	margin-bottom: 0;
+}
+
 /*
  * PAGE SECTIONS
  * header#header {}
@@ -140,7 +154,6 @@ thead th, .total td, .total th {
  * section#section-content aside#sidebar {}
  * footer#footer {}
  */
-
 #main-navigation,
 #main-content,
 #sidebar,
@@ -155,7 +168,6 @@ thead th, .total td, .total th {
 }
 #main-content {
 	width: 360px;
-	overflow: hidden;
 	position: relative;
 }
 #main-content.no-sidebar {
@@ -166,6 +178,11 @@ form#logical-machines-quote-generator {
 /* Specific styling for spout section for S-6 */
 .s6-sp {
 	height: 135px;
+}
+
+.field-container {
+	max-height: 800px;
+	overflow: auto;
 }
 /*
  * Pagination
@@ -588,6 +605,7 @@ form#logical-machines-quote-generator {
  */
 
 .field-type-radio,
+.field-type-checkbox,
 ul.field-type-textfield {
 	list-style: none;
 	padding: 0;
@@ -624,8 +642,19 @@ ul.field-type-radio > li {
 	padding: 11px 11px 4px;
 }
 .field-type-radio input {
-    display:none;
+    display: none;
 	margin-left: 14px;
+}
+
+.field-type-checkbox li {
+	display: table-row;
+}
+.field-type-checkbox input {
+	display: table-cell;
+	margin: 10px;
+}
+.field-type-checkbox label {
+	display: table-cell;
 }
 /* added classes label-format-block and label-format-column to distinguish between display formats when ie requires tweaks*/
 
@@ -1058,6 +1087,8 @@ body {
 }
 #main-content {
     width:100%;
+    max-height: 800px;
+    overflow: auto;
 }
 #quote-summary {
     margin: 1cm;
