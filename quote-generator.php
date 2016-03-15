@@ -131,7 +131,15 @@ include_once 'bin/php_validation.php';
 		<![endif]-->
 
 		<!-- Add your site or application content here -->
-		<div id="PageDiv" class="top">
+		<div id = "NoJS">
+			<p>The Quote Generator requires JavaScript. Please enable JavaScript or switch to a JavaScript capable browser to use the Quote Generator.</p>
+			<p>If that is not possible, please call Logical Machines at (802) 425-2888 to get a quote.</p>
+		</div>
+		<div id="PageDiv" class="top" style="display: none;">
+			<script type="text/javascript">
+				document.getElementById("NoJS").style.display = "none";
+				document.getElementById("PageDiv").style.display = "block";
+			</script>
 			<nav id="pag-navigation" class="clearfix">
 				<ol>
 					<li>
