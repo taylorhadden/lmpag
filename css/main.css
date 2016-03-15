@@ -154,7 +154,6 @@ thead th, .total td, .total th {
  * section#section-content aside#sidebar {}
  * footer#footer {}
  */
-
 #main-navigation,
 #main-content,
 #sidebar,
@@ -169,7 +168,6 @@ thead th, .total td, .total th {
 }
 #main-content {
 	width: 360px;
-	overflow: hidden;
 	position: relative;
 }
 #main-content.no-sidebar {
@@ -180,6 +178,11 @@ form#logical-machines-quote-generator {
 /* Specific styling for spout section for S-6 */
 .s6-sp {
 	height: 135px;
+}
+
+.field-container {
+	max-height: 800px;
+	overflow: auto;
 }
 /*
  * Pagination
@@ -1084,6 +1087,8 @@ body {
 }
 #main-content {
     width:100%;
+    max-height: 800px;
+    overflow: auto;
 }
 #quote-summary {
     margin: 1cm;

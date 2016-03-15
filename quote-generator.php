@@ -93,7 +93,34 @@ $settings = array(
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
 						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
 						"price" => "150"),
-				)
+				"heavyDutyVibrator" => array("name" => "Heavy Duty Vibrator",
+						"description" => "FILL IN HEAVY DUTY VIBRATOR DESCRIPTION",
+						"price" => "100"),
+				"dribbleFeedGate" => array("name" => "Dribble Feed Gate",
+						"description" => "FILL IN Dribble Feed Gate DESCRIPTION",
+						"price" => "750"),
+				"dualLaneDribbleFeedGate" => array("name" => "Dual Lane Dribble Feed gate",
+						"description" => "FILL IN Dual Lane Dribble Feed gate DESCRIPTION",
+						"price" => "1500"),
+				"supplyHopperVibratorAndControls" => array("name" => "Supply Hopper Vibrator and Controls",
+						"description" => "FILL IN Supply Hopper Vibrator and Controls DESCRIPTION",
+						"price" => "975"),
+				"baggerHookupAndSupport" => array("name" => "Bagger Hookup and Support",
+						"description" => "FILL IN Bagger Hookup and Support DESCRIPTION",
+						"price" => "250"),
+				"240V50hzPackage" => array("name" => "240V 50Hz Package",
+						"description" => "FILL IN 240V 50Hz Package DESCRIPTION",
+						"price" => "400"),
+				"tableAdjustable" => array("name" => "Table, Adjustable",
+						"description" => "FILL IN Table, Adjustable DESCRIPTION",
+						"price" => "475"),
+				"j1Jogger" => array("name" => "J1 Jogger",
+						"description" => "FILL IN J1 Jogger DESCRIPTION",
+						"price" => "703"),
+				"adjustableSupplyHopperBaffle" => array("name" => "Adjustable Supply Hopper Baffle",
+						"description" => "FILL IN Adjustable Supply Hopper Baffle DESCRIPTION",
+						"price" => "200")
+			)
 		);
 
 
@@ -843,21 +870,24 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									Accessories are optional add-ons to your machine.
 								</p>
 								<ul id="field-name-supply-hopper" class="field-type-checkbox field-container label-format-block">
-									<li>
-										<input type="checkbox" id="divided-supply-hopper" class="" name="supplyHopper" value="small-weigh-hopper" 
-										/>
-										<label for="divided-supply-hopper" class="clearfix"><h4 class="name"><?php echo $settings["accessory"]["divided-supply-hopper"]["name"]; ?></h4>
-											<div class="component-image ir">
-												Small Weigh Hopper image
-											</div>
-											<p class="description">
-												<?php echo $settings["accessory"]["divided-supply-hopper"]["description"]; ?>
-											</p>
-											<p class="price clear">
-												<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"]["divided-supply-hopper"]["price"]; ?></span> upcharge</span>
-											</p>
-										</label>
-									</li>
+									<!-- Look! I'm actually using a template like a sane person! -->
+									<?php foreach ($settings["accessory"] as $key => $value) { ?>
+										<li>
+											<input type="checkbox" id="<?php echo $key; ?>"  name="supplyHopper" value="<?php echo $key; ?>" 
+											/>
+											<label for="<?php echo $key; ?>" class="clearfix"><h4 class="name"><?php echo $settings["accessory"][$key]["name"]; ?></h4>
+												<div class="component-image ir">
+													Image
+												</div>
+												<p class="description">
+													<?php echo $settings["accessory"][$key]["description"]; ?>
+												</p>
+												<p class="price clear">
+													<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"][$key]["price"]; ?></span> upcharge</span>
+												</p>
+											</label>
+										</li>
+									<?php } ?>
 								</ul>
 							</div><!-- id="step-5" -->
 

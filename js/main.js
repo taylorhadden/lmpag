@@ -573,6 +573,17 @@ $(document).ready(function() {
 
 	// Create accessories along with the machines they are applicable to
 	makeAccessory("#divided-supply-hopper", s7Option);
+	makeAccessory("#heavyDutyVibrator", s4Option, s6Option);
+	makeAccessory("#dribbleFeedGate", s4Option, s5Option, s6Option);
+	makeAccessory("#dualLaneDribbleFeedGate", s7Option);
+	makeAccessory("#supplyHopperVibratorAndControls", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#baggerHookupAndSupport", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#240V50hzPackage", s4Option, s5Option, s6Option);
+	makeAccessory("#tableAdjustable", s4Option, s6Option);
+	makeAccessory("#j1Jogger", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option);
+	
+
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();
