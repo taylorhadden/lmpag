@@ -602,6 +602,7 @@ form#logical-machines-quote-generator {
  */
 
 .field-type-radio,
+.field-type-checkbox,
 ul.field-type-textfield {
 	list-style: none;
 	padding: 0;
@@ -638,8 +639,19 @@ ul.field-type-radio > li {
 	padding: 11px 11px 4px;
 }
 .field-type-radio input {
-    display:none;
+    display: none;
 	margin-left: 14px;
+}
+
+.field-type-checkbox li {
+	display: table-row;
+}
+.field-type-checkbox input {
+	display: table-cell;
+	margin: 10px;
+}
+.field-type-checkbox label {
+	display: table-cell;
 }
 /* added classes label-format-block and label-format-column to distinguish between display formats when ie requires tweaks*/
 
