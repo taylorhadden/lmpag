@@ -582,7 +582,13 @@ $(document).ready(function() {
 	makeAccessory("#tableAdjustable", s4Option, s6Option);
 	makeAccessory("#j1Jogger", s4Option, s5Option, s6Option, s7Option);
 	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option);
-	
+
+	// Additional parts
+	makeAccessory("#smallStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#smallSteepDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#largeStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#dischargeChute5", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#dischargeChuteCustom", s4Option, s5Option, s6Option, s7Option);
 
 
 	weighHopperStep.hideAll();

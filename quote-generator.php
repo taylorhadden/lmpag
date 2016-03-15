@@ -90,6 +90,8 @@ $settings = array(
 						)
 				),
 		"accessory" => array(
+
+				// Proper Accessories
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
 						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
 						"price" => "150"),
@@ -119,7 +121,27 @@ $settings = array(
 						"price" => "703"),
 				"adjustableSupplyHopperBaffle" => array("name" => "Adjustable Supply Hopper Baffle",
 						"description" => "FILL IN Adjustable Supply Hopper Baffle DESCRIPTION",
-						"price" => "200")
+						"price" => "200"),
+
+				// Additional Elements
+				"smallStandardDischargeFunnel" => array("name" => "Small Standard Discharge Funnel",
+						"description" => "FILL IN Small Standard Funnel DESCRIPTION",
+						"price" => "175"),
+				"smallSteepDischargeFunnel" => array("name" => "Small Steep Discharge Funnel",
+						"description" => "FILL IN Small Standard Steep Funnel DESCRIPTION",
+						"price" => "300"),
+				"largeStandardDischargeFunnel" => array("name" => "Large Standard Discharge Funnel",
+						"description" => "FILL IN Large Standard Discharge Funnel DESCRIPTION",
+						"price" => "325"),
+				"largeSteepDischargeFunnel" => array("name" => "Large Steep Discharge Funnel",
+						"description" => "FILL IN Large Steep Discharge Funnel DESCRIPTION",
+						"price" => "575"),
+				"dischargeChute5" => array("name" => "5\" Discharge Chute",
+						"description" => "FILL IN 5\" Discharge Chute DESCRIPTION",
+						"price" => "495"),
+				"dischargeChuteCustom" => array("name" => "Custom Discharge Chute",
+						"description" => "FILL IN Custom Discharge Chute DESCRIPTION",
+						"price" => "595"),
 			)
 		);
 
