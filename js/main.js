@@ -466,9 +466,6 @@ $(document).ready(function() {
 
 		chuteOptions.onDeselect(function() {
 			this.chuteOptionContainer().hide();
-			// Deselect the chute adapter and tell it to update;
-			$("#ChuteAdapterSelector").prop("checked", false).trigger("change");
-			// Reset the chute size customizers and remove the item
 			$chuteSizeSelection.val("5");
 			delete machine["dischargeFunnel"].priceSupplement;
 			delete machine["dischargeFunnel"].descriptionSupplement;
@@ -486,21 +483,6 @@ $(document).ready(function() {
 
 		return chuteOptions;
 	}
-
-	// Establish callback for the chute option selector
-	$("#ChuteAdapterSelector").on("change", function() {
-		if ($(this).prop("checked")) {
-			machine["chuteAdapter"] = {
-				name : "Chute Adapter",
-				description : "Include a Chute Adapter",
-				price : 250
-			}
-		}
-		else {
-			delete machine["chuteAdapter"];
-		}
-		calculateTotalPrice();
-	});
 
 	$chuteSizeSelection.on("change", function() {
 		var selector = $(this);
