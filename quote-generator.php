@@ -995,7 +995,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								&nbsp;
 							</div>
 						</div>
-						<h3 id="machine-title" class="hidden">S-4 Weigh/Fill System</h3>
+						<h3 id="machine-title" class="hidden">S-4 Weigh Fill System</h3>
 						<p id="cost-container">
 							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
 						</p>
