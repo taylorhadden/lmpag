@@ -295,16 +295,19 @@ form#logical-machines-quote-generator {
 	top: 0;
 }
 #machine-image {
-	height: 452px;
+	height: 460px;
 	margin-left: 10px;
 	position: relative;
 	width: 260px;
+
+	background-position: right top;
+	background-repeat: no-repeat;
+	background-color: transparent;
 }
 #machine-image.s4 > * {
 	background-image: url("../img/s4-sprite.png");
 	background-repeat: no-repeat;
 	background-color: transparent;
-	position: absolute;
 }
 #machine-image.s5 > * {
 	background-image: url("../img/s5-sprite.png");
@@ -343,177 +346,89 @@ form#logical-machines-quote-generator {
 .amount {
     color:#AD0000;
 }
+
 /********************
 	S4 Images
 *********************/
-/* S4 Main Image */
-.s4 .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.stwh.std-fnl.front {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-front.png");
 }
-.s4.side .machine-bg {
-	width: 256px;
-	height: 439px;
-	background-position: -10px -465px;
-	top: 5px;
-	left: 1px;
+#machine-image.s4.stwh.std-fnl.side {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-side.png");
 }
-/* Small weigh hopper front */
-.s4.stwh.std-fnl.front .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.stwh.steep-fnl.front {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-front.png");
 }
-.s4.stwh.std-fnl.front.spout .machine-bg {
-	background-position: -10px -467px;
-}
-.s4.stwh.steep-fnl.front .machine-bg {
-	background-position: -10px -925px;
-}
-.s4.stwh.steep-fnl.front.spout .machine-bg {
-	background-position: -10px -1385px;
+#machine-image.s4.stwh.steep-fnl.side {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-side.png");
 }
 
-/* Small weigh hopper side */
-.s4.stwh.side .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -340px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.lrgwh.std-fnl.front {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-front.png");
 }
-.s4.stwh.steep-fnl.side .machine-bg {
-	background-position: -340px -923px;
+#machine-image.s4.lrgwh.std-fnl.side {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-side.png");
 }
-.s4.stwh.side.spout .machine-bg {
-	background-position: -347px -465px;
+#machine-image.s4.lrgwh.steep-fnl.front {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-front.png");
 }
-.s4.stwh.steep-fnl.side.spout .machine-bg {
-	background-position: -347px -1384px;
+#machine-image.s4.lrgwh.steep-fnl.side {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-side.png");
 }
-/* Large weigh hopper front */
-.s4.lrgwh.std-fnl.front .machine-bg {
-	background-position: -10px -1844px;
+#machine-image.s4.lrgwh.discharge-cht.front {
+	background-image: url("../img/s4-labelled/s4-lwh-dc-front.png");
 }
-.s4.lrgwh.std-fnl.spout.front .machine-bg {
-	background-position: -10px -2297px;
+#machine-image.s4.lrgwh.discharge-cht.side {
+	background-image: url("../img/s4-labelled/s4-lwh-dc-side.png");
 }
-.s4.lrgwh.steep-fnl.front .machine-bg {
-	background-position: -10px -2751px;
-}
-.s4.lrgwh.front.steep-fnl.spout .machine-bg {
-	background-position: -12px -3203px;
-}
-/* Large weigh hopper side */
-.s4.lrgwh.std-fnl.side .machine-bg {
-	background-position: -347px -1842px;
-}
-.s4.lrgwh.std-fnl.spout.side .machine-bg {
-	background-position: -347px -2296px;
-}
-.s4.lrgwh.side.steep-fnl .machine-bg {
-	background-position: -347px -2751px;
-}
-.s4.lrgwh.side.steep-fnl.spout .machine-bg {
-	background-position: -347px -3203px;
-}
+
 /********************
 	S5 Images
 *********************/
-/* S5 Main Image */
-.s5.front .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.std-fnl.front {
+	background-image: url("../img/s5-labelled/s5-std-fnl-front.png");
 }
-.s5.side .machine-bg {
-	width: 256px;
-	height: 439px;
-	background-position: -339px -9px;
-	top: 5px;
-	left: 1px;
+#machine-image.s5.no-wh.std-fnl.side {
+	background-image: url("../img/s5-labelled/s5-std-fnl-side.png");
 }
-/* Funnel front */
-.s5.front.steep-fnl .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -469px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.steep-fnl.front {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-front.png");
 }
-/* Funnel side */
-.s5.side.steep-fnl .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -342px -468px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.steep-fnl.side {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-side.png");
 }
-/* Spout front */
-.s5.front.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -928px;
-	top: 5px;
-	left: 3px;
-}
-.s5.front.steep-fnl.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -1387px;
-	top: 5px;
-	left: 3px;
-}
-/* Spout side */
-.s5.side.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -345px -927px;
-	top: 5px;
-	left: 3px;
-}
-.s5.side.steep-fnl.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -345px -1386px;
-	top: 5px;
-	left: 3px;
-}
+
 /********************
 	S6 Images
 *********************/
-/* S6 Main Image */
-.s6.front .machine-bg {
-	width: 260px;
-	height: 410px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s6.stwh.front {
+	background-image: url("../img/s6-labelled/s6-swh-dc-front.png");
 }
-.s6.side .machine-bg {
-	width: 260px;
-	height: 439px;
-	background-position: -339px -9px;
-	top: 5px;
-	left: 1px;
+#machine-image.s6.stwh.side {
+	background-image: url("../img/s6-labelled/s6-swh-dc-side.png");
 }
-/* S6 Large Weigh Hopper */
-.s6.front.lrgwh .machine-bg {
-	background-position: -10px -422px;
+#machine-image.s6.lrgwh.front {
+	background-image: url("../img/s6-labelled/s6-lwh-dc-front.png");
 }
-.s6.side.lrgwh .machine-bg {
-	background-position: -339px -422px;
+#machine-image.s6.lrgwh.side {
+	background-image: url("../img/s6-labelled/s6-lwh-dc-side.png");
 }
+
 /********************
 	S7 Images
 *********************/
+#machine-image.s7.stwh2.std-fnl.front {
+	background-image: url("../img/s7-labelled/s7-swh-front.png");
+}
+#machine-image.s7.stwh2.std-fnl.side {
+	background-image: url("../img/s7-labelled/s7-swh-side.png");
+}
+#machine-image.s7.lrgwh2.std-fnl.front {
+	background-image: url("../img/s7-labelled/s7-lwh-front.png");
+}
+#machine-image.s7.lrgwh2.std-fnl.side {
+	background-image: url("../img/s7-labelled/s7-lwh-side.png");
+}
 /* S7 Main Image */
 .s7.front .machine-bg {
 	width: 254px;

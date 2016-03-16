@@ -383,7 +383,7 @@ $(document).ready(function() {
 			machine.weighHopper = partFromElement(this.element);
 
 			// Assign classes to machine image
-			$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(this.element.attr('id') + ' std-fnl');
+			$machineImage.removeClass('stwh lrgwh stwh2 lrgwh2 no-wh').addClass(this.element.attr('id'));
 		});
 
 		return weighHopper;
@@ -399,6 +399,7 @@ $(document).ready(function() {
 
 			machine.dischargeFunnel = partFromElement(this.element);
 
+			/*
 			// Assign classes to machine image
 			if (machine.weighHopper.id == 'lrgwh') {
 				if ( machine.dischargeFunnel.id == 'large-std-fnl') {
@@ -416,6 +417,13 @@ $(document).ready(function() {
 					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
 				}
 			}
+			*/
+
+			// Remove Old
+			$machineImage.removeClass("std-fnl steep-fnl discharge-cht");
+
+			// Apply New
+			$machineImage.addClass(label.attr("class"));
 		});
 
 		return dischargeFunnel;

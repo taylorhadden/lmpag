@@ -644,9 +644,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								<p>
 									The <b>Discharge Funnel</b> directs your product from the weigh hopper to the spout. Select a funnel by clicking its image.
 								</p>
-								<p class="fu6">
-									The S-6 comes standard with a 5” Discharge Chute. Custom sized Chutes are available upon request.
-								</p>
 								<ul id="field-name-discharge-funnel" class="field-type-radio field-container label-format-block">
 									<li class="small hidden">
 										<input type="radio" id="small-std-fnl" name="dischargefunnel" value="small-standard-funnel" />
@@ -1034,18 +1031,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 							This is how YOUR customized machine will look
 						</p>
 						<div id="machine-image" class="ir s4 stwh std-fnl front">
-							<div class="machine-bg">
-								&nbsp;
-							</div>
-							<div class="weigh-hopper ">
-								&nbsp;
-							</div>
-							<div class="funnel">
-								&nbsp;
-							</div>
-							<div class="spout hidden">
-								&nbsp;
-							</div>
 						</div>
 						<h3 id="machine-title" class="hidden">S-4 Weigh Fill System</h3>
 						<p id="cost-container">
