@@ -917,11 +917,7 @@ $(document).ready(function() {
 			$btnDel.show().prop('disabled', false);
 			// Adjust the grand total
 			// Show the spout image
-			if ($spoutImage.hasClass('hidden')) {
-				$spoutImage.removeClass('hidden');
-				$machineImage.removeClass('no-spout');
-				$machineImage.addClass('spout');
-			}
+			$machineImage.addClass('spout');
 		});
 	}
 	
