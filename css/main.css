@@ -561,7 +561,7 @@ ul.field-type-radio > li {
 .lt-ie8 ul.field-type-radio.label-format-block > li {
 	clear: both;
 }
-.field-type-radio h4 {
+.field-type-radio h4, .field-type-checkbox h4 {
 	margin: 0 0 0.4em 0;
 }
 .field-type-radio h5 {
@@ -582,15 +582,25 @@ ul.field-type-radio > li {
 }
 
 .field-type-checkbox li {
-	display: table-row;
+	position: relative;
+}
+
+.field-type-checkbox label {
+	display: block;
+
+	border: 2px solid #0c4b81;
+	margin-top: 0;
+	padding: 8px 11px 4px 30px;
+	position: relative;
+	margin-bottom: 10px;
 }
 .field-type-checkbox input {
-	display: table-cell;
-	margin: 10px;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	z-index: 10;
 }
-.field-type-checkbox label {
-	display: table-cell;
-}
+
 /* added classes label-format-block and label-format-column to distinguish between display formats when ie requires tweaks*/
 
 .lt-ie9 .label-format-block input {
@@ -616,8 +626,9 @@ ul.field-type-radio > li {
 	margin-left: 0px;
 }
 .field-type-radio.label-format-block input[type="radio"]:checked+label,
+.field-type-checkbox input[type="checkbox"]:checked+label,
 .lt-ie9 .field-type-radio.label-format-block input.active+label,
-.lt-ie8.lt-ie9 .field-type-radio.label-format-block input.active+label, 
+.lt-ie8.lt-ie9 .field-type-radio.label-format-block input.active+label,
 .success {
 	border: #090 2px solid;
 	background-color: #EBFFEA;
