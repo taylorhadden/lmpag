@@ -376,6 +376,13 @@ form#logical-machines-quote-generator {
 	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-spout-side.png");
 }
 
+#machine-image.s4.stwh.discharge-cht.front {
+	background-image: url("../img/s4-labelled/s4-swh-dc-front.png");
+}
+#machine-image.s4.stwh.discharge-cht.side {
+	background-image: url("../img/s4-labelled/s4-swh-dc-side.png");
+}
+
 
 #machine-image.s4.lrgwh.std-fnl.front {
 	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-front.png");
