@@ -438,7 +438,7 @@ $(document).ready(function() {
 		var chuteOptions = makeInsertionOption("#ChuteOptions");
 
 		chuteOptions.onDeselect(function() {
-			$("#customChuteUpgrade").attr("checked", false);
+			$("#customChuteUpgrade").prop("checked", false);
 		});
 
 		return chuteOptions;
@@ -446,7 +446,7 @@ $(document).ready(function() {
 
 	$("#customChuteUpgrade").on("change", function() {
 		var input = $(this);
-		var checked = input.attr("checked");
+		var checked = input.prop("checked");
 
 		var piece = machine["dischargeFunnel"];
 		if (checked) {

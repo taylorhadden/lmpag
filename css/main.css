@@ -180,7 +180,7 @@ form#logical-machines-quote-generator {
 	height: 135px;
 }
 
-.field-container {
+#step-5 .field-container {
 	max-height: 800px;
 	overflow: auto;
 }
