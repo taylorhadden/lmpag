@@ -902,6 +902,12 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 												<p class="price clear">
 													<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"][$key]["price"]; ?></span> upcharge</span>
 												</p>
+												<div class="secondLane" style="display: none;">
+													<input type="checkbox" id="<?php echo $key; ?>SecondLane"></input>
+													<label for="<?php echo $key; ?>SecondLane">
+														Include Second Lane - $<?php echo $settings["accessory"][$key]["price"]; ?>
+													</label>
+												</div>
 											</label>
 										</li>
 									<?php } ?>

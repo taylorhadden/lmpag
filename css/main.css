@@ -642,7 +642,7 @@ ul.field-type-radio > li {
 	position: relative;
 }
 
-.field-type-checkbox label {
+.field-type-checkbox > li > label {
 	display: block;
 
 	border: 2px solid #0c4b81;
@@ -651,7 +651,7 @@ ul.field-type-radio > li {
 	position: relative;
 	margin-bottom: 10px;
 }
-.field-type-checkbox input {
+.field-type-checkbox > li > input {
 	position: absolute;
 	left: 10px;
 	top: 10px;
@@ -683,7 +683,7 @@ ul.field-type-radio > li {
 	margin-left: 0px;
 }
 .field-type-radio.label-format-block input[type="radio"]:checked+label,
-.field-type-checkbox input[type="checkbox"]:checked+label,
+.field-type-checkbox > li > input[type="checkbox"]:checked+label,
 .lt-ie9 .field-type-radio.label-format-block input.active+label,
 .lt-ie8.lt-ie9 .field-type-radio.label-format-block input.active+label,
 .success {

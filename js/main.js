@@ -359,6 +359,7 @@ $(document).ready(function() {
 				}
 				if (approved) {
 					accessory.container().show();
+					accessory.prepareForMachine(this);
 				}
 				else {
 					if (accessory.isSelected()) {
@@ -471,8 +472,13 @@ $(document).ready(function() {
 		accessory.onSelect(function() {
 			var part = partFromElement(this.element);
 			machine.accessories[part.id] = part;
+
+			if (this.currentMachine === s7Option && this.isPerLane) {
+				this.secondLane().show();
+			}
 		});
 		accessory.onDeselect(function() {
+			this.secondLane().hide().find("input").prop("checked", false).trigger("change");
 			delete machine.accessories[this.element.attr('id')];
 		});
 
@@ -480,8 +486,50 @@ $(document).ready(function() {
 		for (var i = 1; i < arguments.length; i++) {
 			accessory.applicableMachines.push(arguments[i]);
 		}
+
+		accessory.secondLane = function() {
+			return this.container().find(".secondLane");
+		}
+
+		accessory.prepareForMachine = function(machine) {
+			this.currentMachine = machine;
+			if (accessory.isPerLane) {
+				var secondLane = this.secondLane();
+
+				if (machine !== s7Option) {
+					secondLane.hide().find("input").prop("checked", false).trigger("change");
+				}
+				else if (this.isSelected()) {
+					secondLane.show();
+				}
+			}
+		};
+		accessory.perLane = function() {
+			accessory.isPerLane = true;
+		}
+
 		return accessory;
 	}
+
+	$(".secondLane input").on('change', function() {
+		var input = $(this);
+
+		var parentId = input.closest('li').children('input').attr('id');
+
+		var accessory = machine['accessories'][parentId];
+		if (accessory !== undefined) {
+			if (input.prop("checked")) {
+				accessory.descriptionSupplement = "Includes second lane ($" + accessory.price + ").";
+				accessory.priceSupplement = accessory.price;
+			}
+			else {
+				delete accessory.descriptionSupplement;
+				delete accessory.priceSupplement;
+			}
+		}
+
+		calculateTotalPrice();
+	});
 
 	// Initialize the S4 Model Heiarachy
 	var s4Option = makeMachine("#s4").addSubOption(
@@ -524,7 +572,7 @@ $(document).ready(function() {
 
 	// Create accessories along with the machines they are applicable to
 	makeAccessory("#divided-supply-hopper", s7Option);
-	makeAccessory("#heavyDutyVibrator", s4Option, s6Option);
+	makeAccessory("#heavyDutyVibrator", s4Option, s6Option, s7Option).perLane();
 	makeAccessory("#dribbleFeedGate", s4Option, s5Option, s6Option);
 	makeAccessory("#dualLaneDribbleFeedGate", s7Option);
 	makeAccessory("#supplyHopperVibratorAndControls", s4Option, s5Option, s6Option, s7Option);
@@ -532,7 +580,7 @@ $(document).ready(function() {
 	makeAccessory("#a240V50hzPackage", s4Option, s5Option, s6Option);
 	makeAccessory("#tableAdjustable", s4Option, s6Option);
 	makeAccessory("#j1Jogger", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option).perLane();
 
 	// Additional parts
 	makeAccessory("#smallStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
@@ -613,19 +661,24 @@ $(document).ready(function() {
 
 		for (var key in machine) {
 			if (key !== "spouts" && key !== "accessories") {
-				price += parseFloat(machine[key].price);
-				if (machine[key].priceSupplement) {
-					price += parseFloat(machine[key].priceSupplement);
-				}
+				price += priceForPart(machine[key]);
 			}
 			else {
 				for (var id in machine[key]) {
-					price += parseFloat(machine[key][id].price);
+					price += priceForPart(machine[key][id]);
 				}
 			}
 		}
 
 		$grandTotalContainer.html(price);
+	}
+
+	function priceForPart(part) {
+		var price = parseFloat(part.price);
+		if (part.priceSupplement) {
+			price += parseFloat(part.priceSupplement);
+		}
+		return price;
 	}
 
 	// Change the machine image between front and side view
@@ -686,6 +739,8 @@ $(document).ready(function() {
 			iteratorName = "prev";
 		}
 
+		// We briefly flirted with the idea of steps that would sometimes be hidden.
+		// I'm leaving the functionality in if you need it in the future.
 		while(true) {
 			// This bit lets us do this without having to ask "is next" every time
 			$stepContainer = $stepContainer[iteratorName]();
@@ -721,7 +776,7 @@ $(document).ready(function() {
      * Pages 1 - 4 selection actions
      */
 
-	$fieldContainer.on('change', 'input[type=radio], input[type=checkbox]', function(e) {
+	$fieldContainer.on('change', 'input[type=radio], li > input[type=checkbox]', function(e) {
 		// Get the machine option that has a selected parent that has this ID
 		var input = $(this);
 
