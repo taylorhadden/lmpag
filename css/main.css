@@ -492,6 +492,7 @@ form#logical-machines-quote-generator {
 	background-image: url("../img/s7-labelled/s7-lwh-spout-side.png");
 }
 
+
 /*
  *  Component images
  */
@@ -516,22 +517,26 @@ form#logical-machines-quote-generator {
 	height: 126px;
 	background-position: -10px -914px;
 }
-#field-name-discharge-funnel .small label.std-fnl .component-image {
+#field-name-discharge-funnel .small label.std-fnl .component-image,
+#smallStandardDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 60px;
 	background-position: -124px -1334px;
 }
-#field-name-discharge-funnel .small label.steep-fnl .component-image {
+#field-name-discharge-funnel .small label.steep-fnl .component-image,
+#smallSteepDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 106px;
 	background-position: -124px -914px;
 }
-#field-name-discharge-funnel .large label.std-fnl .component-image {
+#field-name-discharge-funnel .large label.std-fnl .component-image,
+#largeStandardDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 89px;
 	background-position: -10px -1050px;
 }
-#field-name-discharge-funnel .large label.steep-fnl .component-image {
+#field-name-discharge-funnel .large label.steep-fnl .component-image,
+#largeSteepDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 81px;
 	background-position: -10px -1334px;
@@ -540,6 +545,51 @@ form#logical-machines-quote-generator {
 	width: 104px;
 	height: 106px;
 	background-position: -6px -1153px;
+}
+
+/*
+ * Accessories
+ */
+#step-5 .component-image {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+#heavyDutyVibrator + label .component-image {
+	background-image: url("../img/accessories/heavy-duty-vibrator.png");
+}
+#dribbleFeedGate + label .component-image, #dualLaneDribbleFeedGate + label .component-image {
+	background-image: url("../img/accessories/dribble-feed-gate.png");
+}
+#supplyHopperVibratorAndControls + label .component-image {
+	background-image: url("../img/accessories/supply-hopper-vibrator.png");
+}
+#a240V50hzPackage + label .component-image {
+	background-image: url("../img/accessories/transformer.png");
+}
+#tableAdjustable + label .component-image {
+	background-image: url("../img/accessories/table.png");
+}
+#j1Jogger + label .component-image {
+	background-image: url("../img/accessories/jogger.png");
+}
+#adjustableSupplyHopperBaffle + label .component-image {
+	background-image: url("../img/accessories/supply-hopper-baffle.png");
+}
+#dischargeChute5 + label .component-image, #dischargeChuteCustom + label .component-image {
+	background-image: url("../img/accessories/discharge-chute.png");
+}
+
+/*
+ * Components sold as accessories
+ */
+#smallStandardDischargeFunnel + label .component-image,
+#smallSteepDischargeFunnel + label .component-image,
+#largeStandardDischargeFunnel + label .component-image,
+#largeSteepDischargeFunnel + label .component-image {
+	background-image: url("../img/sprite.png");
+	background-size: auto;
 }
 
 /*

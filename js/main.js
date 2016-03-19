@@ -399,26 +399,6 @@ $(document).ready(function() {
 
 			machine.dischargeFunnel = partFromElement(this.element);
 
-			/*
-			// Assign classes to machine image
-			if (machine.weighHopper.id == 'lrgwh') {
-				if ( machine.dischargeFunnel.id == 'large-std-fnl') {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
-				}
-				else {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
-				}
-			}
-			else {
-				if ( machine.dischargeFunnel.id == 'small-std-fnl') {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
-				}
-				else {
-					$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
-				}
-			}
-			*/
-
 			// Remove Old
 			$machineImage.removeClass("std-fnl steep-fnl discharge-cht");
 
@@ -586,7 +566,7 @@ $(document).ready(function() {
 	makeAccessory("#dualLaneDribbleFeedGate", s7Option);
 	makeAccessory("#supplyHopperVibratorAndControls", s4Option, s5Option, s6Option, s7Option);
 	makeAccessory("#baggerHookupAndSupport", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#240V50hzPackage", s4Option, s5Option, s6Option);
+	makeAccessory("#a240V50hzPackage", s4Option, s5Option, s6Option);
 	makeAccessory("#tableAdjustable", s4Option, s6Option);
 	makeAccessory("#j1Jogger", s4Option, s5Option, s6Option, s7Option);
 	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option);

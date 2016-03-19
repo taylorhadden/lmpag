@@ -110,7 +110,7 @@ $settings = array(
 				"baggerHookupAndSupport" => array("name" => "Bagger Hookup and Support",
 						"description" => "FILL IN Bagger Hookup and Support DESCRIPTION",
 						"price" => "250"),
-				"240V50hzPackage" => array("name" => "240V 50Hz Package",
+				"a240V50hzPackage" => array("name" => "240V 50Hz Package",
 						"description" => "FILL IN 240V 50Hz Package DESCRIPTION",
 						"price" => "400"),
 				"tableAdjustable" => array("name" => "Table, Adjustable",
