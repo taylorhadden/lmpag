@@ -657,6 +657,10 @@ ul.field-type-radio > li {
 	top: 10px;
 	z-index: 10;
 }
+.secondLane {
+	font-weight: bold;
+	margin-bottom: 10px;
+}
 
 /* added classes label-format-block and label-format-column to distinguish between display formats when ie requires tweaks*/
 

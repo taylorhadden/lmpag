@@ -474,11 +474,11 @@ $(document).ready(function() {
 			machine.accessories[part.id] = part;
 
 			if (this.currentMachine === s7Option && this.isPerLane) {
-				this.secondLane().show();
+				this.secondLane().show(200);
 			}
 		});
 		accessory.onDeselect(function() {
-			this.secondLane().hide().find("input").prop("checked", false).trigger("change");
+			this.secondLane().hide(200).find("input").prop("checked", false).trigger("change");
 			delete machine.accessories[this.element.attr('id')];
 		});
 
@@ -497,10 +497,10 @@ $(document).ready(function() {
 				var secondLane = this.secondLane();
 
 				if (machine !== s7Option) {
-					secondLane.hide().find("input").prop("checked", false).trigger("change");
+					secondLane.hide(200).find("input").prop("checked", false).trigger("change");
 				}
 				else if (this.isSelected()) {
-					secondLane.show();
+					secondLane.show(200);
 				}
 			}
 		};
@@ -571,6 +571,8 @@ $(document).ready(function() {
 		);
 
 	// Create accessories along with the machines they are applicable to
+	// NOTE: the "perLane()" function is created in makeAccessory, and adds automatic support for multi-lane functionality on the S-7
+	// A little brittle, but it works and is easily accessible.
 	makeAccessory("#divided-supply-hopper", s7Option);
 	makeAccessory("#heavyDutyVibrator", s4Option, s6Option, s7Option).perLane();
 	makeAccessory("#dribbleFeedGate", s4Option, s5Option, s6Option);
