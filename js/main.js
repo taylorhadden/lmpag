@@ -74,8 +74,6 @@ $(document).ready(function() {
 	$btnDel = $('#btnDel'), 
 	$btnEmail = $('#btnEmail'), 
 	$btnSubmit = $('#btnSubmit');
-	// Chute Size Controls
-	$chuteSizeSelection = $(".chuteSizeSelection");
 
 	// Create an instance of the machine object and default assign properties
 	// Note that "priceSupplement" and "descriptionSupplement" are also supported options for a part model
@@ -436,67 +434,32 @@ $(document).ready(function() {
 		return spoutSelector;
 	}
 
-	function paidChuteOptions() {
+	function chuteOptions() {
 		var chuteOptions = makeInsertionOption("#ChuteOptions");
 
-		chuteOptions.isSelected = function() {
-			return this.element.css('display') != 'none' || this.chuteOptionContainer().css('display') != 'none';
-		}
-
-		chuteOptions.chuteOptionContainer = function() {
-			return $("#ChuteSizeUpcharge");
-		}
-
-		chuteOptions.onSelect(function() {
-			this.chuteOptionContainer().show();
-			$chuteSizeSelection.trigger("change");
-		});
-
 		chuteOptions.onDeselect(function() {
-			this.chuteOptionContainer().hide();
-			$chuteSizeSelection.val("5");
-			delete machine["dischargeFunnel"].priceSupplement;
-			delete machine["dischargeFunnel"].descriptionSupplement;
+			$("#customChuteUpgrade").attr("checked", false);
 		});
 
 		return chuteOptions;
 	}
 
-	function freeChuteOptions() {
-		var chuteOptions = paidChuteOptions();
-
-		chuteOptions.chuteOptionContainer = function() {
-			return $("#ChuteSizeFree");
-		}
-
-		return chuteOptions;
-	}
-
-	$chuteSizeSelection.on("change", function() {
-		var selector = $(this);
-		var option = selector.find("option[value='" + selector.val() + "']");
-
-		var price = 0;
-		if (option.attr("data")) {
-			price = parseInt(option.attr("data"));
-		}
+	$("#customChuteUpgrade").on("change", function() {
+		var input = $(this);
+		var checked = input.attr("checked");
 
 		var piece = machine["dischargeFunnel"];
-		piece.priceSupplement = price;
-		var description = undefined;
-		if (option.index() > 0) {
-			description = "Specified " + option.attr('value') + "\" chute";
-			if (price > 0) {
-				description += " ($" + price + ").";
-			}
-			else {
-				description += ".";
-			}
+		if (checked) {
+			var price = 100;
+			piece.priceSupplement = price;
+			var description = "Custom Chute Upgrade - $" + price + ".";
+			piece.descriptionSupplement = description;
 		}
-		piece.descriptionSupplement = description;
+		else {
+			delete piece.priceSupplement;
+			delete piece.descriptionSupplement;
+		}
 
-		console.log("Updating Weigh Hopper Size");
-		console.log(piece);
 		calculateTotalPrice();
 	});
 
@@ -525,12 +488,12 @@ $(document).ready(function() {
 			makeWeighHopper("#stwh").addSubOption(
 				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
 				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector()),
-				makeDischargeFunnel("#discharge-cht").addSubOption(paidChuteOptions())
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
 			),
 			makeWeighHopper("#lrgwh").addSubOption(
 				makeDischargeFunnel("#large-std-fnl").addSubOption(spoutSelector()),
 				makeDischargeFunnel("#large-steep-fnl").addSubOption(spoutSelector()),
-				makeDischargeFunnel("#discharge-cht").addSubOption(paidChuteOptions())
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
 			)
 		);
 
@@ -543,10 +506,10 @@ $(document).ready(function() {
 
 	var s6Option = makeMachine("#s6").addSubOption(
 			makeWeighHopper("#stwh").addSubOption(
-				makeDischargeFunnel("#discharge-cht-free").addSubOption(freeChuteOptions())
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(chuteOptions())
 			),
 			makeWeighHopper("#lrgwh").addSubOption(
-				makeDischargeFunnel("#discharge-cht-free").addSubOption(freeChuteOptions())
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(chuteOptions())
 			)
 		);
 

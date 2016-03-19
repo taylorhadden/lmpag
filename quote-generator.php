@@ -140,7 +140,7 @@ $settings = array(
 						"description" => "FILL IN 5\" Discharge Chute DESCRIPTION",
 						"price" => "495"),
 				"dischargeChuteCustom" => array("name" => "Custom Discharge Chute",
-						"description" => "FILL IN Custom Discharge Chute DESCRIPTION",
+						"description" => "FILL IN Custom Discharge Chute DESCRIPTION. If you would like to use a custom chute, you will need to send a sample of your packaging so that we may size the chute properly.",
 						"price" => "595"),
 			)
 		);
@@ -251,7 +251,7 @@ include_once 'bin/php_validation.php';
 										We have developed this guide to help you select and equip your Logical Machine to meet the needs of your business.
 									</p>
 									<p>
-										In 5 simple steps you can:
+										In 6 simple steps you can:
 									</p>
 									<ol>
 										<li>
@@ -265,6 +265,9 @@ include_once 'bin/php_validation.php';
 										</li>
 										<li>
 											Select the spout or spouts that work best for the containers that you use;
+										</li>
+										<li>
+											Select the accessories for your machine;
 										</li>
 										<li>
 											Generate a summary of your quote and print or email that summary.
@@ -861,24 +864,20 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									</button>
 								</div>
 								<div id = "ChuteOptions">
-									Hear are where chute options go.
+									<h3>Discharge Chute Customization</h3>
 
-									<div id = "ChuteSizeFree">
-										Chute Size:
-										<select class = "chuteSizeSelection" name = "chuteSize">
-											<option value="5">5"</option>
-											<option value="4.5">4.5"</option>
-											<option value="3.5">3.5"</option>
-										</select>
-									</div>
-									<div id = "ChuteSizeUpcharge">
-										Chute Size:
-										<select class = "chuteSizeSelection" name = "chuteSize">
-											<option value="5">5" (Standard)</option>
-											<option value="4.5" data = "100">4.5" ($100)</option>
-											<option value="3.5" data = "100">3.5" ($100)</option>
-										</select>
-									</div>
+									<label for = "customChuteUpgrade">
+										<h4 class="name">
+											<input type="checkbox" id="customChuteUpgrade"  name="supplyHopper"/>
+											Custom Discharge Chute -
+											$100
+										</h4>
+										<p class = "description">
+											The Discharge Chute comes in a standard size of five inches.
+											We can also create a custom discharge chute to the specifications of your product packaging.
+											We ask that you send us a sample of your packaging so that we may configure the size to work best for your packaging's needs. 
+										</p>
+									</label>
 								</div>
 							</div><!-- id="step-4" -->
 
@@ -888,12 +887,11 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 								<p>
 									Accessories are optional add-ons to your machine.
 								</p>
-								<ul id="field-name-supply-hopper" class="field-type-checkbox field-container label-format-block">
+								<ul id="field-name-accessories" class="field-type-checkbox field-container label-format-block">
 									<!-- Look! I'm actually using a template like a sane person! -->
 									<?php foreach ($settings["accessory"] as $key => $value) { ?>
 										<li>
-											<input type="checkbox" id="<?php echo $key; ?>"  name="supplyHopper" value="<?php echo $key; ?>" 
-											/>
+											<input type="checkbox" id="<?php echo $key; ?>"  name="supplyHopper" value="<?php echo $key; ?>" />
 											<label for="<?php echo $key; ?>" class="clearfix"><h4 class="name"><?php echo $settings["accessory"][$key]["name"]; ?></h4>
 												<div class="component-image ir">
 													Image
