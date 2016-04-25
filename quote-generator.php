@@ -771,9 +771,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									<div class="spout-sprite main-spout-image ir">
 										Spout image
 									</div>
-									<p class="s6-sp">
-										The S-6 uses Discharge Chutes exclusively. Please click on the “Next Step” button to proceed to your Summary.
-									</p>
 									<p class="not-s6">
 										The spout attaches to the bottom of the discharge funnel and directs the materials into your container.
 									</p>
