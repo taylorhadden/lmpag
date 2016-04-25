@@ -559,7 +559,13 @@ $(document).ready(function() {
 			makeWeighHopper("#lrgwh").addSubOption(
 				makeDischargeFunnel("#discharge-cht-free").addSubOption(chuteOptions())
 			)
-		);
+		).onSelect(function() {
+			$(".standardDischarge").hide();
+			$(".s6Discharge").show();
+		}).onDeselect(function() {
+			$(".standardDischarge").show();
+			$(".s6Discharge").hide();
+		});
 
 	var s7Option = makeMachine("#s7").addSubOption(
 			makeWeighHopper("#stwh2").addSubOption(

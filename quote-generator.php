@@ -204,7 +204,7 @@ include_once 'bin/php_validation.php';
 					<li>
 						<a data="step-3"><span class="list-no">3</span>
 						<br/>
-						Select a Discharge Funnel</a>
+						Select a Discharge <span class="standardDischarge">Funnel</span><span class="s6Discharge" style="display: none;">Chute</span></a>
 					</li>
 					<li>
 						<a data="step-4"><span class="list-no">4</span>
@@ -643,10 +643,18 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 							</div><!-- id="step-2" -->
 
 							<div id="step-3" class="step-container" name="step-3">
-								<h3>Select your Discharge Funnel</h3>
-								<p>
-									The <b>Discharge Funnel</b> directs your product from the weigh hopper to the spout. Select a funnel by clicking its image.
-								</p>
+								<div class = "standardDischarge">
+									<h3>Select your Discharge Funnel</h3>
+									<p>
+										The <b>Discharge Funnel</b> directs your product from the weigh hopper to the spout. Select a funnel by clicking its image.
+									</p>
+								</div>
+								<div class = "s6Discharge" style="display: none;">
+									<h3>Discharge Chute</h3>
+									<p>
+										The <b>Discharge Chute</b> directs your product from the weigh hopper to the container.
+									</p>
+								</div>
 								<ul id="field-name-discharge-funnel" class="field-type-radio field-container label-format-block">
 									<li class="small hidden">
 										<input type="radio" id="small-std-fnl" name="dischargefunnel" value="small-standard-funnel" />
