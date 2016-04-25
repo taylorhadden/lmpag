@@ -93,34 +93,34 @@ $settings = array(
 
 				// Proper Accessories
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
-						"description" => "FILL IN DIVIDED SUPPLY HOPPER DESCRIPTION",
+						"description" => "Available only on our Model S-7. The partition essentially creates two separate hoppers. This allows the operator to run two different products simultaneously, usually for the purpose of mixing.",
 						"price" => "150"),
 				"heavyDutyVibrator" => array("name" => "Heavy Duty Vibrator",
-						"description" => "FILL IN HEAVY DUTY VIBRATOR DESCRIPTION",
+						"description" => "Functionally the same as our standard vibrator with 40% more power. Commonly used with heavier, more dense products and higher target weights. Comes standard on our Model S-5 Bulk-Filler.",
 						"price" => "100"),
 				"dribbleFeedGate" => array("name" => "Dribble Feed Gate",
-						"description" => "FILL IN Dribble Feed Gate DESCRIPTION",
+						"description" => "A pneumatically actuated door that closes off a portion of the feed pan during the Dribble phase of the feed cycle.",
 						"price" => "750"),
 				"dualLaneDribbleFeedGate" => array("name" => "Dual Lane Dribble Feed gate",
-						"description" => "FILL IN Dual Lane Dribble Feed gate DESCRIPTION",
+						"description" => "Specifically designed for the two parallel feed pans on our Model S-7. A pneumatically actuated door that closes off a portion  of the feed pan during the Dribble phase of the feed cycle.",
 						"price" => "1500"),
 				"supplyHopperVibratorAndControls" => array("name" => "Supply Hopper Vibrator and Controls",
-						"description" => "FILL IN Supply Hopper Vibrator and Controls DESCRIPTION",
+						"description" => "A vibrator that attaches to the rear face of the supply hopper and is operated via a variable speed foot switch. This accessory is used to coax less than free flowing product out of the supply hopper and onto the feed pan.",
 						"price" => "975"),
 				"baggerHookupAndSupport" => array("name" => "Bagger Hookup and Support",
-						"description" => "FILL IN Bagger Hookup and Support DESCRIPTION",
+						"description" => "For bagger/conveyor integration. Contact Logical Machines for more information.",
 						"price" => "250"),
-				"a240V50hzPackage" => array("name" => "240V 50Hz Package",
-						"description" => "FILL IN 240V 50Hz Package DESCRIPTION",
+				"a240V50hzPackage" => array("name" => "Export Package",
+						"description" => "240 V, 50 Hz. Includes 50 Hz software, a heavy duty vibrator tuned for 50 Hz, and a voltage converter.",
 						"price" => "400"),
 				"tableAdjustable" => array("name" => "Table, Adjustable",
-						"description" => "FILL IN Table, Adjustable DESCRIPTION",
+						"description" => "An adjustable height table top. Standard on our Model S-5, it supports the Scale Base Assembly. When fitted to our other models, it most commonly supports either a container or the J1 Jogger.",
 						"price" => "475"),
 				"j1Jogger" => array("name" => "J1 Jogger",
-						"description" => "FILL IN J1 Jogger DESCRIPTION",
+						"description" => "A vibrating table used to help settle product into its container.",
 						"price" => "703"),
 				"adjustableSupplyHopperBaffle" => array("name" => "Adjustable Supply Hopper Baffle",
-						"description" => "FILL IN Adjustable Supply Hopper Baffle DESCRIPTION",
+						"description" => "An adjustable gate inside the supply hopper that regulates the flow of product from the supply hopper onto the feed pan. Commonly used with heavier, more dense products.",
 						"price" => "200"),
 
 				// Additional Elements
@@ -882,7 +882,10 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 							<div id="step-5" class="step-container" name="step-5" style="display: none;">
 								<h3>Select Accessories</h3>
 								<p>
-									Accessories are optional add-ons to your machine.
+									Accessories are optional add-ons to your machine. 
+									When purchased on a machine, accessories are priced at the add-on price. 
+									Outright price is used when purchased after the fact. 
+									Outright purchases may require drilling holes and/or welding.
 								</p>
 								<ul id="field-name-accessories" class="field-type-checkbox field-container label-format-block">
 									<!-- Look! I'm actually using a template like a sane person! -->
