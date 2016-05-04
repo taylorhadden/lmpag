@@ -1133,3 +1133,25 @@ tbody tr.total td, tbody tr.total th {
 #section-content.fixed #main-content {
 	padding-right: 280px;
 }
+
+/*
+ * Stuff for iPhone
+ */
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+	#pag-navigation.fixed {
+		position: static;
+		left: 173px;
+		top: 10px;
+	}
+	#sidebar.fixed {
+		position: static;
+		left: 667px;
+		top: 19px;
+	}
+	#section-content.fixed {
+		margin-left: 0px;
+	}
+	#section-content.fixed #main-content {
+		padding-right: 0px;
+	}
+}
