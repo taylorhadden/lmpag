@@ -28,7 +28,7 @@
 	// Replace non-js iframe (small, with scrollbars) with js one (larger, no-scroll), if js is running
 	$(document).ready( function() {
 	//	$('#frame-container').html('<iframe id="quote-generator" src="http://lmpag.spirelightserver.com/quote-generator.php" width="785" height="1128" frameborder="no" scrolling="no"></iframe>');
-		$('#frame-container').html('<iframe id="quote-generator" src="quote-generator.php" width="785" height="1500" frameborder="no" scrolling="no"></iframe>');
+		//$('#frame-container').html('<iframe id="quote-generator" src="quote-generator.php" width="785" height="1500" frameborder="no" scrolling="no"></iframe>');
 	});
 </script>
 	</head>
@@ -94,7 +94,8 @@
 			</nav>
 
 			<div id="frame-container">
-				<iframe id="quote-generator" src="quote-generator.php" width="785" height="600" frameborder="no" horizontalscrolling="no" verticalscrolling="yes"></iframe>
+				<?php include 'quote-generator.php' ?>
+				<!--<iframe id="quote-generator" src="quote-generator.php" width="785" height="600" frameborder="no" horizontalscrolling="no" verticalscrolling="yes"></iframe>-->
 			</div>
 
 			<footer id="footer" class="clearfix clear">

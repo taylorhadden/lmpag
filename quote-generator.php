@@ -149,32 +149,7 @@ $settings = array(
 include_once 'bin/php_validation.php';
 
 ?>
-
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-	<!--<![endif]-->
-
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>Logical Machines Quote Generator</title>
-		<meta name="description" content="Scoop no more with Logical Machines automatic weigh and fill machines. Small to medium sized companies save time and money with our automated filling machines">
-
-		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-		<link rel="stylesheet" href="css/lm.css">
-		<link rel="stylesheet" href="css/normalize.css">
-		<link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="css/forms.css">
-		<script src="js/vendor/modernizr-2.6.2.min.js"></script>
-		<script type="text/javascript" src="js/ahah.js" ></script>
-	</head>
-
-	<body>
+<div class = "no-js">
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
@@ -184,10 +159,10 @@ include_once 'bin/php_validation.php';
 			<p>The Quote Generator requires JavaScript. Please enable JavaScript or switch to a JavaScript capable browser to use the Quote Generator.</p>
 			<p>If that is not possible, please call Logical Machines at (802) 425-2888 to get a quote.</p>
 		</div>
-		<div id="PageDiv" class="top" style="display: none;">
+		<div id="QGPageDiv" class="top" style="display: none;">
 			<script type="text/javascript">
 				document.getElementById("NoJS").style.display = "none";
-				document.getElementById("PageDiv").style.display = "block";
+				document.getElementById("QGPageDiv").style.display = "block";
 			</script>
 			<nav id="pag-navigation" class="clearfix">
 				<ol>
@@ -1071,5 +1046,4 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
                     s.parentNode.insertBefore(g, s)
                 }(document, 'script'));
 		</script>
-	</body>
-</html>
+</div>

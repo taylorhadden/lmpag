@@ -181,7 +181,6 @@ form#logical-machines-quote-generator {
 }
 
 #step-5 .field-container {
-	max-height: 800px;
 	overflow: auto;
 }
 /*
@@ -1094,7 +1093,6 @@ body {
 }
 #main-content {
     width:100%;
-    max-height: 800px;
     overflow: auto;
 }
 #quote-summary {

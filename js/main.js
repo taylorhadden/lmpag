@@ -1,4 +1,6 @@
+console.log("HALP! ALIENS ATTACKING!");
 $(document).ready(function() {
+	console.log("I'LL SAVE YOU, CITIZEN!");
 
     var $form = $('#logical-machines-quote-generator');
     
