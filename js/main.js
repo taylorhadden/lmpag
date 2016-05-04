@@ -1,6 +1,6 @@
-console.log("HALP! ALIENS ATTACKING!");
+var targetScrollTop = 162;
+
 $(document).ready(function() {
-	console.log("I'LL SAVE YOU, CITIZEN!");
 
     var $form = $('#logical-machines-quote-generator');
     
@@ -729,6 +729,8 @@ $(document).ready(function() {
 		}
 
 		$('#thankYouMessage').remove();
+
+		$(document).scrollTop(targetScrollTop);
 	}
 
 	// Action for 'prev' & 'next' buttons
@@ -1262,7 +1264,7 @@ $(document).scroll(function() {
 
 	//console.log("Scroll top: " + $(document).scrollTop());
 
-	if ($(document).scrollTop() > 162) {
+	if ($(document).scrollTop() > targetScrollTop) {
 		console.log("DOOM!");
 		elements.addClass("fixed");
 	}
