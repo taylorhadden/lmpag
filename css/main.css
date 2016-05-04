@@ -239,6 +239,7 @@ form#logical-machines-quote-generator {
  */
 #pag-navigation {
 	margin-left: 10px;
+	background: white;
 }
 #pag-navigation ol {
 	margin: 0;
@@ -1110,4 +1111,25 @@ tbody tr th {
 tbody tr.total td, tbody tr.total th {
     border-top: 1px solid #000000;
 }
+}
+
+/*
+ * Stuff for the fixed elements
+ */
+
+#pag-navigation.fixed {
+	position: fixed;
+	left: 173px;
+	top: 10px;
+}
+#sidebar.fixed {
+	position: fixed;
+	left: 667px;
+	top: 19px;
+}
+#section-content.fixed {
+	margin-left: 123px;
+}
+#section-content.fixed #main-content {
+	padding-right: 280px;
 }

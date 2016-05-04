@@ -1256,3 +1256,18 @@ $(document).ready(function() {
 	}
 
 });
+
+$(document).scroll(function() {
+	var elements = $("#pag-navigation, #sidebar, #section-content");
+
+	//console.log("Scroll top: " + $(document).scrollTop());
+
+	if ($(document).scrollTop() > 162) {
+		console.log("DOOM!");
+		elements.addClass("fixed");
+	}
+	else {
+		elements.removeClass("fixed");
+	}
+
+});
