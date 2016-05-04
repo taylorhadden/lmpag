@@ -200,6 +200,7 @@ form#logical-machines-quote-generator {
 }
 .step-pager {
     margin-top: 25px;
+    margin-left: 10px;
 }
 #submit_buttons {
     text-align:center;
@@ -337,8 +338,8 @@ form#logical-machines-quote-generator {
 #cost-container {
 	border: 3px solid #0c4b81;
 	color:#0c4b81;
-	margin-left:10px;
 	padding:10px;
+	margin-left: 10px;
 }
 .price {
     font-weight:bold;
@@ -1116,7 +1117,6 @@ tbody tr.total td, tbody tr.total th {
 /*
  * Stuff for the fixed elements
  */
-
 #pag-navigation.fixed {
 	position: fixed;
 	left: 173px;

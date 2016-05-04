@@ -1023,6 +1023,13 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 						<p id="cost-container">
 							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
 						</p>
+
+						<div>
+							<div class="step-pager" >
+								<a class="prev button" style="display: none;">Previous Step</a>
+								<a class="next button">Next Step</a>
+							</div>
+						</div>
 					</div>
 				</aside>
 				<a href="#hidden-accessories-page" id="hidden-accessories-page-btn" class="ir">Add Accessories</a>

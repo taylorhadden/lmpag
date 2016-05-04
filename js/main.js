@@ -638,24 +638,6 @@ $(document).ready(function() {
        });
     */
 
-	// Create a div on each page for the pager button
-	$('.step-container').each(function() {
-		containerID = $(this).attr('id');
-		$('<div/>', {
-			id : containerID + '-pager',
-			"class" : 'step-pager'
-		}).appendTo($(this));
-	});
-	// Create pager buttons and add them to the created div
-	$('.step-pager').not(':first').append($('<a/>', {
-		"class" : 'prev button',
-		"href" : '#',
-	}).text('Previous step'));
-	$('.step-pager').not(':last').append($('<a/>', {
-		"class" : 'next button',
-		"href" : '#',
-	}).text('Next step'));
-
 	/*
 	* General functions
 	*/
@@ -730,7 +712,26 @@ $(document).ready(function() {
 
 		$('#thankYouMessage').remove();
 
-		$(document).scrollTop(targetScrollTop);
+		// Hide the appropriate pagers
+		if (stepContainer.is(":first-child")) {
+			$(".step-pager .prev").hide();
+		}
+		else {
+			$(".step-pager .prev").show();
+		}
+
+		// Hide the appropriate pagers
+		if (stepContainer.is(":last-child")) {
+			$(".step-pager .next").hide();
+		}
+		else {
+			$(".step-pager .next").show();
+		}
+
+		var doc = $(document);
+		if (doc.scrollTop() > targetScrollTop) {
+			doc.scrollTop(targetScrollTop);
+		}
 	}
 
 	// Action for 'prev' & 'next' buttons
@@ -738,7 +739,7 @@ $(document).ready(function() {
 		console.log("Previous / Next Button Clicked");
 
 		// Determine the next step ID
-		var $stepContainer = $(this).closest('.step-container');
+		var $stepContainer = $('.step-container:visible');// $(this).closest('.step-container');
 		
 		// We need to handle skipping steps with invisible tabs
 		var switchingToID;
@@ -1259,17 +1260,21 @@ $(document).ready(function() {
 
 });
 
+var isFloating = false;
 $(document).scroll(function() {
-	var elements = $("#pag-navigation, #sidebar, #section-content");
-
 	//console.log("Scroll top: " + $(document).scrollTop());
 
 	if ($(document).scrollTop() > targetScrollTop) {
-		console.log("DOOM!");
-		elements.addClass("fixed");
+		if (!isFloating) {
+			$("#pag-navigation, #sidebar, #section-content").addClass("fixed");
+			isFloating = true;
+		}
 	}
 	else {
-		elements.removeClass("fixed");
+		if (isFloating) {
+			$("#pag-navigation, #sidebar, #section-content").removeClass("fixed");
+			isFloating = false;
+		}
 	}
 
 });
