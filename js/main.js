@@ -145,6 +145,7 @@ $(document).ready(function() {
 	function MachineOption(domElement) {
 		this.element = domElement;
 		this.subOptions = [];
+		this.id = domElement.attr("id");
 	}
 	MachineOption.prototype.addSubOption = function() {
 		for (var i = 0; i < arguments.length; i++) {
@@ -219,6 +220,10 @@ $(document).ready(function() {
 			else {
 				selectedChild.select();
 			}
+		}
+
+		for (var i = 0; i < accessoryStep.options.length; i++) {
+			accessoryStep.options[i].evaluateRelevancy();
 		}
 	}
 	// This is pulled out to make mucking with the odd sections easier
@@ -299,10 +304,10 @@ $(document).ready(function() {
 		var option = new MachineOption($(selector));
 
 		// This lets us look up the option by ID
-		var lookupList = optionLookup[option.element.attr('id')];
+		var lookupList = optionLookup[option.id];
 		if (lookupList === undefined) {
 			lookupList = [option];
-			optionLookup[option.element.attr('id')] = lookupList;
+			optionLookup[option.id] = lookupList;
 		}
 		else {
 			lookupList.push(option);
@@ -348,28 +353,6 @@ $(document).ready(function() {
 				name += " " + machine.model.type;
 			}
 			$nextMachineImage.html(name);
-
-			// Check for accessory compatibility
-			for (var i = 0; i < accessoryStep.options.length; i++) {
-				var accessory = accessoryStep.options[i];
-				var approved = false;
-				for (var j = 0; j < accessory.applicableMachines.length; j++) {
-					if (accessory.applicableMachines[j] === this) {
-						approved = true;
-						break;
-					}
-				}
-				if (approved) {
-					accessory.container().show();
-					accessory.prepareForMachine(this);
-				}
-				else {
-					if (accessory.isSelected()) {
-						accessory.deselect();	
-					}
-					accessory.container().hide();
-				}
-			}
 		});
 
 		return machineOption;
@@ -475,7 +458,7 @@ $(document).ready(function() {
 			var part = partFromElement(this.element);
 			machine.accessories[part.id] = part;
 
-			if (this.currentMachine === s7Option && this.isPerLane) {
+			if (s7Option.isSelected() && this.isPerLane) {
 				this.secondLane().show(200);
 			}
 		});
@@ -486,19 +469,50 @@ $(document).ready(function() {
 
 		accessory.applicableMachines = [];
 		for (var i = 1; i < arguments.length; i++) {
-			accessory.applicableMachines.push(arguments[i]);
+			if (arguments[i].id !== undefined) {
+				accessory.applicableMachines.push(arguments[i].id);
+			}
+			else {
+				accessory.applicableMachines.push(arguments[i]);
+			}
 		}
 
 		accessory.secondLane = function() {
 			return this.container().find(".secondLane");
 		}
 
+		accessory.evaluateRelevancy = function() {
+			var approved = false;
+			for (var i = 0; i < this.applicableMachines.length; i++) {
+				var list = optionLookup[this.applicableMachines[i]];
+				for (var j = 0; j < list.length; j++) {
+					if (list[j].isSelected()) {
+						approved = true;
+						break;
+					}
+				}
+				if (approved) {
+					break;
+				}
+			}
+
+			if (approved) {
+				this.container().removeClass("hidden");
+				this.prepareForMachine(this);
+			}
+			else {
+				if (this.isSelected()) {
+					accessory.deselect();	
+				}
+				this.container().addClass("hidden");
+			}
+		}
+
 		accessory.prepareForMachine = function(machine) {
-			this.currentMachine = machine;
 			if (accessory.isPerLane) {
 				var secondLane = this.secondLane();
 
-				if (machine !== s7Option) {
+				if (!s7Option.isSelected()) {
 					secondLane.hide(200).find("input").prop("checked", false).trigger("change");
 				}
 				else if (this.isSelected()) {
@@ -593,9 +607,10 @@ $(document).ready(function() {
 	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option).perLane();
 
 	// Additional parts
-	makeAccessory("#smallStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#smallSteepDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#largeStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#smallStandardDischargeFunnel", "stwh", "stwh2", s5Option);
+	makeAccessory("#smallSteepDischargeFunnel", "stwh", "stwh2", s5Option);
+	makeAccessory("#largeStandardDischargeFunnel", "lrgwh", "lrgwh2");
+	makeAccessory("#largeSteepDischargeFunnel", "lrgwh", "lrgwh2");
 	makeAccessory("#dischargeChute5", s4Option, s6Option, s7Option);
 	makeAccessory("#dischargeChuteCustom", s4Option, s6Option, s7Option);
 
