@@ -851,9 +851,19 @@ $(document).ready(function() {
 	
 	// Calculate the size of the spout based on the container
 	$spout.on('click', '.calculate', function() {
+		calculateSpout($(this).closest('fieldset'));
+	});
+
+	$spout.find(".required.number").keypress(function(e) {
+		if (e.which == 13) {
+			calculateSpout($(this).closest('fieldset'));
+			return false;
+		}
+	});
+
+	function calculateSpout($spoutContainer) {
 		var num = $('fieldset.field-spout').length, 
-		$spoutContainer = $(this).closest('fieldset'), 
-		spoutTitle = $.trim($spoutContainer.find('legend').text())//.trim(),
+		spoutTitle = $.trim($spoutContainer.find('legend').text()),
 		// The selected spout type
 		$spoutSelected = $spoutContainer.find('.field-name-spout-type input:checked'), 
 		spoutSelectedVal = $spoutSelected.val(), 
@@ -896,7 +906,7 @@ $(document).ready(function() {
 				approveSpout(num, $spoutContainer, spoutTitle, spoutSize);
 			}
 		}
-	});
+	}
 	
 	// Find out what the nearest spout is to the calculated spout size
 	function nearestSpout(containerDiameter) {
