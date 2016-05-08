@@ -596,9 +596,24 @@ $(document).ready(function() {
 	makeAccessory("#smallStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
 	makeAccessory("#smallSteepDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
 	makeAccessory("#largeStandardDischargeFunnel", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#dischargeChute5", s4Option, s5Option, s6Option, s7Option);
-	makeAccessory("#dischargeChuteCustom", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#dischargeChute5", s4Option, s6Option, s7Option);
+	makeAccessory("#dischargeChuteCustom", s4Option, s6Option, s7Option);
 
+	// Set up the accessory tabs
+	$("#step-5 .tabs .tab").click(function() {
+		var tab = $(this);
+		var targetClass = tab.attr("data");
+
+		tab.parent().children().removeClass("selected");
+		tab.addClass("selected");
+
+		var list = $("#field-name-accessories li");
+		list.hide();
+
+		list.filter("." + targetClass).show();
+	});
+
+	$("#field-name-accessories li.additional").hide();
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();
@@ -911,6 +926,7 @@ $(document).ready(function() {
 	// Find out what the nearest spout is to the calculated spout size
 	function nearestSpout(containerDiameter) {
 		var closest = null, calculatedSpoutSize = Math.round(containerDiameter * 0.72 * 1000) / 1000;
+		console.log("Cacluated spout size: " + calculatedSpoutSize);
 		$.each(availableSpouts, function() {
 			if (closest == null || Math.abs(this - calculatedSpoutSize) < Math.abs(closest - calculatedSpoutSize)) {
 				closest = this;

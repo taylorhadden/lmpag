@@ -94,54 +94,70 @@ $settings = array(
 				// Proper Accessories
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
 						"description" => "Available only on our Model S-7. The partition essentially creates two separate hoppers. This allows the operator to run two different products simultaneously, usually for the purpose of mixing.",
-						"price" => "150"),
+						"price" => "150",
+						"type" => "accessory"),
 				"heavyDutyVibrator" => array("name" => "Heavy Duty Vibrator",
 						"description" => "Functionally the same as our standard vibrator with 40% more power. Commonly used with heavier, more dense products and higher target weights. Comes standard on our Model S-5 Bulk-Filler.",
-						"price" => "100"),
+						"price" => "100",
+						"type" => "accessory"),
 				"dribbleFeedGate" => array("name" => "Dribble Feed Gate",
 						"description" => "A pneumatically actuated door that closes off a portion of the feed pan during the Dribble phase of the feed cycle.",
-						"price" => "1025"),
+						"price" => "1025",
+						"type" => "accessory"),
 				"dualLaneDribbleFeedGate" => array("name" => "Dual Lane Dribble Feed gate",
 						"description" => "Specifically designed for the two parallel feed pans on our Model S-7. A pneumatically actuated door that closes off a portion  of the feed pan during the Dribble phase of the feed cycle.",
-						"price" => "1875"),
+						"price" => "1875",
+						"type" => "accessory"),
 				"supplyHopperVibratorAndControls" => array("name" => "Supply Hopper Vibrator and Controls",
 						"description" => "A vibrator that attaches to the rear face of the supply hopper and is operated via a variable speed foot switch. This accessory is used to coax less than free flowing product out of the supply hopper and onto the feed pan.",
-						"price" => "975"),
+						"price" => "975",
+						"type" => "accessory"),
 				"baggerHookupAndSupport" => array("name" => "Bagger Hookup and Support",
 						"description" => "For bagger/conveyor integration. Contact Logical Machines for more information.",
-						"price" => "250"),
+						"price" => "250",
+						"type" => "accessory"),
 				"a240V50hzPackage" => array("name" => "Export Package",
 						"description" => "240 V, 50 Hz. Includes 50 Hz software, a heavy duty vibrator tuned for 50 Hz, and a voltage converter.",
-						"price" => "400"),
+						"price" => "400",
+						"type" => "accessory"),
 				"tableAdjustable" => array("name" => "Table, Adjustable",
 						"description" => "An adjustable height table top. Standard on our Model S-5, it supports the Scale Base Assembly. When fitted to our other models, it most commonly supports either a container or the J1 Jogger.",
-						"price" => "600"),
+						"price" => "600",
+						"type" => "accessory"),
 				"j1Jogger" => array("name" => "J1 Jogger",
 						"description" => "A vibrating table used to help settle product into its container.",
-						"price" => "730"),
+						"price" => "730",
+						"type" => "accessory"),
 				"adjustableSupplyHopperBaffle" => array("name" => "Adjustable Supply Hopper Baffle",
 						"description" => "An adjustable gate inside the supply hopper that regulates the flow of product from the supply hopper onto the feed pan. Commonly used with heavier, more dense products.",
-						"price" => "200"),
+						"price" => "200",
+						"type" => "accessory"),
 
 				// Additional Elements
 				"smallStandardDischargeFunnel" => array("name" => "Small Standard Discharge Funnel",
 						"description" => "FILL IN Small Standard Funnel DESCRIPTION",
-						"price" => "175"),
+						"price" => "175",
+						"type" => "additional"),
 				"smallSteepDischargeFunnel" => array("name" => "Small Steep Discharge Funnel",
 						"description" => "FILL IN Small Standard Steep Funnel DESCRIPTION",
-						"price" => "300"),
+						"price" => "300",
+						"type" => "additional"),
 				"largeStandardDischargeFunnel" => array("name" => "Large Standard Discharge Funnel",
 						"description" => "FILL IN Large Standard Discharge Funnel DESCRIPTION",
-						"price" => "325"),
+						"price" => "325",
+						"type" => "additional"),
 				"largeSteepDischargeFunnel" => array("name" => "Large Steep Discharge Funnel",
 						"description" => "FILL IN Large Steep Discharge Funnel DESCRIPTION",
-						"price" => "575"),
+						"price" => "575",
+						"type" => "additional"),
 				"dischargeChute5" => array("name" => "5\" Discharge Chute",
 						"description" => "FILL IN 5\" Discharge Chute DESCRIPTION",
-						"price" => "495"),
+						"price" => "495",
+						"type" => "additional"),
 				"dischargeChuteCustom" => array("name" => "Custom Discharge Chute",
 						"description" => "FILL IN Custom Discharge Chute DESCRIPTION. If you would like to use a custom chute, you will need to send a sample of your packaging so that we may size the chute properly.",
-						"price" => "595"),
+						"price" => "595",
+						"type" => "additional"),
 			)
 		);
 
@@ -870,10 +886,18 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 									Outright price is used when purchased after the fact. 
 									Outright purchases may require drilling holes and/or welding.
 								</p>
+								<ul class = "tabs">
+									<li class="tab selected" data="accessory">
+										Accessories
+									</li>
+									<li class="tab" data="additional">
+										Additional Chutes and Spouts
+									</li>
+								</ul>
 								<ul id="field-name-accessories" class="field-type-checkbox field-container label-format-block">
 									<!-- Look! I'm actually using a template like a sane person! -->
 									<?php foreach ($settings["accessory"] as $key => $value) { ?>
-										<li>
+										<li class="<?php echo $settings["accessory"][$key]["type"]; ?>">
 											<input type="checkbox" id="<?php echo $key; ?>"  name="supplyHopper" value="<?php echo $key; ?>" />
 											<label for="<?php echo $key; ?>" class="clearfix"><h4 class="name"><?php echo $settings["accessory"][$key]["name"]; ?></h4>
 												<div class="component-image ir">
