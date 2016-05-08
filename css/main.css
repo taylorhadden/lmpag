@@ -1154,6 +1154,24 @@ tbody tr.total td, tbody tr.total th {
 	cursor: default;
 }
 
+/*
+ * I know this bit sucks. Why should I have to add css to add more tabs work?
+ * Sorry.
+ */
+#field-name-accessories li {
+	display: none;
+}
+#field-name-accessories.accessory li.accessory {
+	display: block;
+}
+#field-name-accessories.additional li.additional {
+	display: block;
+}
+
+#field-name-accessories li.hidden {
+	display: none !important; 
+}
+
 .outright-price {
 	font-weight: bold;
 	color: #555;

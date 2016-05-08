@@ -607,13 +607,8 @@ $(document).ready(function() {
 		tab.parent().children().removeClass("selected");
 		tab.addClass("selected");
 
-		var list = $("#field-name-accessories li");
-		list.hide();
-
-		list.filter("." + targetClass).show();
+		$("#field-name-accessories").removeClass("accessory").removeClass("additional").addClass(targetClass);
 	});
-
-	$("#field-name-accessories li.additional").hide();
 
 	weighHopperStep.hideAll();
 	dischargeFunnelStep.hideAll();

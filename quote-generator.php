@@ -899,7 +899,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 										Additional Chutes and Spouts
 									</li>
 								</ul>
-								<ul id="field-name-accessories" class="field-type-checkbox field-container label-format-block">
+								<ul id="field-name-accessories" class="field-type-checkbox field-container label-format-block accessory">
 									<!-- Look! I'm actually using a template like a sane person! -->
 									<?php foreach ($settings["accessory"] as $key => $value) { ?>
 										<li class="<?php echo $settings["accessory"][$key]["type"]; ?>">
