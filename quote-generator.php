@@ -4,18 +4,18 @@ $spoutSizes = "0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5";
 $settings = array(
 		// Machine settings
 		"machinemodel" => array(
-				"S-4" => array("name" => "S-4", "type" => "Weigh Fill System",
+				"S-4" => array("name" => "S-4", "type" => "Semi-Automatic Scale System",
 						"description" => "The standard S-4 includes the standard weigh hopper, small discharge funnel and Logical Controller II. It comes fully assembled and ready to operate.",
 						"price" => "6150"),
-				"S-5" => array("name" => "S-5", "type" => "Bulk Fill System",
+				"S-5" => array("name" => "S-5", "type" => "Bulk Scale System",
 						"description" => "The S-5 includes a standard Discharge Funnel, and Logical Controller II. It comes fully assembled and ready to operate. ",
 						"price" => "5450"),
 				"S-6" => array("name" => "S-6",
-						"type" => "Cascading Weigh Filler",
+						"type" => "Cascading Scale System",
 						"description" => "The S-6 includes a standard Weigh Hopper, standard Discharge Chute, and Logical Controller II. It comes fully assembled and ready to operate.",
 						"price" => "9950"),
 				"S-7" => array("name" => "S-7",
-						"type" => "Dual-Lane Weigh Filler",
+						"type" => "Dual Lane Scale System",
 						"description" => "The S-7 includes two standard Weigh Hoppers, standard S-7 Discharge Chute, and two Logical Controller IIs. It comes fully assembled and ready to operate. ",
 						"price" => "12000")
 				),
@@ -1019,7 +1019,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 						</p>
 						<div id="machine-image" class="ir s4 stwh std-fnl front">
 						</div>
-						<h3 id="machine-title" class="hidden">S-4 Weigh Fill System</h3>
+						<h3 id="machine-title" class="hidden">S-4 Semi-Automatic Scale System</h3>
 						<p id="cost-container">
 							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
 						</p>
