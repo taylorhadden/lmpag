@@ -95,18 +95,22 @@ $settings = array(
 				"divided-supply-hopper" => array("name" => "Divided Supply Hopper",
 						"description" => "Available only on our Model S-7. The partition essentially creates two separate hoppers. This allows the operator to run two different products simultaneously, usually for the purpose of mixing.",
 						"price" => "150",
+						"outright-price" => "2000",
 						"type" => "accessory"),
 				"heavyDutyVibrator" => array("name" => "Heavy Duty Vibrator",
 						"description" => "Functionally the same as our standard vibrator with 40% more power. Commonly used with heavier, more dense products and higher target weights. Comes standard on our Model S-5 Bulk-Filler.",
 						"price" => "100",
+						"outright-price" => "758",
 						"type" => "accessory"),
 				"dribbleFeedGate" => array("name" => "Dribble Feed Gate",
 						"description" => "A pneumatically actuated door that closes off a portion of the feed pan during the Dribble phase of the feed cycle.",
-						"price" => "1025",
+						"price" => "750",
+						"outright-price" => "1250",
 						"type" => "accessory"),
 				"dualLaneDribbleFeedGate" => array("name" => "Dual Lane Dribble Feed gate",
 						"description" => "Specifically designed for the two parallel feed pans on our Model S-7. A pneumatically actuated door that closes off a portion  of the feed pan during the Dribble phase of the feed cycle.",
-						"price" => "1875",
+						"price" => "1500",
+						"outright-price" => "2300",
 						"type" => "accessory"),
 				"supplyHopperVibratorAndControls" => array("name" => "Supply Hopper Vibrator and Controls",
 						"description" => "A vibrator that attaches to the rear face of the supply hopper and is operated via a variable speed foot switch. This accessory is used to coax less than free flowing product out of the supply hopper and onto the feed pan.",
@@ -119,6 +123,7 @@ $settings = array(
 				"a240V50hzPackage" => array("name" => "Export Package",
 						"description" => "240 V, 50 Hz. Includes 50 Hz software, a heavy duty vibrator tuned for 50 Hz, and a voltage converter.",
 						"price" => "400",
+						"outright-price" => "1100",
 						"type" => "accessory"),
 				"tableAdjustable" => array("name" => "Table, Adjustable",
 						"description" => "An adjustable height table top. Standard on our Model S-5, it supports the Scale Base Assembly. When fitted to our other models, it most commonly supports either a container or the J1 Jogger.",
@@ -907,7 +912,28 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 													<?php echo $settings["accessory"][$key]["description"]; ?>
 												</p>
 												<p class="price clear">
-													<b>Price: </b>$<span class="amount"><?php echo $settings["accessory"][$key]["price"]; ?></span> upcharge</span>
+													<?php
+														$hasOutrightPrice = isset($settings["accessory"][$key]["outright-price"]);
+													?>
+													<?php
+														if ($hasOutrightPrice) {
+															echo "<span class='outright-price'>Outright Price: $";
+															echo $settings["accessory"][$key]["outright-price"];
+															echo "</span> |";
+														}
+													?>
+													<b>
+														<?php
+															if ($hasOutrightPrice) {
+																echo "Add-On";
+															}
+															elseif ($settings["accessory"][$key]["type"] == "additional") {
+																echo "Outright";
+															}
+														?>
+														Price:
+													</b>$<span class="amount"><?php echo $settings["accessory"][$key]["price"]; ?></span></span>
+													
 												</p>
 												<div class="secondLane" style="display: none;">
 													<input type="checkbox" id="<?php echo $key; ?>SecondLane"></input>

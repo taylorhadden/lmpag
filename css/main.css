@@ -1154,6 +1154,11 @@ tbody tr.total td, tbody tr.total th {
 	cursor: default;
 }
 
+.outright-price {
+	font-weight: bold;
+	color: #555;
+}
+
 /*
  * Stuff for the fixed elements
  */
