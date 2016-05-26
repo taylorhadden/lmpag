@@ -1042,17 +1042,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 							</div>
 
 						</div><!-- id="form-pages" -->
-
-						<div id="hidden-accessories-page" name="hidden-accessories-page"  class="hidden bottom">
-							<button id="btnClose" value="X" class="hidden" >
-								X
-							</button>
-							<h3>Accessory Page</h3>
-							<button id="btnContinue" value="Continue" class="hidden">
-								Continue
-							</button>
-						</div>
-
 					</form>
 				</article>
 
@@ -1082,7 +1071,6 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 						</div>
 					</div>
 				</aside>
-				<a href="#hidden-accessories-page" id="hidden-accessories-page-btn" class="ir">Add Accessories</a>
 			</section>
 
 		</div><!-- id="PageDiv" end -->
