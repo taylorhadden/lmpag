@@ -160,7 +160,7 @@ $settings = array(
 						"price" => "495",
 						"type" => "additional"),
 				"dischargeChuteCustom" => array("name" => "Custom Discharge Chute",
-						"description" => "Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper. If you would like to use a custom chute, you will need to send a sample of your packaging so that we may size the chute properly.",
+						"description" => "Contact Logical Machines for a custom chute. Used for larger-grained products like popcorn or crackers to allow for free flow from Weigh Hopper.",
 						"price" => "595",
 						"type" => "additional"),
 			)
