@@ -65,6 +65,7 @@ $(document).ready(function() {
 	$weighHopperData = $weighHopper.find($('label')), 
 	$dischargeFunnelData = $dischargeFunnel.find($('label')), 
 	spoutPrice = parseInt($('input[name=spout-price]').val()),
+	customSpoutPrice = 250;
 	// Machine image variables
 	$machineImage = $('#machine-image'), 
 	$spoutImage = $machineImage.find('.spout'), 
@@ -912,13 +913,19 @@ $(document).ready(function() {
 					break;
 				case 'can-jar':
 					$.each(availableSpouts, function() {
-						if (spoutSize == null || dimensionFieldDiameter - this >= 0.125) {
+						if (dimensionFieldDiameter - this >= 0.125) {
 							spoutSize = this;
 						}
 					});
 					break;
 			}
-			spoutSize = parseFloat(spoutSize);
+			if (spoutSize == null) {
+				// Make me custom!
+				spoutSize = "Custom";
+			}
+			else {
+				spoutSize = spoutSize + "\"";
+			}
 			// Display a warning if the spout size is the same as an existing one else run spoutValid()
 			var calculatedSpoutSizes = [];
 			$('.spout-calculation .spout-size').each(function(){
@@ -935,13 +942,18 @@ $(document).ready(function() {
 	
 	// Find out what the nearest spout is to the calculated spout size
 	function nearestSpout(containerDiameter) {
-		var closest = null, calculatedSpoutSize = Math.round(containerDiameter * 0.72 * 1000) / 1000;
+		var closest = 0;
+		var calculatedSpoutSize = Math.round(containerDiameter * 0.72 * 1000) / 1000;
 		console.log("Cacluated spout size: " + calculatedSpoutSize);
 		$.each(availableSpouts, function() {
-			if (closest == null || Math.abs(this - calculatedSpoutSize) < Math.abs(closest - calculatedSpoutSize)) {
+			console.log("For " + this + ": " + (this - calculatedSpoutSize) + " vs " + (closest - calculatedSpoutSize));
+			if (Math.abs(this - calculatedSpoutSize) < Math.abs(closest - calculatedSpoutSize)) {
 				closest = this;
 			}
 		});
+		if (closest == 0) {
+			return null;
+		}
 		return closest;
 	}
 	
@@ -954,7 +966,7 @@ $(document).ready(function() {
 		}
 		// Slide the fieldset up and display the results and edit button
 		$spoutContainer.slideUp('fast', function() {    
-			$spoutContainer.after('<p class="spout-calculation"><span class="spoutNum">' + spoutTitle + '</span>: <span class="spout-size">' + spoutSize + '</span>"<button type="button" class="btnRemove" value="Remove spout">Remove</button><button type="button" class="btnEdit" value="Edit spout">Edit</button></p>');
+			$spoutContainer.after('<p class="spout-calculation"><span class="spoutNum">' + spoutTitle + '</span>: <span class="spout-size">' + spoutSize + '</span><button type="button" class="btnRemove" value="Remove spout">Remove</button><button type="button" class="btnEdit" value="Edit spout">Edit</button></p>');
 
 			var spout = spoutObjectForSpoutWrapperElement($spoutContainer.closest(".spout-wrapper"));
 			machine.spouts[spout.id] = spout;
@@ -1067,6 +1079,14 @@ $(document).ready(function() {
 			price : spoutPrice
 		};
 
+		if (spoutObject.description == "Custom") {
+			spoutObject.price = customSpoutPrice;
+			spoutObject.description = "Contact Logical Machines for a custom spout";
+		}
+		else {
+			spoutObject.description = spoutObject.description + " inch";
+		}
+
 		return spoutObject;
 	}
 	
@@ -1118,7 +1138,7 @@ $(document).ready(function() {
 			var spout = machine["spouts"][spoutKey];
 
 			resultsHTML += '<tr><th>' + spout.name + '</th>';
-			resultsHTML += '<td>' + spout.description + ' inch</td>';
+			resultsHTML += '<td>' + spout.description + '</td>';
 			resultsHTML += '<td>$' + spout.price + '</td></tr>';
 		}
 
@@ -1249,7 +1269,7 @@ $(document).ready(function() {
 
 			result += spout.name + ' - ';
 			result += "$" + spout.price + "\r";
-			result += spout.description + " inch\r\r";
+			result += spout.description + "\r\r";
 		}
 
 		// Display Accesssories
