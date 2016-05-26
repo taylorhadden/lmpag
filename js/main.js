@@ -1314,6 +1314,9 @@ $(document).ready(function() {
 		return result;
 	}
 
+
+	s4Option.select();
+	calculateTotalPrice();
 });
 
 var isFloating = false;
