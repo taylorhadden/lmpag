@@ -557,6 +557,9 @@ form#logical-machines-quote-generator {
 	background-size: 100%;
 }
 
+#divided-supply-hopper + label .component-image {
+	background-image: url("../img/accessories/divided-supply-hopper.jpg");
+}
 #heavyDutyVibrator + label .component-image {
 	background-image: url("../img/accessories/heavy-duty-vibrator.png");
 }
@@ -580,6 +583,9 @@ form#logical-machines-quote-generator {
 }
 #dischargeChute5 + label .component-image, #dischargeChuteCustom + label .component-image {
 	background-image: url("../img/accessories/discharge-chute.png");
+}
+#baggerHookupAndSupport + label .component-image {
+	background-image: url("../img/accessories/bagger-interface.jpg");
 }
 
 /*
