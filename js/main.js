@@ -1,3 +1,50 @@
+/*
+ * Hovering window elements
+ */
+var targetScrollTop = 162;
+
+var allowFloating = true;
+var isFloating = false;
+
+function checkAllowFloating() {
+	var windowHeight = $(window).height();
+
+	if (windowHeight < $("#pag-navigation").height() || windowHeight < $("#sidebar").height()) {
+		allowFloating = false;
+	}
+	else {
+		allowFloating = true;
+	}
+}
+
+function updateFloating() {
+	if (allowFloating && $(document).scrollTop() > targetScrollTop) {
+		if (!isFloating) {
+			$("#Floaters").addClass("floating");
+			isFloating = true;
+		}
+	}
+	else {
+		if (isFloating) {
+			$("#Floaters").removeClass("floating");
+			isFloating = false;
+		}
+	}
+}
+
+$(window).resize(function() {
+	checkAllowFloating();
+	updateFloating();
+});
+
+$(document).scroll(function() {
+	updateFloating();
+});
+
+
+/*
+ * Setting up the Meat
+ */
 $(document).ready(function() {
 
     var $form = $('#logical-machines-quote-generator');
@@ -6,120 +53,661 @@ $(document).ready(function() {
      * Validation criteria
      */
 
-    	var email = {
-            email: true 
-        };
-        var emailMessages = {
-        	emails : "Please enter a valid email address."
-            };
-        var requiredEmail = {
-            required : true,
-            email: true
-        };
-        var requiredEmailMessages = {
-            required : "Please enter an email address.",
-            emails : "Please enter a valid email address."
-        };
-		var requiredField = {
-			required : true
+	var email = {
+		email: true 
+	};
+	var emailMessages = {
+		emails : "Please enter a valid email address."
+	};
+	var requiredEmail = {
+		required : true,
+		email: true
+	};
+	var requiredEmailMessages = {
+		required : "Please enter an email address.",
+		emails : "Please enter a valid email address."
+	};
+	var requiredField = {
+		required : true
+	};
+	var requiredFieldMessages = {
+		required : "Please fill in your details."
+	};
+	$form.validate({
+		rules : {
+			to : requiredEmail,
+			cc : email,
+			name : requiredField,
+			company : requiredField
+		},
+		messages : {
+			to : requiredEmailMessages,
+			cc : emailMessages,
+			name : requiredFieldMessages,
+			company : requiredFieldMessages
+		}
+	});
+
+	/*
+	* Declare global variables
+	*/
+
+	// Retreive list of spouts available for sale from the HTML
+	var spoutSizes = $('input[name=spout-sizes]').val(),
+	spoutSizes = spoutSizes.replace(/\s+/g,''),
+	availableSpouts = spoutSizes.split(','),
+	// Field containers
+	$fieldContainer = $('.field-container'), 
+	$machineModel = $('#field-name-machine-model'), 
+	$weighHopper = $('#field-name-weigh-hopper'), 
+	$dischargeFunnel = $('#field-name-discharge-funnel'), 
+	$spout = $('#field-name-spout'), 
+	$spout1 = $spout.find('#spout1'), 
+	$spout2 = $spout.find('#spout2'), 
+	$spout3 = $spout.find('#spout3'),
+	// Field labels for extracting data
+	$machineData = $machineModel.find('label'), 
+	$weighHopperData = $weighHopper.find($('label')), 
+	$dischargeFunnelData = $dischargeFunnel.find($('label')), 
+	spoutPrice = parseInt($('input[name=spout-price]').val()),
+	customSpoutPrice = 250;
+	// Machine image variables
+	$machineImage = $('#machine-image'), 
+	$spoutImage = $machineImage.find('.spout'), 
+	$nextMachineImage = $('#machine-image').next('#machine-title'), 
+	$grandTotalContainer = $('#cost-container .amount'), 
+	grandTotal = parseInt($grandTotalContainer.text(), 10),
+	// Controls
+	$btnAdd = $('#btnAdd'), 
+	$btnDel = $('#btnDel'), 
+	$btnEmail = $('#btnEmail'), 
+	$btnSubmit = $('#btnSubmit');
+
+	// Create an instance of the machine object and default assign properties
+	// Note that "priceSupplement" and "descriptionSupplement" are also supported options for a part model
+	var machine = {};
+
+	function resetMachine() {
+		machine = {
+			// The machine does not auto-fill values. The schema is as follows:
+			/*	
+			part-id : {
+				id : the part id,
+				name : the part name
+				type : (optional) the part type
+				description : the description of the part
+				price : the price of the part
+			}
+			*/
+
+			// The expected values are as follows:
+			/*
+			model : the actual model of the machine,
+			supplyHopper : (optional) the supply hopper for the S7
+			weighHopper : the weigh hopper for the machine
+			dischargeFunnel : the discharge funnel, includes the discharge chute
+			*/
+
+			// Chute size and apapters are added as necessary
+			
+			// The "spouts" and "accessories" name is special. It is a list of sub-parts, each using the base part schema
+			spouts : {
+				// This is a dictionary of spouts
+			},
+			accessories : {
+				// This is a dictionary of accessories
+			}
 		};
-		var requiredFieldMessages = {
-			required : "Please fill in your details."
+	}
+
+	resetMachine();
+	
+	
+	/*
+	Logical Object Creation
+
+	There are two types of objects: MachineOptions and ConfigurationSteps
+
+	A MachineOption can have many MachineOptions as subOptions
+	A ConfigurationStep can have many MachineOptions
+
+	A MachineOption belongs to one MachineStep
+	Multiple MachineOptions may reference the same object. Each MachineOption in a hierarchy is its own object.
+
+	When a MachineOption is selected
+		- deselect all options in the step
+		- select current option
+		- we get the ConfigurationStep of the first sub-option
+		- for each option in the step
+			- if the option is not in the sub-option list
+				- we hide the option
+				- we deselect the option
+			- otherwise, we show the option
+		- if no sub-option is visible and selected, we select the first sub-option
+
+	*/
+
+	/*
+	
+	Establishing the Object API
+
+	*/
+
+	// Machine Option
+	function MachineOption(domElement) {
+		this.element = domElement;
+		this.subOptions = [];
+		this.id = domElement.attr("id");
+	}
+	MachineOption.prototype.addSubOption = function() {
+		for (var i = 0; i < arguments.length; i++) {
+			this.subOptions.push(arguments[i]);
+			arguments[i].parent = this;
+		}
+		return this;
+	}
+	MachineOption.prototype.useSubStep = function(step) {
+		step.addOptions(this.subOptions);
+		return this;
+	}
+	MachineOption.prototype.container = function() {
+		return this.element.closest("li");
+	}
+	MachineOption.prototype.isSelected = function() {
+		return this.element.hasClass("active");
+	}
+	MachineOption.prototype.selectedChild = function() {
+		for (var i = 0; i < this.subOptions.length; i++) {
+			if (this.subOptions[i].isSelected()) {
+				return this.subOptions[i];
+			}
+		}
+		return null;
+	}
+	MachineOption.prototype.pathName = function(name) {
+		if (name === undefined) {
+			name = this.element.attr('id');
+		}
+		else {
+			name = this.element.attr('id') + "/" + name;
+		}
+		if (this.parent !== undefined) {
+			name = this.parent.pathName(name);
+		}
+		return name;
+	}
+	MachineOption.prototype.select = function() {
+		console.log("selecting: " + this.pathName());
+
+		for (var i = 0; i < this.step.options.length; i++) {
+			var option = this.step.options[i];
+			if (option.isSelected() && option.element.attr("id") != this.element.attr("id") && option.step.exclusive) {
+				option.deselect();
+			}
+		}
+
+		this.selectElement();
+
+		if (this.onSelects !== undefined) {
+			for (var i = 0; i < this.onSelects.length; i++) {
+				this.onSelects[i].call(this);
+			}
+		}
+
+		if (this.subOptions.length > 0) {
+			var subStep = this.subOptions[0].step;
+
+			subStep.options.forEach(function(option) {
+				option.container().hide();
+			});
+
+			this.subOptions.forEach(function(option) {
+				option.container().show();
+			});
+
+			var selectedChild = this.selectedChild();
+			if (selectedChild === null) {
+				this.subOptions[0].select();
+			}
+			else {
+				selectedChild.select();
+			}
+		}
+
+		for (var i = 0; i < accessoryStep.options.length; i++) {
+			accessoryStep.options[i].evaluateRelevancy();
+		}
+	}
+	// This is pulled out to make mucking with the odd sections easier
+	MachineOption.prototype.selectElement = function() {
+		this.element.addClass('active');
+		this.element.prop("checked", true);
+	}
+	MachineOption.prototype.onSelect = function(method) {
+		if (this.onSelects === undefined) {
+			this.onSelects = [];
+		}
+		this.onSelects.push(method);
+		return this;
+	}
+	MachineOption.prototype.deselect = function() {
+		console.log("Deselecting " + this.pathName());
+		this.deselectElement();
+		if (this.onDeselects !== undefined) {
+			for (var i = 0; i < this.onDeselects.length; i++) {
+				this.onDeselects[i].call(this);
+			}
+		}
+	}
+	// This is pulled out to make mucking with the odd sections easier
+	MachineOption.prototype.deselectElement = function() {
+		this.element.removeClass('active');
+		this.element.prop('checked', false);
+	}
+	MachineOption.prototype.onDeselect = function(method) {
+		if (this.onDeselects === undefined) {
+			this.onDeselects = [];
+		}
+		this.onDeselects.push(method);
+		return this;
+	}
+
+	
+	// Configuration Steps
+	function ConfigurationStep(domElement) {
+		this.element = domElement;
+		this.options = [];
+		this.exclusive = true;
+	}
+	ConfigurationStep.prototype.addOption = function() {
+		this.addOptions(arguments);
+	}
+	ConfigurationStep.prototype.addOptions = function(list) {
+		for (var i = 0; i < list.length; i++) {
+			this.options.push(list[i]);
+			list[i].step = this;
+		}
+	}
+	ConfigurationStep.prototype.hideAll = function() {
+		// This hides all real dom children
+		this.element.find("li").hide();
+	}
+
+	/*
+
+	Creating the logical objects
+
+	*/
+	// Lookup dictionaries
+	var rootOptions = {};
+	var optionLookup = {};
+
+	// Intialize the Steps
+	var modelStep = new ConfigurationStep($("#step-1"));
+	var weighHopperStep = new ConfigurationStep($("#step-2"));
+	var dischargeFunnelStep = new ConfigurationStep($("#step-3"));
+	var insertionStep = new ConfigurationStep($("#step-4"));
+	var accessoryStep = new ConfigurationStep($("#step-5"));
+	accessoryStep.exclusive = false;
+
+
+	// Creation Methods
+	function MO(selector) {
+		var option = new MachineOption($(selector));
+
+		// This lets us look up the option by ID
+		var lookupList = optionLookup[option.id];
+		if (lookupList === undefined) {
+			lookupList = [option];
+			optionLookup[option.id] = lookupList;
+		}
+		else {
+			lookupList.push(option);
+		}
+
+		return option;
+	}
+
+	function partFromElement(element) {
+		var label = element.next("label");
+		var part = {
+			id : element.attr("id"),
+			name : label.find(".name").text(),
+			description : $.trim(label.find('.description').text()),
+			price : label.find('.amount').text()
+		}
+		// Optional values
+		var type = label.find(".type").text();
+		if (type) {
+			part.type = type;
+		}
+		return part;
+	}
+
+	function makeMachine(selector) {
+		var machineOption = MO(selector);
+
+		modelStep.addOption(machineOption);
+
+		// Tack on other furnctions
+		machineOption.onSelect(function() {
+			resetMachine();
+
+			machine.model = partFromElement(this.element);
+
+			// Show/Hide descriptions
+			$machineData.children(':not(h4,.price)').hide();
+			var label = this.element.next("label");
+			label.find('*').show();
+
+			// Assign classes to machine image and change name displayed below
+			$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.model.id);
+			var name = machine.model.name;
+			if (machine.model.type) {
+				name += " " + machine.model.type;
+			}
+			$nextMachineImage.html(name);
+		});
+
+		return machineOption;
+	}
+
+	function makeWeighHopper(selector) {
+		var weighHopper = MO(selector);
+
+		weighHopperStep.addOption(weighHopper);
+
+		weighHopper.onSelect(function() {
+			machine.weighHopper = partFromElement(this.element);
+
+			// Assign classes to machine image
+			$machineImage.removeClass('stwh lrgwh stwh2 lrgwh2 no-wh').addClass(this.element.attr('id'));
+		});
+
+		return weighHopper;
+	}
+
+	function makeDischargeFunnel(selector) {
+		var dischargeFunnel = MO(selector);
+
+		dischargeFunnelStep.addOption(dischargeFunnel);
+
+		dischargeFunnel.onSelect(function() {
+			var label = this.element.next("label");
+
+			machine.dischargeFunnel = partFromElement(this.element);
+
+			// Remove Old
+			$machineImage.removeClass("std-fnl steep-fnl discharge-cht");
+
+			// Apply New
+			$machineImage.addClass(label.attr("class"));
+		});
+
+		return dischargeFunnel;
+	}
+
+	// For Spouts and Chutes
+	function makeInsertionOption(selector) {
+		// This overrides a number of elements of the base Machine Option setup,
+		// as it is structured differently.
+		var inserter = MO(selector);
+
+		insertionStep.addOption(inserter);
+
+		inserter.isSelected = function() {
+			return this.element.css('display') != 'none';
+		}
+		inserter.selectElement = function() {
+			this.element.show();
+		}
+		inserter.deselectElement = function() {
+			this.element.hide();
+		}
+
+		return inserter;
+	}
+
+	function spoutSelector() {
+		var spoutSelector = makeInsertionOption("#SpoutSelector");
+
+		return spoutSelector;
+	}
+
+	function chuteOptions() {
+		var chuteOptions = makeInsertionOption("#ChuteOptions");
+
+		chuteOptions.onDeselect(function() {
+			$("#customChuteUpgrade").prop("checked", false);
+		});
+
+		return chuteOptions;
+	}
+
+	$("#customChuteUpgrade").on("change", function() {
+		var input = $(this);
+		var checked = input.prop("checked");
+
+		var piece = machine["dischargeFunnel"];
+		if (checked) {
+			var price = 100;
+			piece.priceSupplement = price;
+			var description = "Custom Chute Upgrade - $" + price + ".";
+			piece.descriptionSupplement = description;
+		}
+		else {
+			delete piece.priceSupplement;
+			delete piece.descriptionSupplement;
+		}
+
+		calculateTotalPrice();
+	});
+
+	function makeAccessory() {
+		var selector = arguments[0];
+		var accessory = MO(selector);
+		accessoryStep.addOption(accessory);
+
+		accessory.onSelect(function() {
+			var part = partFromElement(this.element);
+			machine.accessories[part.id] = part;
+
+			if (s7Option.isSelected() && this.isPerLane) {
+				this.secondLane().show(200);
+			}
+		});
+		accessory.onDeselect(function() {
+			this.secondLane().hide(200).find("input").prop("checked", false).trigger("change");
+			delete machine.accessories[this.element.attr('id')];
+		});
+
+		accessory.applicableMachines = [];
+		for (var i = 1; i < arguments.length; i++) {
+			if (arguments[i].id !== undefined) {
+				accessory.applicableMachines.push(arguments[i].id);
+			}
+			else {
+				accessory.applicableMachines.push(arguments[i]);
+			}
+		}
+
+		accessory.secondLane = function() {
+			return this.container().find(".secondLane");
+		}
+
+		accessory.evaluateRelevancy = function() {
+			var approved = false;
+			for (var i = 0; i < this.applicableMachines.length; i++) {
+				var list = optionLookup[this.applicableMachines[i]];
+				for (var j = 0; j < list.length; j++) {
+					if (list[j].isSelected()) {
+						approved = true;
+						break;
+					}
+				}
+				if (approved) {
+					break;
+				}
+			}
+
+			if (approved) {
+				this.container().removeClass("hidden");
+				this.prepareForMachine(this);
+			}
+			else {
+				if (this.isSelected()) {
+					accessory.deselect();	
+				}
+				this.container().addClass("hidden");
+			}
+		}
+
+		accessory.prepareForMachine = function(machine) {
+			if (accessory.isPerLane) {
+				var secondLane = this.secondLane();
+
+				if (!s7Option.isSelected()) {
+					secondLane.hide(200).find("input").prop("checked", false).trigger("change");
+				}
+				else if (this.isSelected()) {
+					secondLane.show(200);
+				}
+			}
 		};
-        $form.validate({
-            rules : {
-                to : requiredEmail,
-                cc : email,
-				name : requiredField,
-				company : requiredField
-            },
-            messages : {
-                to : requiredEmailMessages,
-                cc : emailMessages,
-				name : requiredFieldMessages,
-				company : requiredFieldMessages
-            }
-        });
+		accessory.perLane = function() {
+			accessory.isPerLane = true;
+		}
 
-    /*
-    * Declare global variables
-    */
-        
-    // Retreive list of spouts available for sale from the HTML
-		var spoutSizes = $('input[name=spout-sizes]').val(),
-		spoutSizes = spoutSizes.replace(/\s+/g,''),
-		availableSpouts = spoutSizes.split(','),
-    // Field containers
-		$fieldContainer = $('.field-container'), 
-		$machineModel = $('#field-name-machine-model'), 
-		$weighHopper = $('#field-name-weigh-hopper'), 
-		$dischargeFunnel = $('#field-name-discharge-funnel'), 
-		$spout = $('#field-name-spout'), 
-		$spout1 = $spout.find('#spout1'), 
-		$spout2 = $spout.find('#spout2'), 
-		$spout3 = $spout.find('#spout3'),
-    // Field labels for extracting data
-		$machineData = $machineModel.find('label'), 
-		$weighHopperData = $weighHopper.find($('label')), 
-		$dischargeFunnelData = $dischargeFunnel.find($('label')), 
-		spoutPrice = parseInt($('input[name=spout-price]').val()),
-    // Machine image variables
-		$machineImage = $('#machine-image'), 
-		$spoutImage = $machineImage.find('.spout'), 
-		$nextMachineImage = $('#machine-image').next('#machine-title'), 
-		$grandTotalContainer = $('#cost-container .amount'), 
-		grandTotal = parseInt($grandTotalContainer.text(), 10),
-    // Controls
-		$btnAdd = $('#btnAdd'), 
-		$btnDel = $('#btnDel'), 
-		$btnEmail = $('#btnEmail'), 
-		$btnSubmit = $('#btnSubmit');
+		return accessory;
+	}
 
-    // Create an instance of the machine object and default assign properties
-    var machine = {
-        id : $machineData.first().attr('for'),
-        name : $machineData.first().find('.name').text(),
-        type : $machineData.first().find('.type').text(),
-        description : $.trim($machineData.first().find('.description').text()),//.trim(),
-        price : $machineData.first().find('.amount').text(),
-        weighHopper : {
-            id : $weighHopperData.first().attr('for'),
-            name : $weighHopperData.first().find('.name').text(),
-            description : $.trim($weighHopperData.first().find('.description').text()),//.trim(),
-            price : $weighHopperData.first().find('.amount').text()
-        },
-        dischargeFunnel : {
-            id : $dischargeFunnelData.first().attr('for'),
-            name : $dischargeFunnelData.first().find('.name').text(),
-            description : $.trim($dischargeFunnelData.first().find('.description').text()),//.trim(),
-            price : $dischargeFunnelData.first().find('.amount').text()
-        }
-    };
-	 
-    /*
-    * Document ready JS
-    */
+	$(".secondLane input").on('change', function() {
+		var input = $(this);
 
-    // Hide fallback content, add and delete button
-    $('#field-name-discharge-funnel .large, .field-name-dimensions li, #step-2, #step-3, #step-4, #step-5, #hidden-accessories-page, .container-shape-images > *, #btnAdd, #btnDel, .calculate, .spout-calculation, .field-spout .instructions p, #emailQuote, .field-spout .warning, #sending').hide();
-    $('.field-spout .instructions p.spout-selection').show();
-    // Remove fallback form elements
-    $('.fallback-field-spout,.fallback-discharge-funnel,input[name=nojs]').remove();
-    $btnSubmit.val('Send Email');
-    // .bottom class puts a negative z-index on the hidden
-    // accessories page so that it loads underneath the rest of
-    // the content. This removes that class on load.
-    $('.bottom').removeClass('bottom');
-    // Hide all but the first machine model description
+		var parentId = input.closest('li').children('input').attr('id');
+
+		var accessory = machine['accessories'][parentId];
+		if (accessory !== undefined) {
+			if (input.prop("checked")) {
+				accessory.descriptionSupplement = "Includes second lane ($" + accessory.price + ").";
+				accessory.priceSupplement = accessory.price;
+			}
+			else {
+				delete accessory.descriptionSupplement;
+				delete accessory.priceSupplement;
+			}
+		}
+
+		calculateTotalPrice();
+	});
+
+	// Initialize the S4 Model Heiarachy
+	var s4Option = makeMachine("#s4").addSubOption(
+			makeWeighHopper("#stwh").addSubOption(
+				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
+			),
+			makeWeighHopper("#lrgwh").addSubOption(
+				makeDischargeFunnel("#large-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#large-steep-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#discharge-cht").addSubOption(chuteOptions())
+			)
+		);
+
+	var s5Option = makeMachine("#s5").addSubOption(
+			makeWeighHopper("#no-wh").addSubOption(
+				makeDischargeFunnel("#small-std-fnl").addSubOption(spoutSelector()),
+				makeDischargeFunnel("#small-steep-fnl").addSubOption(spoutSelector())
+			)
+		);
+
+	var s6Option = makeMachine("#s6").addSubOption(
+			makeWeighHopper("#stwh").addSubOption(
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(chuteOptions())
+			),
+			makeWeighHopper("#lrgwh").addSubOption(
+				makeDischargeFunnel("#discharge-cht-free").addSubOption(chuteOptions())
+			)
+		).onSelect(function() {
+			$(".standardDischarge").hide();
+			$(".s6Discharge").show();
+		}).onDeselect(function() {
+			$(".standardDischarge").show();
+			$(".s6Discharge").hide();
+		});
+
+	var s7Option = makeMachine("#s7").addSubOption(
+			makeWeighHopper("#stwh2").addSubOption(
+				makeDischargeFunnel("#small-dl-fnl").addSubOption(spoutSelector())
+			),
+			makeWeighHopper("#lrgwh2").addSubOption(
+				makeDischargeFunnel("#large-dl-fnl").addSubOption(spoutSelector())
+			)
+		);
+
+	// Create accessories along with the machines they are applicable to
+	// NOTE: the "perLane()" function is created in makeAccessory, and adds automatic support for multi-lane functionality on the S-7
+	// A little brittle, but it works and is easily accessible.
+	makeAccessory("#divided-supply-hopper", s7Option);
+	makeAccessory("#heavyDutyVibrator", s4Option, s6Option, s7Option).perLane();
+	makeAccessory("#dribbleFeedGate", s4Option, s5Option, s6Option);
+	makeAccessory("#dualLaneDribbleFeedGate", s7Option);
+	makeAccessory("#supplyHopperVibratorAndControls", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#baggerHookupAndSupport", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#a240V50hzPackage", s4Option, s5Option, s6Option);
+	makeAccessory("#tableAdjustable", s4Option, s6Option);
+	makeAccessory("#j1Jogger", s4Option, s5Option, s6Option, s7Option);
+	makeAccessory("#adjustableSupplyHopperBaffle", s4Option, s5Option, s6Option, s7Option).perLane();
+
+	// Additional parts
+	makeAccessory("#smallStandardDischargeFunnel", "stwh", "stwh2", s5Option);
+	makeAccessory("#smallSteepDischargeFunnel", "stwh", "stwh2", s5Option);
+	makeAccessory("#largeStandardDischargeFunnel", "lrgwh", "lrgwh2");
+	makeAccessory("#largeSteepDischargeFunnel", "lrgwh", "lrgwh2");
+	makeAccessory("#dischargeChute5", s4Option, s6Option, s7Option);
+	makeAccessory("#dischargeChuteCustom", s4Option, s6Option, s7Option);
+
+	// Set up the accessory tabs
+	$("#step-5 .tabs .tab").click(function() {
+		var tab = $(this);
+		var targetClass = tab.attr("data");
+
+		tab.parent().children().removeClass("selected");
+		tab.addClass("selected");
+
+		$("#field-name-accessories").removeClass("accessory").removeClass("additional").addClass(targetClass);
+	});
+
+	weighHopperStep.hideAll();
+	dischargeFunnelStep.hideAll();
+	console.log(optionLookup);
+	// Prepare
+
+	/*
+	* Document ready JS
+	*/
+
+	// Hide fallback content, add and delete button
+	$('#field-name-discharge-funnel .large, .field-name-dimensions li, #step-2, #step-3, #step-4, #step-5, #step-6, #hidden-accessories-page, .container-shape-images > *, #btnAdd, #btnDel, .calculate, .spout-calculation, .field-spout .instructions p, #emailQuote, .field-spout .warning, #sending').hide();
+	$('.field-spout .instructions p.spout-selection').show();
+	// Remove fallback form elements
+	$('.fallback-field-spout,.fallback-discharge-funnel,input[name=nojs]').remove();
+	$btnSubmit.val('Send Email');
+	// .bottom class puts a negative z-index on the hidden
+	// accessories page so that it loads underneath the rest of
+	// the content. This removes that class on load.
+	$('.bottom').removeClass('bottom');
+	// Hide all but the first machine model description
 	$machineData.children(':not(h4,.price)').hide();
-    // Remove .hidden class from JS ready content
-    $('#field-name-discharge-funnel li, #btnAdd, #btnDel, #btnFront, #btnSide, .field-spout, .step-submit, #sidebar, #btnPrint, #btnEmail,#btnClose, #btnContinue, .quote-summary, #hidden-accessories-page, #machine-title, #quote-summary, #sending').removeClass('hidden');
-    // Check the fallback discharge funnel field
-    $dischargeFunnel.find($('.small #small-std-fnl')).prop('checked', true).addClass('active');
-    // Remove the no-sidebar class for fallback
-    $('#main-content').removeClass('no-sidebar');
-    
-    /* 
+	// Remove .hidden class from JS ready content
+	$('#field-name-discharge-funnel li, #btnAdd, #btnDel, #btnFront, #btnSide, .field-spout, .step-submit, #sidebar, #btnPrint, #btnEmail,#btnClose, #btnContinue, .quote-summary, #hidden-accessories-page, #machine-title, #quote-summary, #sending').removeClass('hidden');
+	// Check the fallback discharge funnel field
+	$dischargeFunnel.find($('.small #small-std-fnl')).prop('checked', true).addClass('active');
+	// Remove the no-sidebar class for fallback
+	$('#main-content').removeClass('no-sidebar');
+
+	/* 
        Add a waypoint to the sidebar
        var $mi_container = $('#sidebar');
        Set the .sticky class when waypoint is reached
@@ -129,457 +717,244 @@ $(document).ready(function() {
        });
     */
 
-    // Create a div on each page for the pager button
-    $('.step-container').each(function() {
-        containerID = $(this).attr('id');
-        $('<div/>', {
-            id : containerID + '-pager',
-            "class" : 'step-pager'
-        }).appendTo($(this));
+	/*
+	* General functions
+	*/
 
-    })
-    // Create pager buttons and add them to the created div
-    $('.step-pager').not(':first').append($('<a/>', {
-        "class" : 'prev button',
-		"href" : '#',
-    }).text('Previous step'));
-    $('.step-pager').not(':last').append($('<a/>', {
-        "class" : 'next button',
-		"href" : '#',
-    }).text('Next step'));
+	// Capitalise first letter of a variable
+	String.prototype.capitalise = function() {
+		return this.charAt(0).toUpperCase() + this.slice(1);
+	}
 
-    /*
-    * General functions
-    */
+	// Calculate the grand total frome the machine object
+	function calculateTotalPrice($fieldID) {
+		var price = 0;
 
-    // Capitalise first letter of a variable
-    String.prototype.capitalise = function() {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    }
-
-// Calculate the grand total - passed a particular input and called when that input has been selected
-    function calculateTotal($fieldID) {
-        var price = parseInt($fieldID.next('label').find(".amount").text(), 10), 
-			siblingAmounts = 0, 
-			radioName = $fieldID.attr("name");
-        if (!isNaN(price)) { // If price is a number
-			// Get active inputs in same group excluding clicked:
-				var $siblingInputs = $("input[name='" + radioName + "'].active").not($fieldID);
-			// Add price of each to siblingAmounts:
-				$siblingInputs.each(function() {
-					siblingAmounts += parseInt($(this).next("label").find(".amount").text(), 10);
-				});
-			// Toggle active status for selected input and remove from all other inputs:
-				$fieldID.toggleClass("active");
-				$siblingInputs.removeClass("active");
-			// Test whether clicked input is 'active' and proceed accordingly
-				if ($fieldID.hasClass("active")) {
-					// subtract sibling amounts from grand total and add price
-						grandTotal -= siblingAmounts;
-						grandTotal += price;
-				} else {
-					// subtract price from grand total
-						grandTotal -= price;
+		for (var key in machine) {
+			if (key !== "spouts" && key !== "accessories") {
+				price += priceForPart(machine[key]);
+			}
+			else {
+				for (var id in machine[key]) {
+					price += priceForPart(machine[key][id]);
 				}
-			// Insert grand total amount into box below machine image
-				$grandTotalContainer.html(grandTotal);
-        }
-    }    
+			}
+		}
 
-    // Change the machine image between front and side view
-    $('#machine-image-container').on('click', 'button', function() {
-        var btnDirection = $(this).attr('id');
-        if(!$(this).hasClass('active')) {
-            $('#machine-image-container button').toggleClass('active');
-        }
-        if (btnDirection === 'btnFront') {
-            $machineImage.addClass('front').removeClass('side');
-        } else {
-            $machineImage.addClass('side').removeClass('front');
-        }
-    });
+		$grandTotalContainer.html(price);
+	}
+
+	function priceForPart(part) {
+		var price = parseFloat(part.price);
+		if (part.priceSupplement) {
+			price += parseFloat(part.priceSupplement);
+		}
+		return price;
+	}
+
+	// Change the machine image between front and side view
+	$('#machine-image-container').on('click', 'button', function() {
+		var btnDirection = $(this).attr('id');
+		if(!$(this).hasClass('active')) {
+			$('#machine-image-container button').toggleClass('active');
+		}
+		if (btnDirection === 'btnFront') {
+			$machineImage.addClass('front').removeClass('side');
+		}
+		else {
+			$machineImage.addClass('side').removeClass('front');
+		}
+	});
+
     /*
      *  Navigation
      */
 
-    $('.step-pager .button').click(function() { // Action for 'prev' & 'next' buttons
-    	changeCostContainerText()
-        var $stepContainer = $(this).closest('.step-container'), 
-			nextStepContainerID = $stepContainer.next().attr('id'), 
-			prevStepContainerID = $stepContainer.prev().attr('id');
-		// Text for price value on various options set to name of machine selected
-		if ($('#s4').hasClass('active')) {
-		$('.machine-name').text('S-4');
-		}
-		else if ($('#s5').hasClass('active')) {
-			$('.machine-name').text('S-5');
-		}
-		else if ($('#s6').hasClass('active')) {
-			$('.machine-name').text('S-6');
-		}
-		else if ($('#s7').hasClass('active')) {
-			$('.machine-name').text('S-7');
-		}
-    	// Remove active class from the current page 
-        $('#pag-navigation a').removeClass('active');
-        // Move the app forward if the clicked button is next or back if is previous and add the active class
-        if ($(this).is('.next')) {
-            $stepContainer.hide().next().show();
-            $('#pag-navigation a[href*=' + nextStepContainerID + ']').addClass('active');
-        } else {
-            $stepContainer.hide().prev().show();
-            $('#pag-navigation a[href*=' + prevStepContainerID + ']').addClass('active');
-        }
-        // Execute showvalues() to display results if moving to the summary page
-        if ($(this).is('#step-4-pager .button.next'))
-			showValues()
-    	$('#thankYouMessage').remove();
-    	// Reload the page to reset the form if moving to page 1
-        if ($(this).is('#step-2-pager .button.prev'))
-            location.reload();
-    	// Reload the page to reset the form if moving to page 1
-        if ($(this).is('#step-3-pager .button.prev')) {
-			defaultHopperS4();
-		}
-		// Select the correct Weigh Hopper(s) for each machine
-		if ($(this).is('#step-1-pager .button.next')) {
-			defaultHopperS4();
-			$('#smwh').parent('li').hide();
-			$('#stwh').parent('li').hide();
-			$('#lrgwh').parent('li').hide();
-			$('#lrgwh2').parent('li').hide();
-			$('.wh5').hide();
-			$('.fu6').hide();
-		}
-		if ($(this).is('#step-1-pager .button.next')&& $('#s4').hasClass('active')) {
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s5').hasClass('active')) {
-			$('.wh5').show();
-			$('.not-wh5').hide();
-			defaultHopperS5();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultHopperS6();
-			$('#smwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if ($(this).is('#step-1-pager .button.next') && $('#s7').hasClass('active')) {
-			defaultHopperS4();
-			$('#stwh').parent('li').show();
-			$('#lrgwh2').parent('li').show();
-		}
-		if ($(this).is('#step-2-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		if ($(this).is('#step-2-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		if ($(this).is('#step-4-pager .button.next') && $('#s6').hasClass('active')) {
-			defaultSpoutS6();
-		}
-    });
+    // This causes no state change, only view change.
+    // It is called by clicking on the left-hand tabs and
+    // By the previous/next buttons on each page.
+	function switchToStep(stepID) {
+		changeCostContainerText();
 
-    $('#pag-navigation a').click(function() { // Action for left-hand step tabs
-    	changeCostContainerText();
-        var stepValue = $(this).attr('href');
-		// Text for price value on various options set to name of machine selected
-		if ($('#s4').hasClass('active')) {
-		$('.machine-name').text('S-4');
-		}
-		else if ($('#s5').hasClass('active')) {
-			$('.machine-name').text('S-5');
-		}
-		else if ($('#s6').hasClass('active')) {
-			$('.machine-name').text('S-6');
-		}
-		else if ($('#s7').hasClass('active')) {
-			$('.machine-name').text('S-7');
-		}
-        // Remove active class from current page and add to selected page
-        $('#pag-navigation a').removeClass('active');
-        $(this).addClass('active');
-        // Hide the current page and show the selected page
-        $('.step-container').hide();
-        $(stepValue).show();
-        // Execute showvalues() to display results if moving to the summary page
-        if (stepValue === "#step-5")
-            showValues();
-    	$('#thankYouMessage').remove();
-    	// Reload the page to reset the form if moving to page 1
-        if (stepValue === "#step-1")
-            location.reload();
-    	// Reset the hopper to S4 default if moving to page 2
-        if (stepValue === "#step-2") {
-			defaultHopperS4();
-			$('#smwh').parent('li').hide();
-			$('#stwh').parent('li').hide();
-			$('#lrgwh').parent('li').hide();
-			$('.wh5').hide();
-			$('.fu6').hide();
-			$('.s6-sp').hide();
-		}
-		// Select the correct Weigh Hopper(s) for each machine
-		if (stepValue === "#step-2" && $('#s4').hasClass('active')) {
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-2" && $('#s5').hasClass('active')) {
-			defaultHopperS5();
-			$('.wh5').show();
-			$('.not-wh5').hide();
-		}
-		if (stepValue === "#step-2" && $('#s6').hasClass('active')) {
-			defaultHopperS6();
-			$('#smwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-2" && $('#s7').hasClass('active')) {
-			defaultHopperS4();
-			$('#stwh').parent('li').show();
-			$('#lrgwh').parent('li').show();
-		}
-		if (stepValue === "#step-3" && $('#s6').hasClass('active')) {
-			defaultFunnelS6();
-		}
-		// Don't show Spouts for S6 
-		if (stepValue === "#step-4" && $('#s6').hasClass('active')) {
-			defaultSpoutS6();
+		var stepContainer = $("#" + stepID);
+		// Remove active state from old step tab
+		$('#pag-navigation a').removeClass('active');
+		// Set active state for current step tab
+		$('#pag-navigation a[data=' + stepID + ']').addClass('active');
+
+		$('.step-container').hide();
+		stepContainer.show();
+
+		if (stepID === "step-6") {
+			showValues();
 		}
 
+		$('#thankYouMessage').remove();
+
+		// Hide the appropriate pagers
+		if (stepContainer.is(":first-child")) {
+			$(".step-pager .prev").hide();
+		}
+		else {
+			$(".step-pager .prev").show();
+		}
+
+		// Hide the appropriate pagers
+		if (stepContainer.is(":last-child")) {
+			$(".step-pager .next").hide();
+		}
+		else {
+			$(".step-pager .next").show();
+		}
+
+		var doc = $(document);
+		if (doc.scrollTop() > targetScrollTop) {
+			doc.scrollTop(targetScrollTop);
+		}
+	}
+
+	// Action for 'prev' & 'next' buttons
+	$('.step-pager .button').click(function() {
+		console.log("Previous / Next Button Clicked");
+
+		// Determine the next step ID
+		var $stepContainer = $('.step-container:visible');// $(this).closest('.step-container');
 		
-		
-    });
-	
-	function defaultHopperS4 () {
-		$('#stwh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultHopperS5 () {
-		$('#no-wh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultHopperS6 () {
-		$('#smwh').prop('checked', true).trigger('change');
-	}
-	
-	function defaultFunnelS6 () {
-		$('#discharge-cht').prop('checked', true).trigger('change');
-		$('.fu6').show();
-	}
-	function defaultSpoutS6 () {
-		$('.not-s6').hide();
-			$('#field-name-spout').hide();
-			$('.s6-sp').show();
-	}
-    
-    // Display Base Price as title on the front page and Price as Configured on every other page
-    function changeCostContainerText() {
-    	var costContainerText = $('#cost-container .title').text(); 
-    	if (costContainerText !== 'Price as Configured:') {
-    		$('#cost-container .title').text('Price as Configured:');
-    	} 
-    }
-	
+		// We need to handle skipping steps with invisible tabs
+		var switchingToID;
 
-    /*
-     * Pages 1 - 3 selection actions
-     */
+		var iteratorName; // Checkout this hack!
+		if ($(this).is('.next')) {
+			iteratorName = "next";
+		}
+		else {
+			iteratorName = "prev";
+		}
 
-    $fieldContainer.on('change', 'input[type=radio]', function(e) { // Action when choosing options - registers & indicates selection, determines knock-on choices, updates image, updates cost.
-		
-		var $fieldID = $(this), 
-			fieldContainerID = $(this).closest($fieldContainer).attr('id'), // Id of container element - type of option selected
-			objectName = $fieldID.attr('name'), // Name of input - Appears unused - equates to fieldContainerID
-			objectVal = $fieldID.attr('id'), // ID - precise name of item selected
-			inputVal = $fieldID.closest('ul.field-type-radio').find('.active').attr('id'), // Id of currently active option
-			$fieldLabel = $(this).next('label'); // Label that corresponds to selected input
-        // Check if the clicked field is the same as the selected field
-        if (inputVal == objectVal) {
-			if (inputVal == "stwh" && machine.dischargeFunnel.id !== "standard-std-fnl") {
-				// Select default radio input for selected discharge funnel:
-					var $defaultFunnel = $('#small-std-fnl')
-					$defaultFunnel.prop('checked', true);
-				// Recalculate total for default discharge funnel:	
-					calculateTotal($defaultFunnel);
-				// Get data for discharge funnel:
-					$defaultFunnelData = $defaultFunnel.siblings('label')
-				// Assign properties to the machine.dischargeFunnel object
-					machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-					machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-					machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-					machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-				// Assign classes to machine image
-					$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass('stwh std-fnl');
+		// We briefly flirted with the idea of steps that would sometimes be hidden.
+		// I'm leaving the functionality in if you need it in the future.
+		while(true) {
+			// This bit lets us do this without having to ask "is next" every time
+			$stepContainer = $stepContainer[iteratorName]();
+			switchingToID = $stepContainer.attr('id');
+
+			// Check to see that the tab for the step is visible
+			if ($("#pag-navigation a[data='" + switchingToID + "']:visible").length > 0) {
+				break;
 			}
-		    e.preventDefault();
-        } else {
-        // If it is different execute the following actions according to which field was clicked
-            switch (fieldContainerID) {
-                case 'field-name-machine-model':
-                    // Assign properties to the machine object
-						machine.id = $fieldID.attr('id');
-						machine.name = $fieldLabel.find('.name').text();
-						machine.type = $fieldLabel.find('.type').text();
-						machine.description = $.trim($fieldLabel.find('.description').text())//.trim();
-						machine.price = $fieldLabel.find('.amount').text();
-                    // Show/Hide descriptions - once more than one machine is available this will hide all descriptions except for that of selected machine
-						$machineData.children(':not(h4,.price)').hide();
-						$fieldLabel.find('*').show();
-                    // Assign classes to machine image and change name displayed below
-						$machineImage.removeClass('s4 s5 s6 s7').addClass(machine.id);
-						$nextMachineImage.html(machine.name + " " + machine.type);
-					// Check machine type and show relevant weigh hoppers
-						var machineType = $fieldID.closest('li').attr('class');
-						$weighHopper.find($('li')).hide().filter($('.' + machineType)).show();
-                    break;
-                case 'field-name-weigh-hopper':
-                    // Assign properties to the machine.weighHopper object
-						machine.weighHopper.id = $fieldID.attr('id');
-						machine.weighHopper.name = $fieldLabel.find('.name').text();
-						machine.weighHopper.description = $.trim($fieldLabel.find('.description').text())//.trim();
-						machine.weighHopper.price = $fieldLabel.find('.amount').text();
-                    // Assign classes to machine image
-						$machineImage.removeClass('stwh lrgwh std-fnl steep-fnl').addClass(objectVal + ' std-fnl');
-					// If the S-6 isn't selected
-					if ($('#s4').hasClass('active') || $('#s5').hasClass('active')) {
-						// Show/Hide discharge funnels and reset checked properties:
-							// Get name of required category of discharge funnels
-								var componentSize = $fieldID.closest('li').attr('class');
-							// Hide all list items then show those that are in the required category:
-								$dischargeFunnel.find($('li')).hide().filter($('.' + componentSize)).show();
-							// Uncheck selection of any discharge funnel and de-activate selection flag:
-								$dischargeFunnel.find($('input')).prop('checked', false);
-							// Check which weigh hopper is being selected:
-							if (machine.weighHopper.id == 'stwh') {
-								// Select default radio input for selected discharge funnel:
-									var $defaultFunnel = $('#small-std-fnl')
-									$defaultFunnel.prop('checked', true);
-								// Recalculate total for default discharge funnel:	
-									calculateTotal($defaultFunnel);
-								// Get data for discharge funnel:
-									$defaultFunnelData = $defaultFunnel.siblings('label')
-								// Assign properties to the machine.dischargeFunnel object
-									machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-									machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-									machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-									machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-							}
-							else if (machine.weighHopper.id == 'no-wh') {
-								// Select default radio input for selected discharge funnel:
-									var $defaultFunnel = $('#small-std-fnl')
-									$defaultFunnel.prop('checked', true);
-								// Recalculate total for default discharge funnel:	
-									calculateTotal($defaultFunnel);
-								// Get data for discharge funnel:
-									$defaultFunnelData = $defaultFunnel.siblings('label')
-								// Assign properties to the machine.dischargeFunnel object
-									machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-									machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-									machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-									machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-							}
-							// Automatically selects Large Discharge funnel and adds the cost
-							else if (machine.weighHopper.id == 'lrgwh') {
-								// Select default radio input for selected discharge funnel:
-									var $defaultFunnel = $('#large-std-fnl')
-									$defaultFunnel.prop('checked', true);
-								// Recalculate total for default discharge funnel:	
-									calculateTotal($defaultFunnel);
-								// Get data for discharge funnel:
-									$defaultFunnelData = $defaultFunnel.siblings('label')
-								// Assign properties to the machine.dischargeFunnel object
-									machine.dischargeFunnel.id = $defaultFunnel.attr('id');
-									machine.dischargeFunnel.name = $defaultFunnelData.find('.name').text();
-									machine.dischargeFunnel.description = $.trim($defaultFunnelData.find('.description').text())//.trim();
-									machine.dischargeFunnel.price = $defaultFunnelData.find('.amount').text();
-							} 						
-							else { 
-								calculateTotal($('#field-name-weigh-hopper input.active'))
-							}
-						}
-						// If the S-7 is selected
-						else if ($('#s7').hasClass('active')) {
-							$('#small-steep-fnl').parent('.small').hide();
-							$('#field-name-discharge-funnel .large').hide();
-							$('#field-name-discharge-funnel .discharge-cht').hide();
-							var $defaultFunnel = $('#small-std-fnl')
-							$defaultFunnel.prop('checked', true);
-							calculateTotal($('#field-name-weigh-hopper input.active'))
-						}
-						// If the S-6 is selected
-						else {
-							$('#field-name-discharge-funnel .small').hide();
-							var $defaultFunnel = $('#discharge-cht')
-							$defaultFunnel.prop('checked', true);
-							calculateTotal($('#field-name-weigh-hopper input.active'))
-						}
-					break;
-                case 'field-name-discharge-funnel':
-                    // Assign properties to the machine.dischargeFunnel object
-						machine.dischargeFunnel.id = $fieldID.attr('id');
-						machine.dischargeFunnel.name = $fieldLabel.find('.name').text();
-						machine.dischargeFunnel.description = $.trim($fieldLabel.find('.description').text())//.trim();
-						machine.dischargeFunnel.price = $fieldLabel.find('.amount').text();
-                    // Assign classes to machine image
-					if (machine.weighHopper.id == 'lrgwh') {
-						if ( machine.dischargeFunnel.id == 'large-std-fnl') {
-							$machineImage.removeClass('std-fnl steep-fnl').addClass('std-fnl');
-						} else {
-							$machineImage.removeClass('std-fnl steep-fnl').addClass('steep-fnl');
-						}
-					}
-					 else {
-						$machineImage.toggleClass('std-fnl steep-fnl');
-					}
+			// Otherwise we keep going
+		}
 
-                    break;
-                case 'field-name-spout':
-                    var fieldVal = $fieldID.val(), 
-					$spoutContainer = $fieldID.closest('fieldset');
-                    // Show calculate button
-						$spoutContainer.find('.calculate').show();
-                    // Toggle active class
-						$spoutContainer.find('input.active').removeClass('active');
-						$fieldID.addClass('active');
-                    // Hide all the dimensions fields and images
-						$spoutContainer.find('.field-name-dimensions li').hide();
-						$spoutContainer.find('.container-shape-images > *').hide();
-						$spoutContainer.find('p').hide();
-                    // Show the appropriate instructions and fields for the spout type choice
-						$spoutContainer.find('.instructions .' + fieldVal).show();
-						$spoutContainer.find('.field-name-dimensions .' + fieldVal).show();
-						$spoutContainer.find('.container-shape-images .' + fieldVal).show();
-                    break;
-            }
-            
-			calculateTotal($fieldID);
-        }
+		// Apply the switch to the ID
+		switchToStep(switchingToID);
+	});
 
-    });
+	// Action for left-hand step tabs
+	$('#pag-navigation a').click(function() {
+		var stepID = $(this).attr('data');
+		switchToStep(stepID);
+	});
+
+
+	// Display Base Price as title on the front page and Price as Configured on every other page
+	function changeCostContainerText() {
+		var costContainerText = $('#cost-container .title').text(); 
+		if (costContainerText !== 'Price as Configured:') {
+			$('#cost-container .title').text('Price as Configured:');
+		}
+	}
 
     /*
-     *  'Select spouts' page
+     * Pages 1 - 4 selection actions
      */
+
+	$fieldContainer.on('change', 'input[type=radio], li > input[type=checkbox]', function(e) {
+		// Get the machine option that has a selected parent that has this ID
+		var input = $(this);
+
+		fieldContainerID = input.closest($fieldContainer).attr('id')
+
+		// This is the old spout code and I see no reason to mess with it
+		if (fieldContainerID === 'field-name-spout') {
+			var fieldVal = input.val(), 
+			$spoutContainer = input.closest('fieldset');
+
+			// Show calculate button
+			$spoutContainer.find('.calculate').show();
+
+			// Toggle active class
+			$spoutContainer.find('input.active').removeClass('active');
+			input.addClass('active');
+
+			// Hide all the dimensions fields and images
+			$spoutContainer.find('.field-name-dimensions li').hide();
+			$spoutContainer.find('.container-shape-images > *').hide();
+			$spoutContainer.find('p').hide();
+
+			// Show the appropriate instructions and fields for the spout type choice
+			$spoutContainer.find('.instructions .' + fieldVal).show();
+			$spoutContainer.find('.field-name-dimensions .' + fieldVal).show();
+			$spoutContainer.find('.container-shape-images .' + fieldVal).show();
+		}
+		else {
+			var id = this.id;
+			console.log("Clicked on: " + id);
+
+			var list = optionLookup[id];
+			var clickedOption = null;
+			for (var i = 0; i < list.length; i++) {
+				if (list[i].parent === undefined || list[i].parent.isSelected()) {
+					clickedOption = list[i];
+					break;
+				}
+			}
+
+			if (clickedOption != null) {
+				if (!clickedOption.isSelected()) {
+					clickedOption.select();
+				}
+				else if (clickedOption.step === accessoryStep) {
+					clickedOption.deselect();
+				}
+			}
+			else {
+				console.log("Did not find option");
+			}
+		}
+		calculateTotalPrice();
+	});
+
+	/*
+	 *  'Select spouts' page
+	 */
 	
 	// Calculate the size of the spout based on the container
 	$spout.on('click', '.calculate', function() {
+		calculateSpout($(this).closest('fieldset'));
+	});
+
+	$spout.find(".required.number").keypress(function(e) {
+		if (e.which == 13) {
+			calculateSpout($(this).closest('fieldset'));
+			return false;
+		}
+	});
+
+	function calculateSpout($spoutContainer) {
 		var num = $('fieldset.field-spout').length, 
-			$spoutContainer = $(this).closest('fieldset'), 
-			spoutTitle = $.trim($spoutContainer.find('legend').text())//.trim(),
+		spoutTitle = $.trim($spoutContainer.find('legend').text()),
 		// The selected spout type
-			$spoutSelected = $spoutContainer.find('.field-name-spout-type input:checked'), 
-			spoutSelectedVal = $spoutSelected.val(), 
-			spoutSelectedTitle = $spoutSelected.next('label').find('h4').text(),
+		$spoutSelected = $spoutContainer.find('.field-name-spout-type input:checked'), 
+		spoutSelectedVal = $spoutSelected.val(), 
+		spoutSelectedTitle = $spoutSelected.next('label').find('h4').text(),
 		// Spout dimension values
-			dimensionFieldWidth = parseFloat($spoutContainer.find('.width input').val()), 
-			dimensionFieldD1 = parseFloat($spoutContainer.find('.d1 input').val()), 
-			dimensionFieldD2 = parseFloat($spoutContainer.find('.d2 input').val()), 
-			dimensionFieldDiameter = $spoutContainer.find('.diameter input').val(), 
-			spoutSize = null,
+		dimensionFieldWidth = parseFloat($spoutContainer.find('.width input').val()), 
+		dimensionFieldD1 = parseFloat($spoutContainer.find('.d1 input').val()), 
+		dimensionFieldD2 = parseFloat($spoutContainer.find('.d2 input').val()), 
+		dimensionFieldDiameter = $spoutContainer.find('.diameter input').val(), 
+		spoutSize = null,
 		// Visisble dimension fields
-			$dimensionFieldsVisible = $spoutContainer.find('.field-type-textfield input').filter(":visible");
+		$dimensionFieldsVisible = $spoutContainer.find('.field-type-textfield input').filter(":visible");
 		// If the fields are valid, calculate the spout size
 		if ($dimensionFieldsVisible.valid()) {
 			switch (spoutSelectedVal) {
@@ -591,38 +966,51 @@ $(document).ready(function() {
 					break;
 				case 'can-jar':
 					$.each(availableSpouts, function() {
-						if (spoutSize == null || dimensionFieldDiameter - this >= 0.125) {
+						if (dimensionFieldDiameter - this >= 0.125) {
 							spoutSize = this;
 						}
 					});
 					break;
 			}
-			spoutSize = parseFloat(spoutSize);
-		   // Display a warning if the spout size is the same as an existing one else run spoutValid()
-		   var calculatedSpoutSizes = [];
-		   $('.spout-calculation .spout-size').each(function(){
+			if (spoutSize == null) {
+				// Make me custom!
+				spoutSize = "Custom";
+			}
+			else {
+				spoutSize = spoutSize + "\"";
+			}
+			// Display a warning if the spout size is the same as an existing one else run spoutValid()
+			var calculatedSpoutSizes = [];
+			$('.spout-calculation .spout-size').each(function(){
 				calculatedSpoutSizes.push(parseFloat($.trim($(this).text())));
-		   });
-				if (calculatedSpoutSizes.length !== 0 && $.inArray(spoutSize, calculatedSpoutSizes) !== -1) {
-					$spoutContainer.find('.warning').show().find('.calculatedSpoutSize').text(spoutSize);
-				} else {
-					spoutValid(num, $spoutContainer, spoutTitle, spoutSize);
-				}
+			});
+			if (calculatedSpoutSizes.length !== 0 && $.inArray(spoutSize, calculatedSpoutSizes) !== -1) {
+				$spoutContainer.find('.warning').show().find('.calculatedSpoutSize').text(spoutSize);
+			}
+			else {
+				approveSpout(num, $spoutContainer, spoutTitle, spoutSize);
+			}
 		}
-	});
+	}
 	
 	// Find out what the nearest spout is to the calculated spout size
 	function nearestSpout(containerDiameter) {
-		var closest = null, calculatedSpoutSize = Math.round(containerDiameter * 0.72 * 1000) / 1000;
+		var closest = 0;
+		var calculatedSpoutSize = Math.round(containerDiameter * 0.72 * 1000) / 1000;
+		console.log("Cacluated spout size: " + calculatedSpoutSize);
 		$.each(availableSpouts, function() {
-			if (closest == null || Math.abs(this - calculatedSpoutSize) < Math.abs(closest - calculatedSpoutSize)) {
+			console.log("For " + this + ": " + (this - calculatedSpoutSize) + " vs " + (closest - calculatedSpoutSize));
+			if (Math.abs(this - calculatedSpoutSize) < Math.abs(closest - calculatedSpoutSize)) {
 				closest = this;
 			}
 		});
+		if (closest == 0) {
+			return null;
+		}
 		return closest;
 	}
 	
-	function spoutValid(num, $spoutContainer, spoutTitle, spoutSize) {
+	function approveSpout(num, $spoutContainer, spoutTitle, spoutSize) {
 		// Hide invalid warning message
 		$spoutContainer.find('.warning').hide();
 		// Show add button when the number of fields is less that 3
@@ -631,20 +1019,19 @@ $(document).ready(function() {
 		}
 		// Slide the fieldset up and display the results and edit button
 		$spoutContainer.slideUp('fast', function() {    
-			$spoutContainer.after('<p class="spout-calculation"><span class="spoutNum">' + spoutTitle + '</span>: <span class="spout-size">' + spoutSize + '</span>"<button type="button" class="btnRemove" value="Remove spout">Remove</button><button type="button" class="btnEdit" value="Edit spout">Edit</button></p>');
-		});
-		// Show delete button
-		$btnDel.show().prop('disabled', false);
-		// Adjust the grand total
-		grandTotal += spoutPrice;
-		$grandTotalContainer.html(grandTotal);
-		// Show the spout image
-		if ($spoutImage.hasClass('hidden')) {
-			$spoutImage.removeClass('hidden');
-			$machineImage.removeClass('no-spout');
+			$spoutContainer.after('<p class="spout-calculation"><span class="spoutNum">' + spoutTitle + '</span>: <span class="spout-size">' + spoutSize + '</span><button type="button" class="btnRemove" value="Remove spout">Remove</button><button type="button" class="btnEdit" value="Edit spout">Edit</button></p>');
+
+			var spout = spoutObjectForSpoutWrapperElement($spoutContainer.closest(".spout-wrapper"));
+			machine.spouts[spout.id] = spout;
+			calculateTotalPrice();
+
+			// Show delete button
+			$btnDel.show().prop('disabled', false);
+			// Adjust the grand total
+			// Show the spout image
 			$machineImage.addClass('spout');
-		}
-	   }
+		});
+	}
 	
 	// Buttons for adding, removing and editing spouts
 	
@@ -657,7 +1044,7 @@ $(document).ready(function() {
 		// Create the new element via clone() give it the new ID using newNum value
 		$newElem = $('#spout' + num).clone().attr('id', newSpoutID);
 		// Manipulate the name/id values of the spout type inputs inside the new element
-		spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
+		fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
 		// Show spout type fields and reset
 		$newElem.find('.field-name-spout-type').show().find('input').prop('checked', false).removeClass('active');
 		// Reset the field descriptions
@@ -684,6 +1071,9 @@ $(document).ready(function() {
 			$spoutField = $("#spout" + num), 
 			$spoutWrapper = $(this).closest('.spout-wrapper'), 
 			$spoutFieldset = $spoutWrapper.find('fieldset');
+
+		machine.spouts = {};
+
 		if (num == 1) {
 			$spoutField.find('fieldset').slideDown().find('.calculate').hide();
 			$spoutField.find('.field-name-spout-type').show().find('input').removeClass('active').prop('checked', false); 
@@ -696,28 +1086,32 @@ $(document).ready(function() {
 			$btnDel.hide();
 			$spoutImage.addClass('hidden');
 			$machineImage.removeClass('spout');
-		} else {
-		// Show the 'add another spout' button
-		$btnAdd.show();
-		// Delete the spout
-		$spoutWrapper.remove();
-		// Reset the ID and label numbering for the remaining fields
-		$('.spout-wrapper').each(function(index) {
-			var $newElem = $(this); newNum = index + 1, newSpoutID = 'spout' + newNum, newSpoutIDUpper = newSpoutID.capitalise(), newSpoutTypeID = "type" + newSpoutIDUpper;
-			spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
-			$newElem.find('.spout-calculation .spoutNum').text('Spout ' + newNum);
-		});
+		}
+		else {
+			// Show the 'add another spout' button
+			$btnAdd.show();
+			// Delete the spout
+			$spoutWrapper.remove();
+			// Reset the ID and label numbering for the remaining fields
+			
+			$('.spout-wrapper').each(function(index) {
+				var $newElem = $(this); newNum = index + 1, newSpoutID = 'spout' + newNum, newSpoutIDUpper = newSpoutID.capitalise(), newSpoutTypeID = "type" + newSpoutIDUpper;
+				fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
+				$newElem.find('.spout-calculation .spoutNum').text('Spout ' + newNum);
+				var spout = spoutObjectForSpoutWrapperElement($newElem);
+				machine.spouts[spout.id] = spout;
+			});
 		}
 		// Adjust the spout price
-		grandTotal -= spoutPrice;
-		$grandTotalContainer.html(grandTotal);
+		calculateTotalPrice();
 		// Show the "add" button if the 3rd spout is being removed
-		if (num == 3)
+		if (num == 3) {
 			$btnAdd.show();
+		}
 	});
 	
-	function spoutNumber($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID) {
-		$newElem.attr('id', 'spout' + newNum).find('legend').html('Spout ' + newNum).next().find('input').attr({
+	function fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID) {
+		$newElem.attr('id', newSpoutID).find('legend').html('Spout ' + newNum).next().find('input').attr({
 			"id" : function(arr) {
 				return "type" + (arr + 1) + newSpoutIDUpper;
 			},
@@ -729,121 +1123,257 @@ $(document).ready(function() {
 			attr = attr.substring(0, attr.length - 1);
 			return attr + newNum;
 		});
+
+	}
+
+	function spoutObjectForSpoutWrapperElement(spoutWrapper) {
+
+		var spoutObject = {
+			id : spoutWrapper.attr('id'),
+			name : "Spout",
+			description : spoutWrapper.find(".spout-size").text(),
+			price : spoutPrice
+		};
+
+		if (spoutObject.description == "Custom") {
+			spoutObject.price = customSpoutPrice;
+			spoutObject.description = "Contact Logical Machines for a custom spout";
+		}
+		else {
+			spoutObject.description = spoutObject.description + " inch";
+		}
+
+		return spoutObject;
 	}
 	
 	// Edit button
 	$('#field-name-spout').on('click', '.btnEdit', function() {
 		// Get spout wrapper and related form in objects:
-			var $spoutWrapper = $(this).closest('.spout-wrapper'), 
-				$spoutFieldset = $spoutWrapper.find('fieldset');
+		var $spoutWrapper = $(this).closest('.spout-wrapper'), 
+			$spoutFieldset = $spoutWrapper.find('fieldset');
 		// Show still-complete form and delete spout-calculation
-			$spoutFieldset.slideDown('fast').next().remove();
-		// Adjust the spout price
-			grandTotal -= spoutPrice;
-			$grandTotalContainer.html(grandTotal);
+		$spoutFieldset.slideDown('fast').next().remove();
+		
+		var spout = spoutObjectForSpoutWrapperElement($spoutWrapper);
+		delete machine.spouts[spout.id];
+		calculateTotalPrice();
+
 		//Show add button:
-			$btnAdd.hide();
+		$btnAdd.hide();
 	});
-    
-    /*
-     *  Hidden accessories page
-     */
+	
+	/*
+	 *  Hidden accessories page
+	 */
 
-    $('#hidden-accessories-page-btn').click(function() {
-        $('#hidden-accessories-page').show();
-    });
-    $('#btnClose,#btnContinue').click(function() {
-        $(this).closest('.step-container').hide();
-    });
-    
-    /*
-     *  Display, Email and Print Summary
-     */
-    
-    // Retrieve form values for display on summary
-    function showValues() {
-    	// Create the machine type, weight hopper and discharge funnel rows for the summary table
-    	var resultsHTML = '<tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.name + ' ' + machine.type + '</th><td>' + machine.description + '</td><td>$' + machine.price + '</td></tr><tr><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.weighHopper.name + '</th><td>' + machine.weighHopper.description + '</td><td>$' + machine.weighHopper.price + '</td></tr><tr bgcolor="#EBFFEA"><th style="text-align:right;border-right: 1px solid #0c4b81;">' + machine.dischargeFunnel.name + '</th><td>' + machine.dischargeFunnel.description + '</td><td>$' + machine.dischargeFunnel.price + '</td></tr>',
-        // Create the spout rows for the summary table
-    	num = parseInt($('.spout-size').text());
-        if (!isNaN(num)) {
-            $('.spout-size').each(function() {
-            	resultsHTML += '<tr><th style="text-align:right;border-right: 1px solid #0c4b81;">Spout</th><td>' + $(this).text() + ' inch</td><td>$' + spoutPrice + '</td></tr>';
-            });
-        }
-        // Create the total row for the summary table
-        resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + grandTotal + '</td></tr>';
-        // Empty the current summary table and add the new rows in
-        $('#results').empty().append(resultsHTML);
-        // Stripe the results table
-        $('#results tr').filter(':even').addClass('even').css("background-color", "#EBFFEA");
-        return resultsHTML;
-    }
+	$('#btnClose,#btnContinue').click(function() {
+		$(this).closest('.step-container').hide();
+	});
+	
+	/*
+	 *  Display, Email and Print Summary
+	 */
+	
+	// Retrieve form values for display on summary
+	function showValues() {
+		console.log("Showing values");
+		// Create the machine type, weight hopper and discharge funnel rows for the summary table
+		var resultsHTML = '';
 
-    // Print button action
-    $('#btnPrint').click(function() {
-        window.print();
-        return false;
-    });
+		// Standard Machine Options
+		for (var key in machine) {
 
-    // Email button action
-    $btnEmail.on('click', function() {
-    	// Change the button value
-        var btnEmailText = $(this).val();
-        if (btnEmailText == 'Cancel Email') {
-            $(this).text('Email Quote').val('Email Quote');
-        } else {
-            $(this).text('Cancel Email').val('Cancel Email');
-            $('#thankYouMessage').remove();
-        }
-        // Slide out the email form
-        $('#emailQuote').slideToggle('fast');
-    });
+			if (key !== "spouts" && key !== "accessories") {
+				var piece = machine[key];
 
-    // Email send button action
-    $btnSubmit.on('click', function() {
-        var $disabled = $form.find('input:disabled').prop('disabled', false), quoteSummary = $('#quote-summary').html(), spoutRowsText = '', num = parseInt($('.spout-size').text());
-        // Add spout rows to the email
-        if (!isNaN(num)) {
-        	$('.spout-size').each(function() {
-        		spoutRowsText += 'Spout: ' + $(this).text() + ' inch $ - ' + spoutPrice + '\r';
-            });
-        }
-        // Compile the values from the form
-    	var to = $('#to').val(),
-        cc = $('#cc').val(),
+				resultsHTML += displayPiece(piece);
+			}
+		}
+		// Display Spouts
+		for (var spoutKey in machine["spouts"]) {
+			var spout = machine["spouts"][spoutKey];
+
+			resultsHTML += '<tr><th>' + spout.name + '</th>';
+			resultsHTML += '<td>' + spout.description + '</td>';
+			resultsHTML += '<td>$' + spout.price + '</td></tr>';
+		}
+
+		// Display Accesssories
+		for (var accessoryKey in machine["accessories"]) {
+			resultsHTML += displayPiece(machine["accessories"][accessoryKey]);
+		}
+
+		// Create the total row for the summary table
+		resultsHTML += '<tr class="total" style="text-align:right;border-top:1px solid #0c4b81;"><td>&nbsp;</td><th>Total:</th><td>$' + $("#cost-container .amount").text() + '</td></tr>';
+		// Empty the current summary table and add the new rows in
+		$('#results').empty().append(resultsHTML);
+		// Stripe the results table
+		$('#results tr').filter(':even').addClass('even').css("background-color", "#EBFFEA");
+		return resultsHTML;
+	}
+
+	function displayPiece(piece) {
+		var result = "";
+		result += '<tr><th>';
+		result += piece.name;
+		if (piece.type) {
+			result += " " + piece.type;
+		}
+		result += '</th>';
+
+		// Description
+		result += '<td>' + piece.description;
+		if (piece.descriptionSupplement) {
+			result += " " + piece.descriptionSupplement;
+		}
+		result += '</td>';
+
+		// Price
+		result += '<td>';
+		if (parseFloat(piece.price) > 0) {
+			result += "$" + piece.price;
+		}
+		else {
+			result += "Included";
+		}
+		
+		if (piece.priceSupplement) {
+			result += " + $" + piece.priceSupplement;
+		}
+		result += '</td></tr>'
+		return result;
+	}
+
+	// Print button action
+	$('#btnPrint').click(function() {
+		window.print();
+		return false;
+	});
+
+	// Email button action
+	$btnEmail.on('click', function() {
+		// Change the button value
+		var btnEmailText = $(this).val();
+		if (btnEmailText == 'Cancel Email') {
+			$(this).text('Email Quote').val('Email Quote');
+		}
+		else {
+			$(this).text('Cancel Email').val('Cancel Email');
+			$('#thankYouMessage').remove();
+		}
+		// Slide out the email form
+		$('#emailQuote').slideToggle('fast');
+	});
+
+	// Email send button action
+	$btnSubmit.on('click', function() {
+		var $disabled = $form.find('input:disabled').prop('disabled', false), quoteSummary = $('#quote-summary').html(), spoutRowsText = '', num = parseInt($('.spout-size').text());
+		
+		// Compile the values from the form
+		var to = $('#to').val(),
+		cc = $('#cc').val(),
 		company = $('#company').val(),
 		name = $('#name').val(),
-        message = $.trim(encodeURIComponent($('#message').val())),
-        $emailFields = $('#to,#cc'),
+		message = $.trim(encodeURIComponent($('#message').val())),
+		$emailFields = $('#to,#cc'),
 		$names = $('#company,#name'),
-        $HTMLresults = showValues(),
-        $HTMLresults = $HTMLresults.replace(/\"/g,''),
-        $HTMLheader = '<table border=0 cellpadding=10 cellspacing=0 style=margin:14px;border-collapse:collapse;><thead style=border-bottom:1px solid #0c4b81;><tr><th style=text-align:right;>Item</th><th style=text-align:left;>Description</th><th style=text-align:left;>Price</th></tr></thead><tbody>', 
-    	$HTMLfooter = '</tbody></table>',
-    	quoteHTML =  encodeURIComponent($HTMLheader + $HTMLresults + $HTMLfooter), 
-        quoteText = encodeURIComponent(machine.name + " " + machine.type + " - $" + machine.price + "\r" + machine.description + "\r\r" + machine.weighHopper.name + " - $" + machine.weighHopper.price + "\r" + machine.weighHopper.description + "\r\r" + machine.dischargeFunnel.name + " - $" + machine.dischargeFunnel.price + "\r" + machine.dischargeFunnel.description + "\r\r" + spoutRowsText + "\rTotal: $" + grandTotal);
-        // Create the datastring from the form values
-    	var dataString = 'to=' + to + '&cc=' + cc + '&name=' + name + '&company=' + company + '&message=' + message + '&quoteHTML=' + quoteHTML + '&quoteText=' + quoteText;
-        // Send the email via an AJAX request the PHP script
-        if ($emailFields.valid()) {
-        	$('#sending').show();
-        	$('#btnSubmit').prop('disabled', true);
-            $.ajax({
-                type : "POST",
-                url : "bin/email_processing.php",
-                data : dataString,
-                success : function(response) {
-                    $btnEmail.text('Email Quote').val('Email Quote');
-                    $('#emailQuote').slideToggle('fast').find('input').not('input[type=submit]').val('');
-                    $('#quote-summary').after("<div id='thankYouMessage'></div>");
-                    $('#thankYouMessage').html("<h3>Thank you.</h3>").append("<p>Your email has been sent to the recipients your entered.</p>");
-                	$('#sending').hide();
-                	$('#btnSubmit').prop('disabled', false);
-                }
-            });
-            return false;
-        }
-    });
+		$HTMLresults = showValues(),
+		$HTMLresults = $HTMLresults.replace(/\"/g,''),
+		$HTMLheader = '<table border=0 cellpadding=10 cellspacing=0 style=margin:14px;border-collapse:collapse;><thead style=border-bottom:1px solid #0c4b81;><tr><th style=text-align:right;>Item</th><th style=text-align:left;>Description</th><th style=text-align:left;>Price</th></tr></thead><tbody>', 
+		$HTMLfooter = '</tbody></table>',
+		quoteHTML =  encodeURIComponent($HTMLheader + $HTMLresults + $HTMLfooter), 
+		quoteText = encodeURIComponent(summaryPlainText());
+		// Create the datastring from the form values
+		var dataString = 'to=' + to + '&cc=' + cc + '&name=' + name + '&company=' + company + '&message=' + message + '&quoteHTML=' + quoteHTML + '&quoteText=' + quoteText;
+		// Send the email via an AJAX request the PHP script
+		if ($emailFields.valid()) {
+			$('#sending').show();
+			$('#btnSubmit').prop('disabled', true);
+			$.ajax({
+				type : "POST",
+				url : "bin/email_processing.php",
+				data : dataString,
+				success : function(response) {
+					$btnEmail.text('Email Quote').val('Email Quote');
+					$('#emailQuote').slideToggle('fast').find('input').not('input[type=submit]').val('');
+					$('#quote-summary').after("<div id='thankYouMessage'></div>");
+					$('#thankYouMessage').html("<h3>Thank you.</h3>").append("<p>Your email has been sent to the recipients your entered.</p>");
+					$('#sending').hide();
+					$('#btnSubmit').prop('disabled', false);
+				}
+			});
+			return false;
+		}
+	});
 
+	function summaryPlainText() {
+		// Create the machine type, weight hopper and discharge funnel rows for the summary table
+		var result = '';
+
+		// Standard Machine Options
+		for (var key in machine) {
+
+			if (key !== "spouts" && key !== "accessories") {
+				var piece = machine[key];
+
+				result += displayPlainTextPiece(piece);
+			}
+		}
+		// Display Spouts
+		for (var spoutKey in machine["spouts"]) {
+			var spout = machine["spouts"][spoutKey];
+
+			result += spout.name + ' - ';
+			result += "$" + spout.price + "\r";
+			result += spout.description + "\r\r";
+		}
+
+		// Display Accesssories
+		for (var accessoryKey in machine["accessories"]) {
+			result += displayPlainTextPiece(machine["accessories"][accessoryKey]);
+		}
+
+		// Create the total row for the summary table
+		result += '\rTotal: $' + $("#cost-container .amount").text();
+		return result;
+	}
+
+	function displayPlainTextPiece(piece) {
+		var result = "";
+		result += piece.name;
+		if (piece.type) {
+			result += " " + piece.type;
+		}
+		result += ' - ';
+
+		// Price
+		if (parseFloat(piece.price) > 0) {
+			result += "$" + piece.price;
+		}
+		else {
+			result += "Included";
+		}
+		
+		if (piece.priceSupplement) {
+			result += " + $" + piece.priceSupplement;
+		}
+
+		result += "\r";
+
+		// Description
+		result += piece.description;
+		if (piece.descriptionSupplement) {
+			result += " " + piece.descriptionSupplement;
+		}
+
+		result += '\r\r';
+		return result;
+	}
+
+	// Final Initialization
+	s4Option.select();
+	calculateTotalPrice();
+
+	checkAllowFloating();
 });
+
