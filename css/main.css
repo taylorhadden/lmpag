@@ -1186,6 +1186,10 @@ tbody tr.total td, tbody tr.total th {
 	color: #555;
 }
 
+#field-name-machine-model .disclaimer {
+	margin-top: 1em;
+}
+
 /*
  * Stuff for the fixed elements
  */

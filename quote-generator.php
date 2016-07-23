@@ -433,6 +433,11 @@ if ($_POST && $_POST['machinemodel'] == 'S-6') {
 											<div class="description">
 												<?php echo $settings["machinemodel"]["S-6"]["description"]; ?>
 											</div>
+
+											<p class="disclaimer">
+												The S-6 is a more advanced scale system. Please give Logical Machines a call to assist you with configuring this system. 802-425-2888.
+											</p>
+
 											<h5>S-6 Specifications:</h5>
 											<ul>
 												<li>
@@ -499,6 +504,11 @@ if ($_POST && $_POST['machinemodel'] == 'S-7') {
 												<?php echo $settings["machinemodel"]["S-7"]["description"]; ?>
 												
 											</div>
+
+											<p class="disclaimer">
+												The S-7 is a more advanced scale system. Please give Logical Machines a call to assist you with configuring this system. 802-425-2888.
+											</p>
+
 											<h5>S-7 Specifications:</h5>
 											<ul>
 												<li>
