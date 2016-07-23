@@ -170,7 +170,7 @@ $settings = array(
 include_once 'bin/php_validation.php';
 
 ?>
-<div class = "no-js">
+<div id = "QuoteGenerator" class = "no-js">
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
@@ -185,40 +185,70 @@ include_once 'bin/php_validation.php';
 				document.getElementById("NoJS").style.display = "none";
 				document.getElementById("QGPageDiv").style.display = "block";
 			</script>
-			<nav id="pag-navigation" class="clearfix">
-				<ol>
-					<li>
-						<a data="step-1" class="active"><span class="list-no">1</span>
-						<br/>
-						Select your machine</a>
-					</li>
-					<li>
-						<a data="step-2"><span class="list-no">2</span>
-						<br/>
-						Select a Weigh Hopper</a>
-					</li>
-					<li>
-						<a data="step-3"><span class="list-no">3</span>
-						<br/>
-						Select a Discharge <span class="standardDischarge">Funnel</span><span class="s6Discharge" style="display: none;">Chute</span></a>
-					</li>
-					<li>
-						<a data="step-4"><span class="list-no">4</span>
-						<br/>
-						Select Spouts</a>
-					</li>
-					<li>
-						<a data="step-5" style="font-size: 16px;"><span class="list-no">5</span>
-						<br/>
-						Select Accessories</a>
-					</li>
-					<li>
-						<a data="step-6"><span class="list-no">6</span>
-						<br/>
-						Your Quote Summary</a>
-					</li>
-				</ol>
-			</nav>
+
+			<div id = "Floaters">
+				<nav id="pag-navigation" class="clearfix">
+					<ol>
+						<li>
+							<a data="step-1" class="active"><span class="list-no">1</span>
+							<br/>
+							Select your machine</a>
+						</li>
+						<li>
+							<a data="step-2"><span class="list-no">2</span>
+							<br/>
+							Select a Weigh Hopper</a>
+						</li>
+						<li>
+							<a data="step-3"><span class="list-no">3</span>
+							<br/>
+							Select a Discharge <span class="standardDischarge">Funnel</span><span class="s6Discharge" style="display: none;">Chute</span></a>
+						</li>
+						<li>
+							<a data="step-4"><span class="list-no">4</span>
+							<br/>
+							Select Spouts</a>
+						</li>
+						<li>
+							<a data="step-5" style="font-size: 16px;"><span class="list-no">5</span>
+							<br/>
+							Select Accessories</a>
+						</li>
+						<li>
+							<a data="step-6"><span class="list-no">6</span>
+							<br/>
+							Your Quote Summary</a>
+						</li>
+					</ol>
+				</nav>
+
+				<aside id="sidebar" class="clearfix hidden">
+					<div id="machine-image-container">
+						<button id="btnFront" value="Front view" class="hidden active">
+							Front view
+						</button>
+						<button id="btnSide" value="Side view" class="hidden">
+							Side view
+						</button>
+						<p>
+							This is how YOUR customized machine will look
+						</p>
+						<div id="machine-image" class="ir s4 stwh std-fnl front">
+						</div>
+						<h3 id="machine-title" class="hidden">S-4 Semi-Automatic Scale System</h3>
+						<p id="cost-container">
+							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
+						</p>
+
+						<div>
+							<div class="step-pager" >
+								<a class="prev button" style="display: none;">Previous Step</a>
+								<a class="next button">Next Step</a>
+							</div>
+						</div>
+					</div>
+				</aside>
+			</div>
 
 			<section id="section-content" class="clearfix">
 				<article id="main-content" class="clearfix no-sidebar"> 
@@ -1044,35 +1074,7 @@ if ($_POST && $_POST['weighhopper'] == 'large-weigh-hopper') {
 						</div><!-- id="form-pages" -->
 					</form>
 				</article>
-
-				<aside id="sidebar" class="clearfix hidden">
-					<div id="machine-image-container">
-						<button id="btnFront" value="Front view" class="hidden active">
-							Front view
-						</button>
-						<button id="btnSide" value="Side view" class="hidden">
-							Side view
-						</button>
-						<p>
-							This is how YOUR customized machine will look
-						</p>
-						<div id="machine-image" class="ir s4 stwh std-fnl front">
-						</div>
-						<h3 id="machine-title" class="hidden">S-4 Semi-Automatic Scale System</h3>
-						<p id="cost-container">
-							 <span class="title">Base Price:</span> <span class="price">$<span class="amount">0</span></span>
-						</p>
-
-						<div>
-							<div class="step-pager" >
-								<a class="prev button" style="display: none;">Previous Step</a>
-								<a class="next button">Next Step</a>
-							</div>
-						</div>
-					</div>
-				</aside>
 			</section>
-
 		</div><!-- id="PageDiv" end -->
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>

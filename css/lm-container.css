@@ -147,6 +147,7 @@ strong {
     min-height: 100%;
     position: relative;
     width: 960px;
+    margin: 0 auto;
 }
 #LMLogo1 {
     float: left;

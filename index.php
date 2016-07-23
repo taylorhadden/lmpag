@@ -51,64 +51,10 @@
 				</div>
 			</header>
 
-			<nav id="main-navigation" class="clearfix">
-				<div id="lft-nav1">
-					<p class="lftnav f-lp">
-						<span class="style3"><a href="table-of-contents.html">Table of Contents</a></span><a href="http://www.logicalmachines.com"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="what-are-logical-machines.html">What Are Logical Machines?</a></span><a href="http://logicalmachines.com/what.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="which-logical-machine.html">Which machine is
-							<br>
-							right for me?</a></span><a href="http://logicalmachines.com/which.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="sample-videos.html">Sample Videos</a></span><a href="http://logicalmachines.com/videos.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="testimonials.html">Testimonials</a></span><a href="http://logicalmachines.com/testimonials.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="distributor-support.html">Distributor
-							<br>
-							Support</a></span><a href="http://logicalmachines.com/distributor-support.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="customer-support.html">Customer
-							<br>
-							Support</a></span><a href="http://logicalmachines.com/customer-support.php"><span class="style3">
-							<br>
-						</span></a><span class="style3">&#8226;
-							<br>
-							<a href="contact.html">Contact Us</a></span>
-					</p>
-				</div>
-			</nav>
-
 			<div id="frame-container">
 				<?php include 'quote-generator.php' ?>
 				<!--<iframe id="quote-generator" src="quote-generator.php" width="785" height="600" frameborder="no" horizontalscrolling="no" verticalscrolling="yes"></iframe>-->
 			</div>
-
-			<footer id="footer" class="clearfix clear">
-				<hr>
-				<p class="style10 f-fp f-lp">
-					<strong><span class="style13">Logical Machines
-						<br>
-					</span></strong><span class="style11">1158 Roscoe Road, Charlotte, Vermont 05445 USA &#8226; (802) 425-2888 &#8226; (802) 425-5667 (fax)
-						<br>
-						&#108;&#109;&#105;&#110;&#107;&#108;&#101;&#114;&#64;&#108;&#111;&#103;&#105;&#99;&#97;&#108;&#109;&#97;&#99;&#104;&#105;&#110;&#101;&#115;&#46;&#99;&#111;&#109;</span>
-				</p>
-			</footer>
-
 		</div><!-- id="PageDiv" end -->
 
 

@@ -1,5 +1,50 @@
+/*
+ * Hovering window elements
+ */
 var targetScrollTop = 162;
 
+var allowFloating = true;
+var isFloating = false;
+
+function checkAllowFloating() {
+	var windowHeight = $(window).height();
+
+	if (windowHeight < $("#pag-navigation").height() || windowHeight < $("#sidebar").height()) {
+		allowFloating = false;
+	}
+	else {
+		allowFloating = true;
+	}
+}
+
+function updateFloating() {
+	if (allowFloating && $(document).scrollTop() > targetScrollTop) {
+		if (!isFloating) {
+			$("#Floaters").addClass("floating");
+			isFloating = true;
+		}
+	}
+	else {
+		if (isFloating) {
+			$("#Floaters").removeClass("floating");
+			isFloating = false;
+		}
+	}
+}
+
+$(window).resize(function() {
+	checkAllowFloating();
+	updateFloating();
+});
+
+$(document).scroll(function() {
+	updateFloating();
+});
+
+
+/*
+ * Setting up the Meat
+ */
 $(document).ready(function() {
 
     var $form = $('#logical-machines-quote-generator');
@@ -1317,26 +1362,10 @@ $(document).ready(function() {
 		return result;
 	}
 
-
+	// Final Initialization
 	s4Option.select();
 	calculateTotalPrice();
+
+	checkAllowFloating();
 });
 
-var isFloating = false;
-$(document).scroll(function() {
-	//console.log("Scroll top: " + $(document).scrollTop());
-
-	if ($(document).scrollTop() > targetScrollTop) {
-		if (!isFloating) {
-			$("#pag-navigation, #sidebar, #section-content").addClass("fixed");
-			isFloating = true;
-		}
-	}
-	else {
-		if (isFloating) {
-			$("#pag-navigation, #sidebar, #section-content").removeClass("fixed");
-			isFloating = false;
-		}
-	}
-
-});

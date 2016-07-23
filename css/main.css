@@ -154,15 +154,18 @@ thead th, .total td, .total th {
  * section#section-content aside#sidebar {}
  * footer#footer {}
  */
+
+
 #main-navigation,
 #main-content,
 #sidebar,
 #pag-navigation {
-	float: left;
+	display: inline-block;
+	vertical-align: top;
 }
 #section-content {
 	border: 1px solid #911936;
-	float: left;
+	display: inline-block;
 	padding: 10px;
 	position: relative;
 }
@@ -1186,22 +1189,35 @@ tbody tr.total td, tbody tr.total th {
 /*
  * Stuff for the fixed elements
  */
-#pag-navigation.fixed {
+#Floaters {
+	position: absolute;
+}
+#Floaters.floating {
 	position: fixed;
-	left: 173px;
 	top: 10px;
 }
-#sidebar.fixed {
-	position: fixed;
-	left: 667px;
-	top: 19px;
+
+#section-content {
+	margin-left: 122px;
+	padding-right: 300px;
+
+	min-height: 720px;
 }
-#section-content.fixed {
+
+#sidebar {
+	position: relative;
+	left: 374px;
+	top: 10px;
+}
+
+/*
+#section-content.floating {
 	margin-left: 123px;
 }
-#section-content.fixed #main-content {
+#section-content.floating #main-content {
 	padding-right: 280px;
 }
+*/
 
 /*
  * Stuff for iPhone
