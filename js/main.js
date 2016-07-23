@@ -125,36 +125,42 @@ $(document).ready(function() {
 
 	// Create an instance of the machine object and default assign properties
 	// Note that "priceSupplement" and "descriptionSupplement" are also supported options for a part model
-	var machine = {
-		// The machine does not auto-fill values. The schema is as follows:
-		/*
-		part-id : {
-			id : the part id,
-			name : the part name
-			type : (optional) the part type
-			description : the description of the part
-			price : the price of the part
-		}
-		*/
+	var machine = {};
 
-		// The expected values are as follows:
-		/*
-		model : the actual model of the machine,
-		supplyHopper : (optional) the supply hopper for the S7
-		weighHopper : the weigh hopper for the machine
-		dischargeFunnel : the discharge funnel, includes the discharge chute
-		*/
+	function resetMachine() {
+		machine = {
+			// The machine does not auto-fill values. The schema is as follows:
+			/*	
+			part-id : {
+				id : the part id,
+				name : the part name
+				type : (optional) the part type
+				description : the description of the part
+				price : the price of the part
+			}
+			*/
 
-		// Chute size and apapters are added as necessary
-		
-		// The "spouts" and "accessories" name is special. It is a list of sub-parts, each using the base part schema
-		spouts : {
-			// This is a dictionary of spouts
-		},
-		accessories : {
-			// This is a dictionary of accessories
-		}
-	};
+			// The expected values are as follows:
+			/*
+			model : the actual model of the machine,
+			supplyHopper : (optional) the supply hopper for the S7
+			weighHopper : the weigh hopper for the machine
+			dischargeFunnel : the discharge funnel, includes the discharge chute
+			*/
+
+			// Chute size and apapters are added as necessary
+			
+			// The "spouts" and "accessories" name is special. It is a list of sub-parts, each using the base part schema
+			spouts : {
+				// This is a dictionary of spouts
+			},
+			accessories : {
+				// This is a dictionary of accessories
+			}
+		};
+	}
+
+	resetMachine();
 	
 	
 	/*
@@ -385,6 +391,8 @@ $(document).ready(function() {
 
 		// Tack on other furnctions
 		machineOption.onSelect(function() {
+			resetMachine();
+
 			machine.model = partFromElement(this.element);
 
 			// Show/Hide descriptions
