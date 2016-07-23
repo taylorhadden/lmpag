@@ -1018,6 +1018,9 @@ $(document).ready(function() {
 			$spoutField = $("#spout" + num), 
 			$spoutWrapper = $(this).closest('.spout-wrapper'), 
 			$spoutFieldset = $spoutWrapper.find('fieldset');
+
+		machine.spouts = {};
+
 		if (num == 1) {
 			$spoutField.find('fieldset').slideDown().find('.calculate').hide();
 			$spoutField.find('.field-name-spout-type').show().find('input').removeClass('active').prop('checked', false); 
@@ -1037,7 +1040,7 @@ $(document).ready(function() {
 			// Delete the spout
 			$spoutWrapper.remove();
 			// Reset the ID and label numbering for the remaining fields
-			machine.spouts = {};
+			
 			$('.spout-wrapper').each(function(index) {
 				var $newElem = $(this); newNum = index + 1, newSpoutID = 'spout' + newNum, newSpoutIDUpper = newSpoutID.capitalise(), newSpoutTypeID = "type" + newSpoutIDUpper;
 				fillSpoutElement($newElem,newNum,newSpoutID,newSpoutIDUpper,newSpoutTypeID);
