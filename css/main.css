@@ -272,6 +272,9 @@ form#logical-machines-quote-generator {
 	cursor: pointer;
 
 	border-right: 1px solid #911936;
+
+	z-index: 0;
+	position: relative;
 }
 .lt-ie8 #pag-navigation ol li a {
 	display: block;
@@ -281,6 +284,7 @@ form#logical-machines-quote-generator {
 	color: #0c4b81;
 	cursor: default;
 	border-right: none;
+	padding-right: 7px;
 }
 #pag-navigation ol li a:hover {
 	color: #090;
@@ -1206,10 +1210,14 @@ tbody tr.total td, tbody tr.total th {
 }
 
 #section-content {
-	margin-left: 122px;
+	margin-left: 123px;
 	padding-right: 300px;
 
 	min-height: 720px;
+
+	position: absolute;
+	z-index: 2;
+	background-color: white;
 }
 
 #sidebar {
