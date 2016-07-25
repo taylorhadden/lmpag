@@ -270,6 +270,8 @@ form#logical-machines-quote-generator {
 	padding: 6px;
 	margin-bottom: -1px;
 	cursor: pointer;
+
+	border-right: 1px solid #911936;
 }
 .lt-ie8 #pag-navigation ol li a {
 	display: block;
@@ -278,6 +280,7 @@ form#logical-machines-quote-generator {
 #pag-navigation ol li a.active:hover {
 	color: #0c4b81;
 	cursor: default;
+	border-right: none;
 }
 #pag-navigation ol li a:hover {
 	color: #090;
@@ -1195,6 +1198,7 @@ tbody tr.total td, tbody tr.total th {
  */
 #Floaters {
 	position: absolute;
+	z-index: 10;
 }
 #Floaters.floating {
 	position: fixed;
@@ -1209,8 +1213,8 @@ tbody tr.total td, tbody tr.total th {
 }
 
 #sidebar {
-	position: relative;
-	left: 374px;
+	position: absolute;
+	left: 500px;
 	top: 10px;
 
 	z-index: 10;
